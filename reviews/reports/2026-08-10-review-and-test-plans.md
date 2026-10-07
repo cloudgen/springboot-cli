@@ -1,4 +1,4 @@
-# Report: review-and-test-plans — springboot3 2.3.2
+# Report: review-and-test-plans — springboot-cli 2.3.2
 
 **Date:** 2026-08-10  
 **Mode:** product-review publish (living plans + TP map) after bootstrap specialize + H2  
@@ -6,14 +6,14 @@
 
 ## Summary
 
-Created the public **`reviews/`** surface for **springboot3** (peer of `tests/`), specialized from the springboot2 plan shape but retargeted to this product:
+Created the public **`reviews/`** surface for **springboot-cli** (peer of `tests/`), specialized from the springboot2 plan shape but retargeted to this product:
 
 | Field | Live value |
 |-------|------------|
-| APP_NAME | `springboot3` |
+| APP_NAME | `springboot-cli` |
 | VERSION | `2.3.1` |
 | Domain | Spring Boot **3.3.5** · Java **21** (`21.0.10-tem` Temurin) |
-| Domain SSOT | `requirement-domain-springboot3.md` |
+| Domain SSOT | `requirement-domain-springboot-cli.md` |
 | Bootstrap A | springboot2 (A→B only; not reverse-copied) |
 | Install class | Type O-P online |
 | Type 1 elev | **N/A** |
@@ -64,7 +64,7 @@ No open **bug** findings from this plan bootstrap. Prior architecture lessons re
 
 | TP family | Change |
 |-----------|--------|
-| All Core TP rows in suite | Documented as **have** for springboot3 |
+| All Core TP rows in suite | Documented as **have** for springboot-cli |
 | TP-DOM-02 | Explicit Boot **3.3.5** (not 2.7.18) |
 | TP-ELEV | **n/a** (no Type 1 claim) |
 | TP-CURL-09 | **optional** unchanged |

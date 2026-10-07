@@ -1,4 +1,4 @@
-# Report: help/dispatcher follow-up — springboot3 2.3.5
+# Report: help/dispatcher follow-up — springboot-cli 2.3.5
 
 **Date:** 2026-09-06
 **Mode:** implement leftover P1s from 2.3.4 coverage audit
@@ -11,7 +11,7 @@ Closed the remaining help ↔ dispatcher and test-plan honesty gaps: `--debug` i
 ## Issues
 
 ### Issue 1 -- Severity: bug
-- File: springboot3 (app_main / app_help)
+- File: springboot-cli (app_main / app_help)
 - Description: `--debug` required in CLI law but not parsed or listed; `--force-user`/`--force-root` routed but unadvertised; unknown `--*` swallowed; help had no Environment/`SCRIPT_URL`.
 - Suggestion: Parse `--debug`; list force-user/root; Environment block; `out_die` on unknown options.
 - Test: TP-CLI-03 · TP-CLI-08

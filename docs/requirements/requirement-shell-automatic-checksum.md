@@ -4,7 +4,7 @@
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for **automatic companion-digest integrity** of the springboot3 bash shell tool: downloading a SHA-256 sidecar next to the install channel, verifying install/self-update downloads, and reporting the process **transparently** (companion **link**, expected **value**, and verification **result**).
+This requirement is the **project Single Source of Truth** for **automatic companion-digest integrity** of the springboot-cli bash shell tool: downloading a SHA-256 sidecar next to the install channel, verifying install/self-update downloads, and reporting the process **transparently** (companion **link**, expected **value**, and verification **result**).
 
 **Scope:** Automatic `${SCRIPT_URL}.sha256` path; transparency of integrity messaging; publisher companion file; relationship to optional env pin; product README primary integrity story.  
 **Out of scope (cited, not re-owned):** Full install one-liner / bootstrap (`requirement-shell-cli-interface.md`, online-install patterns in self-management); full self-update semver gates (`requirement-shell-self-management.md`); full `out_*` catalog (`requirement-shell-output-requirements.md`); package-manager signatures / cosign (not claimed here).
@@ -19,7 +19,7 @@ This requirement is the **project Single Source of Truth** for **automatic compa
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Anyone installing or self-updating `springboot3` from the channel | `curl … \| bash` or `springboot3 self-update` |
+| You / this login | Anyone installing or self-updating `springboot-cli` from the channel | `curl … \| bash` or `springboot-cli self-update` |
 | The other role | CI that may set an optional `CHECKSUM` pin | Out-of-band pin, not a help command |
 | Not this file | Signing, cosign, or host authenticity claims | Same-channel SHA-256 is not a signed release |
 
@@ -31,7 +31,7 @@ This requirement is the **project Single Source of Truth** for **automatic compa
 |---------|---------------|----------|
 | `src/springboot-cli` | program file people install | download verify helpers |
 | `src/springboot-cli.sha256` | companion digest next to the script | publisher sidecar |
-| `springboot3 help` | command | must **not** list `CHECKSUM` |
+| `springboot-cli help` | command | must **not** list `CHECKSUM` |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
@@ -42,8 +42,8 @@ This requirement is the **project Single Source of Truth** for **automatic compa
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
@@ -146,9 +146,9 @@ When this requirement is **Active** for the product:
 
 ### 2.7 Implementation Notes (this project)
 
-| Item | Value for springboot3 |
+| Item | Value for springboot-cli |
 |------|------------------------|
-| **Product / binary** | `springboot3` (`APP_NAME`) |
+| **Product / binary** | `springboot-cli` (`APP_NAME`) |
 | **Implementation file** | `src/springboot-cli` |
 | **Orchestrator** | `inst_perform_install` (download then integrity then place binary) |
 | **Integrity helper** | `util_verify_download_integrity` — Shape A companion when `CHECKSUM` empty; Shape B pin when `CHECKSUM` set |

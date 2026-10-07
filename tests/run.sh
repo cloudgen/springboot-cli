@@ -1,6 +1,6 @@
 #!/bin/sh
 # =============================================================================
-# tests/run.sh — CI entrypoint for springboot3
+# tests/run.sh — CI entrypoint for springboot-cli
 # =============================================================================
 #
 # GENERAL PURPOSE:
@@ -23,7 +23,7 @@ set -u
 
 TESTS_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 REPO_ROOT=$(CDPATH= cd -- "${TESTS_ROOT}/.." && pwd)
-APP_NAME="${APP_NAME:-springboot3}"
+APP_NAME="${APP_NAME:-springboot-cli}"
 export TESTS_ROOT REPO_ROOT APP_NAME
 SCRIPT="${REPO_ROOT}/src/springboot-cli"
 export SCRIPT
@@ -49,7 +49,7 @@ _cleanup() {
 }
 trap _cleanup EXIT INT HUP TERM
 
-printf 'springboot3 CI tests\n'
+printf 'springboot-cli CI tests\n'
 printf 'script: %s\n' "${SCRIPT}"
 printf 'APP_NAME=%s VERSION=%s SPRINGBOOT_VER=%s\n' "${PRODUCT_APP}" "${PRODUCT_VERSION}" "${SPRINGBOOT_VER}"
 printf 'RUN_ONLINE_CURL_TESTS=%s\n' "${RUN_ONLINE_CURL_TESTS:-0}"

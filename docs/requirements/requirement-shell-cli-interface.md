@@ -4,7 +4,7 @@
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for the **POSIX shell CLI interface** of the springboot3 tool: command surface, privilege typing, global flags, dispatcher behavior, output modes, and interactive vs non-interactive rules.
+This requirement is the **project Single Source of Truth** for the **POSIX shell CLI interface** of the springboot-cli tool: command surface, privilege typing, global flags, dispatcher behavior, output modes, and interactive vs non-interactive rules.
 
 It defines a **Type 0–centric self-managed shell CLI** (install / update / uninstall of the tool itself). It does **not** invent Type 1 host-bootstrap or Type 2 system-user app-ops commands unless a future requirement adds them.
 
@@ -19,7 +19,7 @@ It defines a **Type 0–centric self-managed shell CLI** (install / update / uni
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Operator reading `help` and typing verbs | `springboot3 help` |
+| You / this login | Operator reading `help` and typing verbs | `springboot-cli help` |
 | The other role | Implementer wiring `app_main` | Every help row must have a dispatcher case |
 | Not this file | Spring Boot pin values | Domain file owns `SPRINGBOOT_VER` |
 
@@ -30,19 +30,19 @@ It defines a **Type 0–centric self-managed shell CLI** (install / update / uni
 | Surface | What you open | What for |
 |---------|---------------|----------|
 | `src/springboot-cli` | program file people install | `app_main` dispatcher |
-| `springboot3 help` | command | listed verbs and flags |
+| `springboot-cli help` | command | listed verbs and flags |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| See commands | Help and the dispatcher must list the same verbs. A help-only advertisement is a defect. | `springboot3 help` |
-| Payload vs CLI | `install`/`uninstall` change the demo environment; `self-*` change only this program. | `springboot3 install` vs `springboot3 self-uninstall` |
+| See commands | Help and the dispatcher must list the same verbs. A help-only advertisement is a defect. | `springboot-cli help` |
+| Payload vs CLI | `install`/`uninstall` change the demo environment; `self-*` change only this program. | `springboot-cli install` vs `springboot-cli self-uninstall` |
 
 ### Identity SSOT (this product — do not diverge)
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
@@ -87,7 +87,7 @@ Additional flags **MAY** be added only when documented here (or a superseding re
 
 1. **Single entry:** A single main dispatcher (e.g. `app_main`) **MUST** parse global flags and route commands.
 2. **Unknown command:** **MUST** fail loudly with a clear error and pointer to `help` (via output SSOT).
-3. **Zero-arg Type O-P (this product):** Empty argv **MUST NOT** dump help. **Non-interactive** (no TTY, pipe, `--json`, `--quiet`): not installed → ship-unit + payload ensure; installed → upgrade policy + domain run. **Interactive TTY** with no line switch and no domain payload flag → numbered menu (`requirement-shell-cli-default-interaction.md`); do not auto-run the payload. A line switch or domain payload flag with no positional verb stays the payload path, including on a TTY. `--json` with no command is not JSON help and is not the menu. Full contract: `requirement-shell-cli-zero-arguments.md` + `requirement-shell-cli-default-interaction.md`.
+3. **Zero-arg (this product):** Empty argv **MUST NOT** dump help. **Non-interactive** (no TTY, pipe, `--json`, `--quiet`) with no line switch and no domain payload flag: not installed → ship-unit install then exit; installed → upgrade policy then exit. **No payload.** **Interactive TTY** with no line switch and no domain payload flag → numbered menu (`requirement-shell-cli-default-interaction.md`); do not auto-run the payload. A line switch or domain payload flag with no positional verb stays the payload path, including on a TTY. `--json` with no command is not JSON help and is not the menu. Full contract: `requirement-shell-cli-zero-arguments.md` + `requirement-shell-cli-default-interaction.md`. `setup` is the payload verb.
 4. **Idempotent install skip:** Install **MUST** no-op when already installed unless force/reinstall policy is set.
 5. **No raw user I/O:** User-facing messages **MUST** go through the centralized `out_*` system (see output template/term).
 
@@ -115,13 +115,13 @@ In JSON mode, help **MUST NOT** dump long human text; return a short structured 
 
 ### 2.6 Implementation Notes (this project)
 
-| Item | Value for springboot3 |
+| Item | Value for springboot-cli |
 |------|------------------------|
-| **Product / binary name** | `springboot3` (`APP_NAME`, default `springboot3`) |
+| **Product / binary name** | `springboot-cli` (`APP_NAME`, default `springboot-cli`) |
 | **Primary executable** | `src/springboot-cli` (bash `#!/bin/bash`, single-file for `curl \| sh`) |
 | **Dispatcher** | `app_main` (always invoked at end of script: `app_main "$@"` — no `${0##*/}` / APP_NAME basename gate; required for `curl \| sh`) |
 | **Output SSOT** | `out_text` + wrappers (`out_info`, `out_success`, `out_warn`, `out_error`, `out_die`, `out_plain`, `out_json`, …) |
-| **Version SSOT** | `VERSION` default `1.0.1` (script header / config block: `VERSION="1.0.1"`) |
+| **Version SSOT** | `VERSION` default `2.0.0` (script header / config block: `VERSION="2.0.0"`) |
 | **Install paths** | Global: `GLOBAL_BIN` default `/usr/local/bin`; User: `USER_BIN` default `${HOME}/.local/bin` |
 | **Remote channel env (help surface)** | `REPO_USER` / `REPO_NAME` (defaults `cloudgen` / `springboot-cli`); `SCRIPT_REL` default `src/springboot-cli`; `SCRIPT_URL` composed default `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/${SCRIPT_REL}` (literal product default: `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli`; override via env). `APP_NAME` stays the installed command name. **`help` / `about` MUST list these operator channel vars as designed — MUST NOT list `CHECKSUM`** (install-path runtime pin only; see `requirement-shell-automatic-checksum.md`) |
 | **Type 1 / Type 2 commands** | **None** on current surface — this tool is CLI lifecycle only |
@@ -131,8 +131,9 @@ In JSON mode, help **MUST NOT** dump long human text; return a short structured 
 
 | Command | Layer | Handler | Required behavior |
 |---------|-------|---------|-------------------|
-| *(no args — empty argv)* | Combined O-P or menu | non-interactive: ship ensure + payload `run`; interactive TTY with no line switch: `app_cmd_menu` | Non-interactive: never help. Interactive TTY, no line switch, no domain payload flag: numbered menu, no auto payload. Line switch or domain payload flag with no verb: payload path. |
-| `install` | **Payload** | `payload_install` | Ensure SDKMAN/Java/Maven/project only — **not** ship-unit download |
+| *(no args — empty argv)* | Ship unit or menu | non-interactive, no line switch, no domain payload flag: ship ensure then exit; interactive TTY with no line switch: `app_cmd_menu` | Non-interactive: never help, never the payload. Interactive TTY, no line switch, no domain payload flag: numbered menu, no auto payload. Line switch or domain payload flag with no verb: payload path. |
+| `setup` | **Payload** | `payload_install` | Ensure SDKMAN/Java/Maven/project only — **not** ship-unit download, **not** app start |
+| `install` | **Payload** | `payload_install` | Alias of `setup` |
 | `uninstall` | **Payload** | `payload_uninstall` | Remove managed `PROJECT_DIR` only; confirm unless `--force` — **not** CLI binary |
 | `run` | Payload + run | domain pipeline | Payload ensure + build/run |
 | `reinstall` | Ship + payload | force `inst_perform_install` then payload | Force CLI replace then payload setup |
@@ -156,8 +157,8 @@ In JSON mode, help **MUST NOT** dump long human text; return a short structured 
 | `--debug` | Set `DEBUG=1` in `app_main` |
 | `--force` | Parsed by `app_main` → `FORCE=1` and `FORCE_REINSTALL=1`; uninstall, project regenerate, self-update force paths |
 | `--reset` | Sets `FORCE_REINSTALL=1` (and `RESET_PROJECT=1`); domain project wipe/regenerate |
-| `--project-dir`, `--project-base`, `--base-path`, `--prefix`, `--port`, `--no-run` | Domain flags — `requirement-domain-springboot3.md`. `--project-dir` wins over base and prefix. `--port` is 1–65535 |
-| `--springboot2`, `--springboot3`, `--boot <2\|3>` | Domain line switch — `requirement-domain-springboot3.md`. Missing or unknown `--boot` value **MUST** `out_die` |
+| `--project-dir`, `--project-base`, `--base-path`, `--prefix`, `--port`, `--no-run` | Domain flags — `requirement-domain-springboot-cli.md`. `--project-dir` wins over base and prefix. `--port` is 1–65535 |
+| `--springboot2`, `--springboot3`, `--boot <2\|3>` | Domain line switch — `requirement-domain-springboot-cli.md`. Missing or unknown `--boot` value **MUST** `out_die` |
 | `--force-user`, `--force-root` | Privilege force flags as wired; **MUST** appear in `app_help` Options |
 | Unknown `--*` / `-*` | **MUST** `out_die` (not silently ignored) |
 
@@ -167,27 +168,27 @@ Every routed verb is named here **and** on a topic-owner. Topic-owner samples:
 
 | Verb | Topic-owner | Sample |
 |------|-------------|--------|
-| *(empty argv)* | `requirement-shell-cli-zero-arguments` | `springboot3` |
-| `install` | `requirement-shell-payload-online-install` | `springboot3 install` |
-| `uninstall` | `requirement-shell-payload-online-install` | `springboot3 uninstall --force` |
-| `run` | `requirement-domain-springboot3` | `springboot3 run` |
-| `reinstall` | `requirement-domain-springboot3` | `springboot3 reinstall` |
-| `version` | `requirement-shell-self-management` | `springboot3 version` |
-| `about` | `requirement-shell-self-management` | `springboot3 about` |
-| `status` | `requirement-domain-springboot3` | `springboot3 status` |
-| `version-check` | `requirement-shell-self-management` | `springboot3 version-check` |
-| `self-update` | `requirement-shell-self-management` | `springboot3 self-update` |
-| `self-upgrade` | `requirement-shell-self-management` | `springboot3 self-upgrade` |
-| `self-uninstall` | `requirement-shell-self-management` | `springboot3 self-uninstall` |
-| `help` | this file | `springboot3 help` |
-| `menu` | `requirement-shell-cli-default-interaction` | `springboot3 menu` |
-| `main` | `requirement-shell-cli-default-interaction` | `springboot3 main` |
+| *(empty argv)* | `requirement-shell-cli-zero-arguments` | `springboot-cli` |
+| `install` | `requirement-shell-payload-online-install` | `springboot-cli install` |
+| `uninstall` | `requirement-shell-payload-online-install` | `springboot-cli uninstall --force` |
+| `run` | `requirement-domain-springboot-cli` | `springboot-cli run` |
+| `reinstall` | `requirement-domain-springboot-cli` | `springboot-cli reinstall` |
+| `version` | `requirement-shell-self-management` | `springboot-cli version` |
+| `about` | `requirement-shell-self-management` | `springboot-cli about` |
+| `status` | `requirement-domain-springboot-cli` | `springboot-cli status` |
+| `version-check` | `requirement-shell-self-management` | `springboot-cli version-check` |
+| `self-update` | `requirement-shell-self-management` | `springboot-cli self-update` |
+| `self-upgrade` | `requirement-shell-self-management` | `springboot-cli self-upgrade` |
+| `self-uninstall` | `requirement-shell-self-management` | `springboot-cli self-uninstall` |
+| `help` | this file | `springboot-cli help` |
+| `menu` | `requirement-shell-cli-default-interaction` | `springboot-cli menu` |
+| `main` | `requirement-shell-cli-default-interaction` | `springboot-cli main` |
 
 Help **MUST** list Options `--debug`, `--force-user`, `--force-root` and Environment `SCRIPT_URL` / `REPO_USER` / `REPO_NAME`. Help **MUST NOT** list `CHECKSUM`.
 
 #### Dispatcher acceptance criteria (this project)
 
-1. Unknown token after flag parse → `out_die` with pointer to `springboot3 help`.  
+1. Unknown token after flag parse → `out_die` with pointer to `springboot-cli help`.  
 2. Empty argv **Type O-P** (not Type N help; not Type O-S binary-only): non-interactive → ship unit + payload; interactive TTY with no line switch and no domain payload flag → numbered menu — see zero-arguments and default-interaction.  
 3. Command routing table in `app_main` **must** include every supported command row above (except intentional non-command empty-argv install).  
 4. Help text **must** stay aligned with routed commands/flags (no orphan listings).  
@@ -247,7 +248,7 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 3. Force manual `sudo` as the only UX for every elevated sub-step when internal escalation is the designed pattern (when Type 1 is introduced).  
 4. Bypass Output SSOT with raw user-facing `echo`/`printf` for normal messages.  
 5. Break the contract that `--json` implies quiet and machine-oriented output.  
-6. Drop zero-arg Type O-P combined ensure for the classic `curl | bash` path (or collapse to binary-only / help) without an explicit requirement change (`requirement-shell-cli-zero-arguments.md`).  
+6. Put the payload back on a bare `curl | bash`, or dump help for that path, without an explicit requirement change (`requirement-shell-cli-zero-arguments.md`).  
 7. Document flags in help that the dispatcher does not parse (or leave `--force` documented-only).  
 8. Invent a dedicated system user as mandatory for Type 0 CLI self-management without a specialized architecture requirement.
 
@@ -257,7 +258,7 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 
 ## 5. Definition of done (CLI interface)
 
-This requirement is satisfied for the springboot3 shell CLI when all of the following hold:
+This requirement is satisfied for the springboot-cli shell CLI when all of the following hold:
 
 1. Every command in §2.6 is routed and documented.  
 2. Global flags in §2.6 are parsed and honored.  
@@ -276,10 +277,10 @@ This requirement is satisfied for the springboot3 shell CLI when all of the foll
 | `docs/requirements/requirement-shell-self-management.md` | Lifecycle command semantics |
 | `docs/requirements/requirement-shell-output-requirements.md` | Output SSOT and channels |
 | `docs/requirements/requirement-shell-interactive-vs-noninteractive.md` | TTY / automation mode behavior |
-| `docs/requirements/requirement-shell-cli-zero-arguments.md` | Empty argv Type O-P payload installer (ship unit + payload) |
+| `docs/requirements/requirement-shell-cli-zero-arguments.md` | Empty argv: a bare pipe is the CLI only; payload is `setup` |
 | `docs/requirements/requirement-shell-cli-default-interaction.md` | Numbered menu and dual-mode matrix |
 | `docs/requirements/requirement-shell-cli-language.md` | Menu language copy |
-| `docs/requirements/requirement-domain-springboot3.md` | Domain commands/flags / pipeline |
+| `docs/requirements/requirement-domain-springboot-cli.md` | Domain commands/flags / pipeline |
 | `docs/requirements/requirement-shell-idempotency.md` | Re-run safety for ensure ops |
 | `docs/requirements/requirement-shell-modular-function-design.md` | Live function families (`out_*`, lifecycle, util, domain) |
 | `docs/requirements/index.md` | Registry SSOT |
@@ -288,10 +289,10 @@ This requirement is satisfied for the springboot3 shell CLI when all of the foll
 ---
 
 **Last Updated**: 2026-10-07 (1.2.0 points `--port`, `--prefix`, `--project-base`, and `--base-path` at the domain file)  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; CIAO Principles 1, 2, 3, 5, 8, 14, 18 (https://github.com/cloudgen/ciao); CIAO-Lite (https://github.com/cloudgen/ciao-lite). R1–R6 Notes sync.
 
-**Empty argv (this product):** See `requirement-shell-cli-zero-arguments.md` and `requirement-shell-cli-default-interaction.md`. Non-interactive empty argv is Type O-P **combined ensure**. Interactive TTY empty argv with no line switch is the numbered menu. Not Type N help. Not Type O-S binary-only.
+**Empty argv (this product):** See `requirement-shell-cli-zero-arguments.md` and `requirement-shell-cli-default-interaction.md`. Non-interactive empty argv installs or updates the CLI and exits. Interactive TTY empty argv with no line switch is the numbered menu. Payload is `setup`. Not Type N help.
 
 ### Live function inventory (ship unit — A naming)
 
@@ -309,11 +310,12 @@ Compliance claiming seed-prefix inventory as Implemented is **false** until rena
 
 ### Domain surface (this product)
 
-In addition to Type 0 lifecycle, **springboot3** exposes domain setup/run:
+In addition to Type 0 lifecycle, **springboot-cli** exposes domain setup/run:
 
 | Command / flag | Behavior (live) |
 |----------------|-----------------|
-| empty argv when installed / `run` | Non-interactive empty argv and explicit `run`: setup env + project + `run_springboot_project`. Interactive TTY empty argv with no line switch: numbered menu in the ship unit |
+| empty argv when installed / `run` | Non-interactive empty argv with no line switch and no domain payload flag: ship unit only, then exit. Explicit `run`, a line switch, or a domain payload flag: setup env + project + `run_springboot_project` unless `--no-run`. Interactive TTY empty argv with no line switch: numbered menu in the ship unit |
+| `setup` | **Implemented** — `payload_install` (SDKMAN, Java, Maven, project; no app start). `install` is the same step |
 | `--project-dir <path>` | Exact project directory. Wins over `--project-base` and `--prefix` |
 | `--project-base <path>` / `--base-path <path>` | Parent directory for another root on this machine |
 | `--prefix <name>` | Instance folder suffix so a second copy does not replace the default root |

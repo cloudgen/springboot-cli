@@ -1,5 +1,5 @@
 # =============================================================================
-# tests/helpers.sh — shared assertions for springboot3 CI tests
+# tests/helpers.sh — shared assertions for springboot-cli CI tests
 # =============================================================================
 # Source from test scripts (POSIX /bin/sh). Does not modify product code.
 # Parameterized APP_NAME / ship unit — specialized from selfmanaged bootstrap A.
@@ -8,7 +8,7 @@
 # shellcheck disable=SC2034
 : "${TESTS_ROOT:=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)}"
 : "${REPO_ROOT:=$(CDPATH= cd -- "${TESTS_ROOT}/.." && pwd)}"
-: "${APP_NAME:=springboot3}"
+: "${APP_NAME:=springboot-cli}"
 : "${SCRIPT:=${REPO_ROOT}/src/springboot-cli}"
 : "${PASS:=0}"
 : "${FAIL:=0}"

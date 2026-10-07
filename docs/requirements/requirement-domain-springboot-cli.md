@@ -1,53 +1,56 @@
-**file**: docs/requirements/requirement-domain-springboot3.md  
-**Status**: Active (Version 1.3.0)  
+**file**: docs/requirements/requirement-domain-springboot-cli.md  
+**Status**: Active (Version 1.4.0)  
 **Philosophy**: CIAO / CIAO-Lite (Caution • Intentional • Anti-fragile • Over-engineered)
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for the **Spring Boot domain surface** of springboot3: SDKMAN / Java / Maven toolchain ensure, a **line switch** between Spring Boot 2.7.18 and Spring Boot 3.3.5, demo project create-preserve-reset, build and run, Alpine/bash constraints, and domain flags/commands — **beyond** Type 0 CLI self-management. The ship unit stays `springboot3`. The default line stays Boot 3.3.5 / Java 21. `--springboot2` selects the Boot 2.7.18 / Java 8 profile.
+This requirement is the **project Single Source of Truth** for the **Spring Boot domain surface** of springboot-cli: SDKMAN / Java / Maven toolchain ensure, a **line switch** between Spring Boot 2.7.18 and Spring Boot 3.3.5, demo project create-preserve-reset, build and run, Alpine/bash constraints, and domain flags/commands — **beyond** Type 0 CLI self-management. The ship unit stays `springboot-cli`. The default line stays Boot 3.3.5 / Java 21. `--springboot2` selects the Boot 2.7.18 / Java 8 profile.
 
 It owns product ops so agents do not treat shell lifecycle files alone as full-product law (see glossary: domain-requirements, requirement-sufficient-check).
 
 **Scope:** Domain pins, helpers, default run path, project preserve/force, domain flags, help↔dispatcher alignment for domain surface.  
 **Out of scope (cited, not re-owned):** Binary install / self-update / uninstall detail (`requirement-shell-self-management.md`); empty-argv Type O-P routing when not installed (`requirement-shell-cli-zero-arguments.md` — this domain file owns **payload steps** that empty argv must reach); full Type 0 command catalog (`requirement-shell-cli-interface.md`); automatic companion checksum (`requirement-shell-automatic-checksum.md`); output channel SSOT (`requirement-shell-output-requirements.md`).
 
-**Payload online installer:** springboot3 is Type O-P. Product-class law: `requirement-shell-payload-online-install.md`. Domain helpers below are the **payload content** (what `install` / empty-argv payload layer / `run` ensure). Command names: **`install`/`uninstall` = payload**; **`self-update`/`self-uninstall` = CLI only**.
+**Payload online installer:** springboot-cli is Type O-P. Product-class law: `requirement-shell-payload-online-install.md`. Domain helpers below are the **payload content** (what `install` / empty-argv payload layer / `run` ensure). Command names: **`install`/`uninstall` = payload**; **`self-update`/`self-uninstall` = CLI only**.
 
 ---
 
 ### 1.1 Human-facing
 
-**In one sentence:** This file owns **which Spring Boot demo you get** — Boot 3.3.5 by default, or Boot 2.7.18 when you pass the switch — and how that demo folder and TCP port are chosen so more than one copy can run on the same machine.
+**In one sentence:** This file owns which Spring Boot demo you get — Boot 3.3.5 by default, or Boot 2.7.18 when you pass the switch — and it places that demo's Java with SDKMAN in your own home, on Bash, because SDKMAN does not run under `/bin/sh`.
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Someone running `springboot3` to get a working demo app | `springboot3` or `springboot3 --springboot2` |
+| You / this login | Someone running `springboot-cli` to get a working demo app | `springboot-cli` or `springboot-cli --springboot2` |
 | The other role | A future owner who may add a Boot 4 line after an explicit product decision | Do not add a third line as cleanup |
-| Not this file | Installing or removing the `springboot3` program itself | `springboot3 self-update` / `self-uninstall` |
+| Not this file | Installing or removing the `springboot-cli` program itself | `springboot-cli self-update` / `self-uninstall` |
 
 | Includes | Excludes |
 |----------|----------|
-| SDKMAN/Java/Maven ensure, the Boot 2 / Boot 3 line switch, demo `pom.xml`/sources, preserve vs `--reset`, domain help | Placing the CLI binary; companion SHA-256 of the CLI; a Spring Boot 4 line |
+| SDKMAN/Java/Maven ensure, Bash instead of `/bin/sh`, the login tree `${HOME}/.sdkman`, `sdk use` / `sdk default` to swap Java, the Boot 2 / Boot 3 line switch, demo `pom.xml`/sources, preserve vs `--reset`, domain help | Placing the CLI binary; companion SHA-256 of the CLI; a Spring Boot 4 line; a system Java from `apt` or `dnf` |
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
 | `src/springboot-cli` | program file people install | domain helpers (`setup_*`, `run_springboot_project`) |
-| `springboot3 help` | command | domain flags and verbs |
+| `springboot-cli help` | command | domain flags and verbs |
 | Demo `PROJECT_DIR` | `pom.xml`, `HelloApplication.java`, `application.properties` | the generated app |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Run the Boot 3 demo | Installed empty arguments or `run` builds and starts the Boot 3.3.5 app on port 8080. | `springboot3` or `springboot3 --springboot3` |
-| Run the Boot 2 demo | The same program sets up Spring Boot 2.7.18 and Java 8 in its own folder, on port 8081 unless you name another port. | `springboot3 --springboot2` or `springboot3 install --springboot2` |
-| Run a second copy | A prefix or a base path makes another folder. A port makes another TCP listener. `--project-dir` still names one exact folder and wins. | `springboot3 --prefix shop --port 8088 --no-run` |
-| Keep your edits | Re-runs must not wipe `pom.xml` or sources unless you ask. `--reset` is the wipe. An explicit port updates only `server.port`. The two lines do not share a default folder. | `springboot3 --reset` only when you want a clean demo |
+| Run the Boot 3 demo | Installed empty arguments or `run` builds and starts the Boot 3.3.5 app on port 8080. | `springboot-cli` or `springboot-cli --springboot3` |
+| Run the Boot 2 demo | The same program sets up Spring Boot 2.7.18 and Java 8 in its own folder, on port 8081 unless you name another port. | `springboot-cli --springboot2` or `springboot-cli install --springboot2` |
+| Run a second copy | A prefix or a base path makes another folder. A port makes another TCP listener. `--project-dir` still names one exact folder and wins. | `springboot-cli --prefix shop --port 8088 --no-run` |
+| Keep your edits | Re-runs must not wipe `pom.xml` or sources unless you ask. `--reset` is the wipe. An explicit port updates only `server.port`. The two lines do not share a default folder. | `springboot-cli --reset` only when you want a clean demo |
+| See the SDKMAN tree | Java and Maven for this login live under your home, not under `/usr`. A different login has a different tree. | `${HOME}/.sdkman` |
+| Swap Java in this terminal | `sdk use` selects that identifier for this shell only. The other candidate stays installed. | `sdk use java 21.0.10-tem` or `sdk use java 8.0.472-amzn` |
+| Swap Java for later terminals | `sdk default` is what a new shell picks. It does not have to match the shell you are in until you also `sdk use` it. | `sdk default java 21.0.10-tem` or `sdk default java 8.0.472-amzn` |
 
 ### Identity SSOT (this product — do not diverge)
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
@@ -71,7 +74,7 @@ The ship unit **MUST** offer exactly two payload lines. Unset `BOOT_LINE` and a 
 | **Java (SDKMAN id)** | `21.0.10-tem` | `8.0.472-amzn` |
 | **Java language level** | `21` | `1.8` |
 | **Java label** | Java 21 (Eclipse Temurin) | Java 1.8 (Amazon Corretto) |
-| **Default project dir** | `${HOME}/springboot-springboot3` | `${HOME}/springboot-springboot2` |
+| **Default project dir** | `${HOME}/springboot-springboot-cli` | `${HOME}/springboot-springboot2` |
 | **Artifact id** | `hello-springboot3` | `hello-springboot2` |
 
 | Pin | Both lines | Contract |
@@ -83,13 +86,13 @@ The ship unit **MUST** offer exactly two payload lines. Unset `BOOT_LINE` and a 
 | **Instance prefix** | empty | `--prefix <name>` appends `-${name}` to the line folder. It is one path segment, not a URL context path |
 | **Explicit project dir** | `--project-dir <path>` or a pre-set `PROJECT_DIR` | **MUST** win over the line folder, `--project-base`, and `--prefix` |
 
-`install`, `run`, non-interactive empty argv, a line switch or domain payload flag with no positional verb, and `--no-run` **MUST** use the line selected for that invocation. A bare interactive TTY with no line switch and no domain payload flag opens the numbered menu (`requirement-shell-cli-default-interaction.md`) and **MUST NOT** start this pipeline until a leaf chooses a line. The silent Config default `BOOT_LINE` of `3` is not a line switch. The two default folders **MUST NOT** be the same path. A Boot 2 setup **MUST NOT** delete or rewrite the Boot 3 default folder, and the reverse **MUST NOT** happen, unless the operator passed the same `--project-dir` for both. Two prefixes or two bases **MUST** produce two directories. Setting up one **MUST NOT** delete the other. The Boot 3 default listen port is **8080**. The Boot 2 default listen port is **8081**. Those defaults exist so both default roots can listen on one machine. `--port` or a pre-set `PORT` selects one port for that invocation and **MUST** be an integer from 1 to 65535. A missing or invalid value **MUST** fail loud. An explicit port on an existing project **MUST** update `server.port` and **MUST NOT** wipe other project files. When the port was not explicit and `application.properties` already has `server.port`, this invocation **MUST** adopt that value so the banner and `about` match the file.
+`setup`, `install`, `run`, a line switch or domain payload flag with no positional verb, and `--no-run` **MUST** use the line selected for that invocation. A bare non-interactive empty argv **MUST NOT** enter this pipeline. A bare interactive TTY with no line switch and no domain payload flag opens the numbered menu (`requirement-shell-cli-default-interaction.md`) and **MUST NOT** start this pipeline until a leaf chooses a line. The silent Config default `BOOT_LINE` of `3` is not a line switch. The two default folders **MUST NOT** be the same path. A Boot 2 setup **MUST NOT** delete or rewrite the Boot 3 default folder, and the reverse **MUST NOT** happen, unless the operator passed the same `--project-dir` for both. Two prefixes or two bases **MUST** produce two directories. Setting up one **MUST NOT** delete the other. The Boot 3 default listen port is **8080**. The Boot 2 default listen port is **8081**. Those defaults exist so both default roots can listen on one machine. `--port` or a pre-set `PORT` selects one port for that invocation and **MUST** be an integer from 1 to 65535. A missing or invalid value **MUST** fail loud. An explicit port on an existing project **MUST** update `server.port` and **MUST NOT** wipe other project files. When the port was not explicit and `application.properties` already has `server.port`, this invocation **MUST** adopt that value so the banner and `about` match the file.
 
 Agents **MUST NOT** change either pin set, or add a third line, as a casual cleanup. Header comments on the ship unit restate this intent.
 
 ### 2.2 Domain ensure pipeline (order)
 
-When the domain run path applies (non-interactive empty argv, a line switch or domain payload flag with no positional verb, explicit `run`, or a menu leaf that starts a line), `app_main` **MUST** execute in order:
+When the domain run path applies (a line switch or domain payload flag with no positional verb, explicit `run`, or a menu leaf that starts a line), `app_main` **MUST** execute in order:
 
 1. `check_alpine_requirements` — Alpine + bash availability for SDKMAN  
 2. `setup_sdkman` — install or reuse SDKMAN  
@@ -113,7 +116,7 @@ Live code keys full project wipe/regenerate on `FORCE_REINSTALL` from `--force` 
 
 ### 2.3.1 Demo artifact samples (product-owned files)
 
-When the demo project is generated, this requirement owns **fixed names** (not a sequenced queue). Filename grammar for those files: no prefix, no `n`; allocator = `setup_springboot_project`. Dest root = `PROJECT_DIR`. With no explicit directory, that root is `${PROJECT_BASE}/${PROJECT_NAME}` and, when `--prefix` is set, `${PROJECT_BASE}/${PROJECT_NAME}-<prefix>`. `PROJECT_NAME` is `springboot-springboot3` or `springboot-springboot2`. Default `PROJECT_BASE` is `${HOME}`. `--project-dir` replaces that composition.
+When the demo project is generated, this requirement owns **fixed names** (not a sequenced queue). Filename grammar for those files: no prefix, no `n`; allocator = `setup_springboot_project`. Dest root = `PROJECT_DIR`. With no explicit directory, that root is `${PROJECT_BASE}/${PROJECT_NAME}` and, when `--prefix` is set, `${PROJECT_BASE}/${PROJECT_NAME}-<prefix>`. `PROJECT_NAME` is `springboot-springboot-cli` or `springboot-springboot2`. Default `PROJECT_BASE` is `${HOME}`. `--project-dir` replaces that composition.
 
 | Role | Sample basename |
 |------|-----------------|
@@ -151,7 +154,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloApplication {
   public static void main(String[] args) { SpringApplication.run(HelloApplication.class, args); }
   @GetMapping("/")
-  public String hello() { return "Hello from springboot3"; }
+  public String hello() { return "Hello from springboot-cli"; }
 }
 ```
 
@@ -192,8 +195,9 @@ Field tables without these samples are not enough for a domain-file claim. Prese
 | Surface | Contract |
 |---------|----------|
 | **Default cmd** | `cmd=run` when the dual-mode matrix selects the payload path and no command token is given |
-| **Empty argv when installed** | Non-interactive: domain run pipeline (§2.2) + ship-unit upgrade policy — **not** Type O-S binary no-op. Interactive TTY with no line switch: numbered menu, not this pipeline |
-| **Empty argv when not installed** | Non-interactive Type O-P: ship-unit install **then** this domain pipeline. Interactive TTY with no line switch: numbered menu |
+| **Empty argv when installed** | Non-interactive, no line switch, no domain payload flag: ship-unit upgrade policy, then exit. **Not** this pipeline. Interactive TTY with no line switch: numbered menu, not this pipeline |
+| **Empty argv when not installed** | Non-interactive, no line switch, no domain payload flag: ship-unit install, then exit. **Not** this pipeline. Interactive TTY with no line switch: numbered menu |
+| **`setup` / `install`** | This pipeline through the project step. **MUST NOT** call `run_springboot_project` |
 | `--project-dir <path>` | Set `PROJECT_DIR`; required path argument or fail loud; marks the directory explicit so the line switch, `--project-base`, and `--prefix` do not retarget it |
 | `--project-base <path>` / `--base-path <path>` | Parent directory for the generated folder. Missing value or a newline **MUST** fail loud. Ignored for the path when `--project-dir` or a pre-set `PROJECT_DIR` is present |
 | `--prefix <name>` | One instance segment: letters, digits, `.`, `_`, `-`, starting with a letter or digit, at most 64 characters. Missing or invalid **MUST** fail loud. Folder suffix `-<name>` |
@@ -211,11 +215,59 @@ Field tables without these samples are not enough for a domain-file claim. Prese
 | `--reset` | **Implemented** — force project regenerate via `FORCE_REINSTALL` |
 | Type 0 cmds | `version`, `version-check`, `self-update`, `self-uninstall`, `about`, `help` exit before domain pipeline |
 
-### 2.5 Alpine / bash
+### 2.5 SDKMAN, Bash, and the normal-user tree
 
-1. Shebang **MUST** remain `#!/bin/bash` while SDKMAN requires bash.  
-2. On Alpine (`/etc/alpine-release`), if bash is missing, **MUST** instruct install (`apk add bash`) and fail non-zero — **MUST NOT** continue silently with ash-only assumptions.  
-3. Domain helpers **MUST** keep using output SSOT (no raw `echo` for user messages).
+Java and Maven for this product **MUST** come from SDKMAN for the login that runs the program. **MUST NOT** install those pins with `apt`, `dnf`, `yum`, or Termux `pkg`. **MUST NOT** point the demo at a Java that lives outside this login's SDKMAN tree.
+
+#### Why the shell is `/bin/bash` and not `/bin/sh`
+
+SDKMAN's installer (`https://get.sdkman.io`) and `${HOME}/.sdkman/bin/sdkman-init.sh` are Bash scripts. They use Bash arrays, `[[ ]]`, and Bash functions. `/bin/sh` on Debian and Ubuntu is dash. `/bin/sh` on Alpine is ash. Those shells cannot run that installer or that init script.
+
+| Rule | Contract |
+|------|----------|
+| Shebang | The ship unit **MUST** start with `#!/bin/bash`. **MUST NOT** change it to `#!/bin/sh`. |
+| Started as a file under another shell | When `BASH_VERSION` is empty and bash is on `PATH`, and `$0` is the script file, the process **MUST** `exec bash` on that file. |
+| Piped into `sh`, `dash`, `ash`, or `busybox` | There is no script path to re-exec. The process **MUST** exit 1 and say that springboot-cli requires bash. **MUST NOT** continue. |
+| Alpine without bash | When `/etc/alpine-release` exists and bash is missing, **MUST** tell the operator `apk add bash` and exit 1. **MUST NOT** continue on ash. |
+
+`SH` defaults to `bash`. The Alpine retry line is `bash <(curl -fsSL <channel>)`, not a pipe into `sh`.
+
+#### SDKMAN path for this login
+
+The tree belongs to the person who typed the command (**normal user privilege**). It is not a host-wide install and not another user's home.
+
+| Piece | Path |
+|-------|------|
+| `SDKMAN_DIR` | `${HOME}/.sdkman` |
+| `sdk` command | `${HOME}/.sdkman/bin/sdk` |
+| Init script | `${HOME}/.sdkman/bin/sdkman-init.sh` |
+| One Java identifier | `${HOME}/.sdkman/candidates/java/<id>` |
+| Java selected for new work | `${HOME}/.sdkman/candidates/java/current` |
+| One Maven identifier | `${HOME}/.sdkman/candidates/maven/<id>` |
+| Maven selected for new work | `${HOME}/.sdkman/candidates/maven/current` |
+
+`setup_sdkman` **MUST** source the init script through `util_source_external_safe` when the file is non-empty. A missing tree **MUST** install with `curl -fsSL https://get.sdkman.io | bash` as this login. After install, if `sdk` is still not on `PATH`, the helper **MUST** export `SDKMAN_DIR=${HOME}/.sdkman` and prepend `${HOME}/.sdkman/bin` plus the `java/current/bin` and `maven/current/bin` directories. If `sdk` is still missing, **MUST** `out_die`. **MUST NOT** install SDKMAN under `/usr`, `/opt`, or `/usr/local`.
+
+#### Swap Java with SDKMAN
+
+`setup_java` **MUST** run these three commands for the line's `JAVA_ID`, with nounset off so the candidate scripts do not abort the process, then put `${HOME}/.sdkman/candidates/java/current/bin` on `PATH`:
+
+```bash
+sdk install java "${JAVA_ID}"
+sdk default java "${JAVA_ID}"
+sdk use java "${JAVA_ID}"
+```
+
+`sdk install` downloads that identifier once into `candidates/java/<id>`. A second run that already has it is still success for this product when the following `sdk` commands can select it. `sdk use` changes **this shell only**. `sdk default` is what a **new** shell selects. The program runs both so the demo process and the next terminal agree. The other line's candidate **MUST** stay on disk. Swapping **MUST NOT** delete it.
+
+Shown swaps for this product (the operator can type these after `. "${HOME}/.sdkman/bin/sdkman-init.sh"`):
+
+| Line | Java identifier | This shell | Later shells |
+|------|-----------------|------------|--------------|
+| Boot 3.3.5 (default) | `21.0.10-tem` | `sdk use java 21.0.10-tem` | `sdk default java 21.0.10-tem` |
+| Boot 2.7.18 | `8.0.472-amzn` | `sdk use java 8.0.472-amzn` | `sdk default java 8.0.472-amzn` |
+
+Check the selection with `java -version` and `sdk current java`. Maven uses the same two verbs with identifier `3.9.14` (`sdk use maven 3.9.14`, `sdk default maven 3.9.14`). Domain helpers **MUST** keep user messages on the output helpers (`out_*`). Raw `echo` is not the product message for this section. The Alpine `apk add bash` hint is the existing `out_plain` line in `check_alpine_requirements`.
 
 ### 2.6 Help ↔ dispatcher (domain)
 
@@ -238,21 +290,21 @@ Field tables without these samples are not enough for a domain-file claim. Prese
 #### Invocation samples (this topic-owner)
 
 ```bash
-springboot3
-springboot3 run
-springboot3 --springboot3
-springboot3 --springboot2
-springboot3 install --springboot2
-springboot3 install --springboot3
-springboot3 --boot 2 --no-run
-springboot3 --boot 3 --no-run
-springboot3 --no-run
-springboot3 --prefix shop --port 8088 --no-run
-springboot3 --project-base /srv/apps --prefix api --port 9090 --springboot2 --no-run
-springboot3 --base-path /srv/apps --prefix api --port 9090 --no-run
-springboot3 --reset
-springboot3 status
-springboot3 reinstall
+springboot-cli
+springboot-cli run
+springboot-cli --springboot3
+springboot-cli --springboot2
+springboot-cli install --springboot2
+springboot-cli install --springboot3
+springboot-cli --boot 2 --no-run
+springboot-cli --boot 3 --no-run
+springboot-cli --no-run
+springboot-cli --prefix shop --port 8088 --no-run
+springboot-cli --project-base /srv/apps --prefix api --port 9090 --springboot2 --no-run
+springboot-cli --base-path /srv/apps --prefix api --port 9090 --no-run
+springboot-cli --reset
+springboot-cli status
+springboot-cli reinstall
 ```
 
 #### Compliance notes (implementation status) — re-read disk 2026-07-15
@@ -264,10 +316,10 @@ springboot3 reinstall
 | `--reset` → project regenerate | **Implemented** |
 | `status` / `reinstall` routed | **Implemented** |
 | `--force` → `FORCE_REINSTALL=1` | **Implemented** |
-| Empty argv installed = domain pipeline | **Implemented** (hybrid) |
+| Empty argv installed = ship unit only | **Implemented** — no domain pipeline unless `setup`, `run`, a line switch, or a domain payload flag |
 | Preserve without force | **Implemented** |
 | `install` / `uninstall` (payload) | **Required** — `payload_install` / `payload_uninstall` |
-| Empty argv not-installed continues to domain | **Required (Type O-P)** — ship install then payload (no binary-only exit) |
+| Empty argv not-installed stops after the CLI | **Required** — `setup` is the payload. A bare pipe does not enter this domain |
 | Residual | Real SDKMAN/Java network path not fully mocked beyond suite stubs; production run needs network/toolchain |
 
 ### 2.8 Why This Requirement Exists (Direct CIAO Alignment)
@@ -283,7 +335,7 @@ springboot3 reinstall
 ## 3. Design Principles (CIAO / CIAO-Lite)
 
 - Domain is **additive** to Type 0 — never a reason to delete self-management.  
-- Non-interactive empty argv is **Type O-P combined ensure**: not installed → ship unit **then** domain; installed → upgrade policy + domain run. A bare interactive TTY opens the numbered menu.  
+- Non-interactive empty argv with no line switch and no domain payload flag installs or updates the CLI and stops. `setup` installs the payload and does not start the app. A bare interactive TTY opens the numbered menu.  
 - Help, dispatcher, and this requirement stay synchronized.  
 - Prefer surgical code changes over “cleanup” that rewrites defensive domain helpers.
 
@@ -309,7 +361,8 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 
 1. Change either line's Spring Boot / Java / Maven pins, drop the line switch, or add another line without an explicit product decision and requirement revision.  
 2. Delete or simplify domain helpers (`setup_*`, `run_springboot_project`, Alpine check) as drive-by cleanup.  
-3. Change non-interactive empty argv from domain run back to an install-only no-op, or make a TTY `--springboot2` with no verb open the menu, without updating this file, `requirement-shell-cli-zero-arguments.md`, and `requirement-shell-cli-default-interaction.md`.  
+2a. Change the shebang to `#!/bin/sh`, or move SDKMAN out of `${HOME}/.sdkman`, or replace `sdk use` / `sdk default` with a host package manager.  
+3. Put the payload back on a bare non-interactive empty argv, or make a TTY `--springboot2` with no verb open the menu, without updating this file, `requirement-shell-cli-zero-arguments.md`, and `requirement-shell-cli-default-interaction.md`.  
 4. Advertise domain commands/flags in help without dispatcher wiring (or leave known Gaps untracked).  
 5. Default to destroying an existing `PROJECT_DIR` without force/reset policy.  
 6. Treat shell lifecycle requirements alone as full-product sufficient law while this domain surface exists.  
@@ -327,10 +380,10 @@ This requirement is satisfied when:
 2. Domain pipeline §2.2 runs for installed default/`run`.  
 3. Project preserve/force rules §2.3 hold.  
 4. Domain flags/commands §2.4 are either Implemented or listed as Gap with honest status.  
-5. Alpine/bash §2.5 holds.  
+5. SDKMAN §2.5 holds: shebang stays `#!/bin/bash`, the tree is `${HOME}/.sdkman`, and Java swap is `sdk use` plus `sdk default` for the line's identifier.  
 6. Help↔dispatcher §2.6 has no silent drift.  
 7. Registered in `docs/requirements/index.md`.  
-8. Traceability: implementation changes cite this file path / key `requirement-domain-springboot3`.
+8. Traceability: implementation changes cite this file path / key `requirement-domain-springboot-cli`.
 
 ---
 
@@ -349,7 +402,7 @@ This requirement is satisfied when:
 ---
 
 **Last Updated**: 2026-10-07  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; CIAO (https://github.com/cloudgen/ciao); CIAO-Lite; default Boot 3.3.5 line plus explicit Boot 2.7.18 switch.
 
 ## Terminologies
@@ -370,14 +423,31 @@ This requirement is satisfied when:
 
 **Daily-life example:** A café’s extra-job binder lists how takeout works, with a filled sample ticket — not just “we also serve food.” That binder is domain requirements; opening and closing the shop is a different binder.
 
+### Normal user privilege
+
+**Definition:** Normal user privilege is the layer in which a command runs as the person who typed it, with no root and no switch into a dedicated system account. That login may install this program into their own PATH and may install a toolchain under their own home. Normal user privilege must not change the host OS, write `/etc`, or create a dedicated system account.
+
+**Human daily-life explanation:** You run the command as the ordinary login who typed it. Everyday picture: your own keys — tidy your desk and put a tool in your own drawer. You may not rewrite the building lock list.
+
+**Daily-life example:** You install Java under your home with SDKMAN. You do not need admin privilege to do that.
+
+### Command line for normal user only
+
+**Definition:** A command line for normal user only is a shell environment whose privilege ceiling is normal user privilege. Typical instances are Termux, Git Bash, and Windows Command Prompt. There is no usable root switch and no dedicated system account for this login. When the program detects that class, it must not enable admin privilege or a dedicated system user: no in-tool sudo, no apt or dnf wrap, and no system-user create.
+
+**Human daily-life explanation:** This is a keyboard that only has your keys. Termux on a phone, Git Bash on Windows, and Windows Command Prompt are this kind of room: you can tidy your own drawer; you cannot borrow the building site key.
+
+**Daily-life example:** On that room, Java still comes from SDKMAN in your home. The program does not grow a `sudo apt install` for Java.
+
 ## 7. Revision history
 
 | Date | Change | Author / agent |
 |------|--------|----------------|
+| 2026-10-07 | Active v1.4.0: SDKMAN is the Java and Maven installer for this login. The shell stays `/bin/bash` because SDKMAN does not run under `/bin/sh`. The tree is `${HOME}/.sdkman`. Java swap is `sdk use` for this shell and `sdk default` for later shells (`21.0.10-tem` or `8.0.472-amzn`). | Grok (owner request) |
 | 2026-10-07 | Active v1.3.0: `--project-base` / `--base-path`, `--prefix`, and `--port` keep more than one root and more than one TCP port on one machine. `--project-dir` still wins. Boot 2 default port is 8081; Boot 3 stays 8080 | Grok (product decision) |
 | 2026-10-07 | Active v1.2.0: A line switch with no verb still runs that line, including on a TTY. A bare TTY opens the numbered menu and does not auto-run this pipeline | Grok (owner confirm) |
 | 2026-10-07 | Active v1.1.0: line switch `--springboot2` / `--springboot3` / `--boot` / `BOOT_LINE`; separate default project dirs; Boot 2.7.18 / Java 8 opt-in; default remains 3.3.5 / Java 21 | Grok (product decision) |
-| 2026-08-10 | Rename key/path to `requirement-domain-springboot3` (domain naming law) | Grok (fix-all) |
+| 2026-08-10 | Rename key/path to `requirement-domain-springboot-cli` (domain naming law) | Grok (fix-all) |
 | 2026-07-15 | Initial Active v1.0.0: domain pins, pipeline, preserve/force, flags, Alpine, help↔dispatcher, Gaps | Grok (authorized 1–3) |
 | 2026-08-10 | Specialized from bootstrap springboot2: identity + Boot 3.3.5 / Java 21 Temurin pins; Type O-P architecture inherited | Grok council |
 
@@ -386,6 +456,7 @@ This requirement is satisfied when:
 | TP family / ID | Suite | Status |
 |----------------|-------|--------|
 | **TP-DOM-01–11** | `tests/test_domain.sh` | have |
+| **TP-DOM-12** | `tests/test_domain.sh` | have |
 | **TP-LC-01** | `tests/test_install_lifecycle.sh` | have |
 
 **Suite map:** `tests/README.md` (TP labels in suite files).

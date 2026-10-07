@@ -1,6 +1,6 @@
-# What to review — springboot3
+# What to review — springboot-cli
 
-**Living checklist** (review plan). Product: **springboot3** bash Type O-P payload online installer + Spring Boot **3.3.5** domain.  
+**Living checklist** (review plan). Product: **springboot-cli** bash Type O-P payload online installer + Spring Boot **3.3.5** domain.  
 **Class:** software-development · domain SSOT present · **online Type O-P** install.  
 **Always load first:** `reviews/lessons.md`
 
@@ -12,7 +12,7 @@
 
 | # | Check | Notes |
 |---|--------|--------|
-| P1 | Read `docs/requirements/index.md` | class + 11 shell REQs + domain (`requirement-domain-springboot3`) |
+| P1 | Read `docs/requirements/index.md` | class + 11 shell REQs + domain (`requirement-domain-springboot-cli`) |
 | P2 | Confirm ship unit `src/springboot-cli` + companion `.sha256` | `VERSION` / `APP_NAME` / `SCRIPT_URL` SSOT |
 | P3 | Load `reviews/lessons.md` and re-check every open L-* | Mandatory |
 | P4 | Run suite | `./tests/run.sh` — record PASS/FAIL/SKIP |
@@ -29,16 +29,16 @@
 | Surface | Path | Review focus |
 |---------|------|--------------|
 | Class | `requirement-class-software-dev.md` | Residual stack; own-or-point peers |
-| Domain | `requirement-domain-springboot3.md` | Line switch (default Boot 3.3.5 / Java 21, opt-in Boot 2.7.18 / Java 8), pipeline, preserve/reset, help↔dispatcher |
+| Domain | `requirement-domain-springboot-cli.md` | Line switch (default Boot 3.3.5 / Java 21, opt-in Boot 2.7.18 / Java 8), pipeline, preserve/reset, help↔dispatcher |
 | CLI interface | `requirement-shell-cli-interface.md` | Commands, flags, dispatch, modes |
-| Zero-arguments | `requirement-shell-cli-zero-arguments.md` | Non-interactive Type O-P combined ensure. TTY with no line switch is the menu peer |
+| Zero-arguments | `requirement-shell-cli-zero-arguments.md` | A bare pipe installs or updates the CLI only. TTY with no line switch is the menu peer |
 | Default interaction | `requirement-shell-cli-default-interaction.md` | Dual-mode matrix and Boot-line menu. Handlers are in the ship unit |
 | Menu language | `requirement-shell-cli-language.md` | Thirteen codes, language leaf, help/about copy. Handlers are in the ship unit |
 | Payload online install | `requirement-shell-payload-online-install.md` | Layer split; first pipe not binary-only |
 | Self-management | `requirement-shell-self-management.md` | `version-check`, `self-update`, `self-uninstall`, about |
 | Automatic checksum | `requirement-shell-automatic-checksum.md` | Shape A companion primary; CHECKSUM not help |
 | Output | `requirement-shell-output-requirements.md` | `out_*` SSOT; JSON purity |
-| Storage | `requirement-shell-cli-storage.md` | Cache folder per login and process; persistence under `~/.local/springboot3` |
+| Storage | `requirement-shell-cli-storage.md` | Cache folder per login and process; persistence under `~/.local/springboot-cli` |
 | Idempotency | `requirement-shell-idempotency.md` | Re-run safety |
 | Interactive vs noninteractive | `requirement-shell-interactive-vs-noninteractive.md` | TTY vs pipe; confirm gates |
 | Modular design | `requirement-shell-modular-function-design.md` | Prefix families; no template authority in source |
@@ -100,7 +100,7 @@
 | Check | Path |
 |-------|------|
 | README install / Type O-P honesty | `README.md` |
-| Changelog vs `VERSION` | `CHANGELOG.md` vs `1.0.1` |
+| Changelog vs `VERSION` | `CHANGELOG.md` vs `2.0.0` |
 | SECURITY integrity / contact | `SECURITY.md` |
 | Companion digest present | `src/springboot-cli.sha256` |
 | Requirements registry honesty | `docs/requirements/index.md` |

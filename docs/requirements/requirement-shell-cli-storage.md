@@ -6,7 +6,7 @@
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for **shell CLI storage** of springboot3. **Storage** means **two** classes:
+This requirement is the **project Single Source of Truth** for **shell CLI storage** of springboot-cli. **Storage** means **two** classes:
 
 | Class | Role | Survives reboot |
 |-------|------|-----------------|
@@ -31,14 +31,14 @@ The preferred cache is **not** a ram-drive **project** tree (`/dev/shm/<project>
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Inspect storage | about shows Cache folder used, preferred, 1st fallback, 2nd fallback when that host has one, and Persistence storage. A skipped tier prints nothing | `springboot3 about` / `springboot3 --json about` |
+| Inspect storage | about shows Cache folder used, preferred, 1st fallback, 2nd fallback when that host has one, and Persistence storage. A skipped tier prints nothing | `springboot-cli about` / `springboot-cli --json about` |
 
 ### Identity SSOT (this product — do not diverge)
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` |
@@ -127,7 +127,7 @@ Walk this host’s chain in order. First directory that can be created **and** i
 
 ```sh
 util_mktemp() {
-    : "${APP_NAME:=springboot3}"
+    : "${APP_NAME:=springboot-cli}"
     : "${EFFECTIVE_STORAGE_DIR:=}"
     _suffix="${1:-tmp}"
     _dollar='$'
@@ -187,13 +187,13 @@ Git Bash omits the 2nd fallback line. Mac prints preferred under `/tmp/cache/`, 
 
 | Item | Live value |
 |------|------------|
-| **Product / binary** | `springboot3` |
+| **Product / binary** | `springboot-cli` |
 | **Cache resolver** | `util_resolve_storage` in `src/springboot-cli` |
 | **Linux preferred** | `/dev/shm/cache/cache-${APP_NAME}-${login}-$$` |
 | **Linux 1st / 2nd** | `/tmp/cache/cache-${APP_NAME}-${login}-$$` then `${HOME}/.cache/cache-${APP_NAME}-$$` |
 | **Git Bash** | `/tmp/cache/cache-${APP_NAME}-${login}-$$` then `${HOME}/AppData/Local/Temp/cache-${APP_NAME}-$$` |
 | **Mac** | `/tmp/cache/cache-${APP_NAME}-${login}-$$` then `${HOME}/Library/Caches/cache-${APP_NAME}-$$` then `${HOME}/cache/cache-${APP_NAME}-$$` |
-| **Persistence** | `${HOME}/.local/springboot3` |
+| **Persistence** | `${HOME}/.local/springboot-cli` |
 | **Persistence resolver** | `util_resolve_persistent_storage` |
 | **Scratch files** | `util_mktemp` (and `mktemp` under the resolved cache root / `TMPDIR`) |
 | **Call sites** | `app_main`, `app_about`, install staging via `TMPDIR` |
@@ -239,7 +239,7 @@ When the product may run on Termux, Git Bash, Windows cmd, or the same class: **
 3. Drop persistence storage from this requirement or from `about`.  
 4. Use `${HOME}/.local/bin` or `PROJECT_DIR` as persistence.  
 5. Replace the cache fallback chain with a shared world-writable dump, with one `cache-${APP_NAME}` leaf shared by every login, or with `XDG_CACHE_HOME` / an operator `STORAGE_DIR` override.  
-6. Scatter hard-coded `/tmp/springboot3` roots outside the cache resolver.  
+6. Scatter hard-coded `/tmp/springboot-cli` roots outside the cache resolver.  
 7. Leave the resolvers dead with no call sites while claiming storage is product law.  
 8. Echo a tier path without creating it (the chosen tier).  
 9. Use predictable `$$` scratch **file** names instead of `util_mktemp` / `mktemp` XXXXXX. The cache **directory** itself includes `$$`.  
@@ -277,7 +277,7 @@ When the product may run on Termux, Git Bash, Windows cmd, or the same class: **
 | `requirement-shell-modular-function-design` | `util_*` family ownership |
 | `requirement-shell-output-requirements` | Data-return stdout vs product UI |
 | `requirement-shell-self-management` | Install staging (`util_mktemp` / `TMPDIR`) |
-| `requirement-domain-springboot3` | Domain `PROJECT_DIR` (not this resolver) |
+| `requirement-domain-springboot-cli` | Domain `PROJECT_DIR` (not this resolver) |
 | `requirement-shell-cli-interface` | About fields, including `boot_line`, `prefix`, and `port` |
 | `requirement-shell-cli-language` | Language leaf inside persistence; not the cache root |
 | `docs/requirements/index.md` | Registry |
@@ -285,7 +285,7 @@ When the product may run on Termux, Git Bash, Windows cmd, or the same class: **
 ---
 
 **Last Updated**: 2026-10-07  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; CIAO (https://github.com/cloudgen/ciao); CIAO-Lite.
 
 ## 7. Revision history

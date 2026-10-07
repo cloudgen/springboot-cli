@@ -1,5 +1,5 @@
 # =============================================================================
-# CI — springboot3 Type O-P + domain shell CLI
+# CI — springboot-cli Type O-P + domain shell CLI
 # =============================================================================
 # Runs the POSIX test suite (syntax, CLI surface, install lifecycle against a
 # local HTTP channel, domain --no-run with stub toolchain). No secrets, no

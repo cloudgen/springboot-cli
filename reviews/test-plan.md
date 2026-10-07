@@ -1,9 +1,9 @@
-# Test plan — springboot3
+# Test plan — springboot-cli
 
 Maps **TP-*** coverage to automated or documented checks.  
 **Suite entry:** `./tests/run.sh`  
 **Ship unit:** `src/springboot-cli`  
-**Product VERSION:** 1.0.1  
+**Product VERSION:** 2.0.0  
 **Domain pins:** default Spring Boot **3.3.5** · Java **21** (`21.0.10-tem` Temurin); opt-in Spring Boot **2.7.18** · Java **8** (`8.0.472-amzn`); Maven **3.9.14**  
 **Last plan update:** 2026-10-07 (cache-folder storage, TTY menu, menu language)  
 **Last suite run:** see latest `reports/`
@@ -21,14 +21,14 @@ Status: **have** = automated today · **todo** = needed · **optional** · **man
 | Help lists payload vs ship-unit verbs; no CHECKSUM row | have | TP-CLI-03 · TP-CSUM-05 |
 | Unknown command fail-closed (+ JSON) | have | TP-CLI-06 |
 | Quiet / set -u HOME / storage isolation | have | TP-CLI-07 · TP-CLI-11 · TP-CLI-05 |
-| Type O-P empty argv combined ensure on a non-interactive run (not binary-only) | have | TP-LC-01 · TP-DOM-03 · TP-CURL-02 |
+| Bare pipe installs or updates the CLI and does not enter the payload | have | TP-LC-01 · TP-DOM-03 · TP-CURL-02 |
 | TTY numbered menu and menu language | have | TP-MENU-01..05 · TP-LANG-01 |
 | Payload install / uninstall isolation | have | TP-LC-02..03 · TP-DOM-04 · TP-DOM-09 |
 | Ship-unit self-update / self-uninstall / version-check | have | TP-LC-04..07 |
 | Refuse silent downgrade | have | TP-LC-08 |
 | Bad channel loud fail | have | TP-LC-09 |
 | Shape A companion + Shape B CHECKSUM pin | have | TP-CSUM-02..04 |
-| Domain pins (default Boot 3.3.5 port 8080, opt-in Boot 2.7.18 port 8081), prefix/base roots, preserve, reset, status/reinstall | have | TP-DOM-01..11 |
+| Domain pins (default Boot 3.3.5 port 8080, opt-in Boot 2.7.18 port 8081), prefix/base roots, preserve, reset, status/reinstall, SDKMAN bash and Java swap | have | TP-DOM-01..12 |
 | Silent-failure class (`assert_not_silent`) on pipes | have | TP-CURL-02..08 · TP-U-04 |
 | Optional public online channel | optional | TP-CURL-09 (`RUN_ONLINE_CURL_TESTS=1`) |
 | Modular prefix hygiene as primary TP | have | TP-MOD-01 · TP-MOD-02 |
@@ -80,7 +80,7 @@ Status: **have** = automated today · **todo** = needed · **optional** · **man
 
 | TP-ID | Intent | Suite | Primary requirement(s) | Status |
 |-------|--------|-------|------------------------|--------|
-| TP-LC-01 | Empty argv first ensure: binary + payload project (not binary-only) | test_install_lifecycle | zero-arguments · payload-online-install · L-OP-01 | **have** |
+| TP-LC-01 | Empty argv first ensure: CLI only, no demo; `setup` creates the demo and does not start it | test_install_lifecycle | zero-arguments · payload-online-install · L-OP-01 | **have** |
 | TP-LC-02 | Payload `install` creates project; CLI remains | test_install_lifecycle | payload-online-install · domain | **have** |
 | TP-LC-03 | Payload `uninstall` refuse without force; `--force` removes project only | test_install_lifecycle | payload-online-install · interactive · L-PAYLOAD-01 | **have** |
 | TP-LC-04 | about + version-check after install | test_install_lifecycle | self-management | **have** |
@@ -119,13 +119,14 @@ Status: **have** = automated today · **todo** = needed · **optional** · **man
 | TP-DOM-09 | Payload uninstall isolates project; CLI remains | test_domain | domain · payload · L-PAYLOAD-01 | **have** |
 | TP-DOM-10 | `--springboot2` / `--boot 2` scaffolds Boot 2.7.18; default line stays 3.3.5; folders stay apart; unknown line fails | test_domain | domain | **have** |
 | TP-DOM-11 | `--prefix`, `--project-base` / `--base-path`, and `--port` keep two roots and two TCP ports; `--project-dir` wins; bad port and bad prefix fail | test_domain | domain | **have** |
+| TP-DOM-12 | Shebang is `#!/bin/bash`; SDKMAN tree is `${HOME}/.sdkman`; Java swap commands are `sdk use java` and `sdk default java` | test_domain | domain | **have** |
 
 ### TP-MENU (TTY menu and menu language)
 
 | TP-ID | Intent | Suite | Primary requirement(s) | Status |
 |-------|--------|-------|------------------------|--------|
-| TP-MENU-01 | Interactive zero-command opens the menu and does not start the payload | test_cli | default-interaction | **have** |
-| TP-MENU-02 | A pipe with no command still runs Type O-P combined ensure and does not read | test_cli | default-interaction · zero-arguments | **have** |
+| TP-MENU-01 | Interactive zero-command, with or without `--debug`, opens the menu and does not self-install or start the payload | test_cli | default-interaction | **have** |
+| TP-MENU-02 | A pipe with no command installs or updates the CLI only and does not read | test_cli | default-interaction · zero-arguments | **have** |
 | TP-MENU-03 | An invalid choice reprints that layer via `out_error` and does not `out_die` | test_cli | default-interaction | **have** |
 | TP-MENU-04 | `menu` with no TTY dies and does not read | test_cli | default-interaction · cli-interface | **have** |
 | TP-MENU-05 | `--springboot2` with no verb still runs line 2 on a TTY | test_domain | default-interaction · domain | **have** |

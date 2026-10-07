@@ -1,4 +1,4 @@
-# Review reports — springboot3
+# Review reports — springboot-cli
 
 Dated product-review run reports. Index: `../index.md`.
 

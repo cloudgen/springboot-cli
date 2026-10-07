@@ -6,7 +6,7 @@
 
 ## 1. Purpose
 
-This requirement is the product law for **menu language** on springboot3: the thirteen codes, the file that remembers the choice, the words the numbered menu prints, and the human text of `help` and `about`.
+This requirement is the product law for **menu language** on springboot-cli: the thirteen codes, the file that remembers the choice, the words the numbered menu prints, and the human text of `help` and `about`.
 
 The numbered tree, Back, and the current-shell `read` stay in `requirement-shell-cli-default-interaction.md`. The scratch directory that `util_resolve_storage` returns stays in `requirement-shell-cli-storage.md`. This file owns the codes, the `language` leaf, and the copy. The leaf is not inside that scratch directory.
 
@@ -19,7 +19,7 @@ The ship unit writes this file. The sentences below are the copy `src/springboot
 | Box | Meaning | Example |
 |-----|---------|---------|
 | You / this login | Pick a language on the menu | `5`, then **52** |
-| The other role | A script that must not wait | `springboot3 install` |
+| The other role | A script that must not wait | `springboot-cli install` |
 | Not this file | What the demo prints, and the version one-liner | Those stay English |
 
 | Includes | Excludes |
@@ -29,15 +29,15 @@ The ship unit writes this file. The sentences below are the copy `src/springboot
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `springboot3` on a terminal | the menu | row **5** |
-| `${HOME}/.local/springboot3/language` | one-line file, mode 0600 | the saved code |
+| `springboot-cli` on a terminal | the menu | row **5** |
+| `${HOME}/.local/springboot-cli/language` | one-line file, mode 0600 | the saved code |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Keep English | A missing file means English. You do not need to pick **51** first. | `springboot3` |
+| Keep English | A missing file means English. You do not need to pick **51** first. | `springboot-cli` |
 | Switch language | The front board comes back in that language. The next run still uses it. | `5`, then `59` |
 | Go back | **0**, an empty line, or EOF does not write the file. | `0` |
-| Read help | Headings and the sentence after each command follow the saved language. The command token stays Latin. | `springboot3 help` |
+| Read help | Headings and the sentence after each command follow the saved language. The command token stays Latin. | `springboot-cli help` |
 
 ## 2. Core Rules / Requirements (Mandatory)
 
@@ -400,9 +400,9 @@ English `help` still prints `Usage:` and lists operational verbs apart from any 
 
 | Field | Value |
 |-------|--------|
-| Product | `springboot3` |
-| VERSION named here | `1.0.1`. This requirement's status stays 1.0.0. |
-| Leaf | `${HOME}/.local/springboot3/language` |
+| Product | `springboot-cli` |
+| VERSION named here | `2.0.0`. This requirement's status stays 1.0.0. |
+| Leaf | `${HOME}/.local/springboot-cli/language` |
 | Override | `SPRINGBOOT3_LANG` |
 | Runtime variable | `APP_LANG` |
 | Default | `en` |
@@ -457,7 +457,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 
 | TP family / ID | Intent | Suite | Status |
 |----------------|--------|-------|--------|
-| **TP-LANG-01** | Saving `de` writes `${HOME}/.local/springboot3/language` mode 0600, the next human help heading is `Verwendung:`, and **0** on the language board does not write the file | `tests/test_cli.sh` | **have** |
+| **TP-LANG-01** | Saving `de` writes `${HOME}/.local/springboot-cli/language` mode 0600, the next human help heading is `Verwendung:`, and **0** on the language board does not write the file | `tests/test_cli.sh` | **have** |
 
 ## 6. Related artifacts (versioned surface only)
 
@@ -495,7 +495,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 
 **Human daily-life explanation:** Menu language is the language of the chalkboard and of the printed usage card. The dishes keep their Latin names. The explanation beside each name changes.
 
-**Daily-life example:** You pick **60**. The next time you open the program, the board and `help` are in Japanese. `springboot3 version` still prints the version line in the program’s usual English form.
+**Daily-life example:** You pick **60**. The next time you open the program, the board and `help` are in Japanese. `springboot-cli version` still prints the version line in the program’s usual English form.
 
 ## 7. Status history
 
@@ -504,5 +504,5 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 | 2026-10-07 | Active 1.0.0 | Thirteen codes **51–63**, language leaf, and copy tables. Ship unit does not implement them yet. |
 
 **Last Updated**: 2026-10-07
-**Owner**: springboot3 project maintainers
+**Owner**: springboot-cli project maintainers
 **Alignment**: Registry `docs/requirements/index.md`; **CIAO** (https://github.com/cloudgen/ciao); CIAO-Lite (https://github.com/cloudgen/ciao-lite).

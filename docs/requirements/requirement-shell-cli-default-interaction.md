@@ -6,21 +6,21 @@
 
 ## 1. Purpose
 
-This requirement is the product law for the springboot3 **TTY numbered menu** and for the **dual-mode matrix** that decides when that menu is drawn and when the Type O-P combined ensure still runs.
+This requirement is the product law for the springboot-cli **TTY numbered menu** and for the **dual-mode matrix** that decides when that menu is drawn and when a pipe installs the CLI only.
 
-On a real terminal, a run with no positional verb, no Spring Boot line switch, and no domain payload flag opens a numbered tree: Spring Boot 3.3.5, Spring Boot 2.7.18, setup only, language, self-management, and Exit. A pipe, a missing terminal, `--json`, or `--quiet` with no positional verb stays the combined ensure and must not wait for a key. A line switch or a domain payload flag with no positional verb still runs that payload path, including on a terminal, so `--springboot2` does not turn into the menu.
+On a real terminal, a run with no positional verb, no Spring Boot line switch, and no domain payload flag opens a numbered tree: Spring Boot 3.3.5, Spring Boot 2.7.18, setup only, language, self-management, and Exit. A pipe, a missing terminal, `--json`, or `--quiet` with no positional verb installs or updates the CLI only and must not wait for a key. It does not install the payload. A line switch or a domain payload flag with no positional verb still runs that payload path, including on a terminal, so `--springboot2` does not turn into the menu.
 
-The language codes and the translated words live in `requirement-shell-cli-language.md`. The payload pins and the demo files live in `requirement-domain-springboot3.md`. Empty-argv detect and the non-interactive ensure live in `requirement-shell-cli-zero-arguments.md`. This file owns the matrix and the numbered tree.
+The language codes and the translated words live in `requirement-shell-cli-language.md`. The payload pins and the demo files live in `requirement-domain-springboot-cli.md`. Empty-argv detect and the non-interactive ensure live in `requirement-shell-cli-zero-arguments.md`. This file owns the matrix and the numbered tree.
 
-The ship unit `src/springboot-cli` at VERSION 1.0.1 draws this tree. The handlers are in that file. TP-MENU-01 through TP-MENU-05 are have.
+The ship unit `src/springboot-cli` at VERSION 2.0.0 draws this tree. The handlers are in that file. TP-MENU-01 through TP-MENU-05 are have.
 
 ### 1.1 Human-facing
 
-**In one sentence:** On a keyboard session, typing `springboot3` with no command shows a numbered board for Boot 3, Boot 2, setup only, language, and self-management; a pipe still installs and sets up the demo without waiting.
+**In one sentence:** On a keyboard session, typing `springboot-cli` with no command shows a numbered board for Boot 3, Boot 2, setup only, language, and self-management; a pipe installs the CLI only and does not wait.
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Picking a number on a real terminal | `springboot3`, then `1` |
+| You / this login | Picking a number on a real terminal | `springboot-cli`, then `1` |
 | The other role | A pipe or a script that must not wait | `curl … \| bash` |
 | Not this file | The Spring Boot pin tables, and the words of each language | Domain file and language file |
 
@@ -32,22 +32,22 @@ The ship unit `src/springboot-cli` at VERSION 1.0.1 draws this tree. The handler
 | Surface | What you open | What for |
 |---------|---------------|----------|
 | `src/springboot-cli` | ship unit | the menu, once the handlers exist |
-| `springboot3 menu` | command | the same tree on a terminal |
+| `springboot-cli menu` | command | the same tree on a terminal |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Open the front board | Boot 3, Boot 2, setup only, language, self-management, and Exit. Nothing starts until you pick a row. | `springboot3` on a terminal |
+| Open the front board | Boot 3, Boot 2, setup only, language, self-management, and Exit. Nothing starts until you pick a row. | `springboot-cli` on a terminal |
 | Start Boot 3 | Set up and run Spring Boot 3.3.5 on Java 21. A successful start replaces this process, so the board does not come back. | `1` |
 | Start Boot 2 | Set up and run Spring Boot 2.7.18 on Java 8. Same replacement on success. | `2` |
 | Write the project only | A side board, then one line, and you return to the front board. | `3`, then `31` or `32` |
 | Change the language | Thirteen languages. **0** goes back and does not save. | `5`, then `51` through `63` |
 | Care for this program | Payload install, local version, diagnostics, version check, channel update, remove this program. | `8`, then `81` through `86` |
 | Leave | The program returns success. | `9` |
-| Keep a pipe automatic | No board and no read. The combined ensure still runs. | `curl -fsSL …/src/springboot-cli \| bash` |
+| Keep a pipe automatic | No board and no read. The CLI is installed or updated. The payload is not. | `curl -fsSL …/src/springboot-cli \| bash` |
 
 ## 2. Core Rules / Requirements (Mandatory)
 
-**Claimed:** yes. A zero-arguments requirement already exists, so non-interactive empty argv stays that file’s combined ensure. This file adds the interactive half and the numbered tree.
+**Claimed:** yes. A zero-arguments requirement already exists, so a non-interactive empty argv stays that file’s CLI-only ensure. This file adds the interactive half and the numbered tree.
 
 ### 2.1 Dual-mode matrix (normative)
 
@@ -59,14 +59,14 @@ A **domain payload flag** is `--no-run`, `--reset`, `--force`, `--project-dir`, 
 
 | Situation | What runs | Menu | `read` |
 |-----------|-----------|------|--------|
-| Non-interactive, no positional verb: no TTY, a pipe, `curl \| bash`, `--json`, or `--quiet` | Type O-P combined ensure (ship unit if needed, then the payload). `--json` with no command is **not** JSON help and **not** this menu. | no | no; must not hang |
-| Interactive TTY, no positional verb, no line switch, no domain payload flag. Examples: `springboot3`, `springboot3 --debug` | This numbered tree. Do not place the CLI and do not start the payload until a leaf that needs them is chosen. | yes | yes, current shell |
+| Non-interactive, no positional verb, no line switch, no domain payload flag: no TTY, a pipe, `curl \| bash`, `--json`, or `--quiet` | Ship-unit install or update, then exit. No payload. `--json` with no command is **not** JSON help and **not** this menu. | no | no; must not hang |
+| Interactive TTY, no positional verb, no line switch, no domain payload flag. Examples: `springboot-cli`, `springboot-cli --debug` | This numbered tree. Do not place the CLI and do not start the payload until a leaf that needs them is chosen. | yes | yes, current shell |
 | Line switch or domain payload flag, no positional verb, including on a TTY. Examples: `--springboot2`, `--boot 2`, `--no-run`, `--project-dir DIR`, `--prefix shop`, `--port 8088` | That line’s payload path. Not this menu. | no | no, unless an existing confirm on that path already requires one |
 | `menu` or `main` on a TTY | This same tree. | yes | yes, current shell |
 | `menu` or `main` with no TTY, or with `--quiet` | Fail loud with `out_die`. Name the command. Do not `read`. | no | no |
 | A positional verb (`install`, `run`, `help`, …) | That verb, unchanged. | no | only when that verb already confirms |
 
-A second empty argv on a TTY is the menu again. It is not a second payload run. A second empty argv with no TTY stays the payload ensure.
+A second empty argv on a TTY is the menu again. It is not a second payload run. A second empty argv with no TTY, no line switch, and no domain payload flag refreshes the CLI and does not install the payload.
 
 `menu` and `main` are operational verbs. They are not numbered rows. `help` is not a numbered row.
 
@@ -168,7 +168,7 @@ There is no secret field and no multi-field walk. Payload flags stay operands on
 
 ### 2.10 Style
 
-Every command row prints **number**, **bold** short description, and *italic* long description. On a TTY the short name uses SGR 1 and the long description uses SGR 3;37. The header on every layer is the identity token `**springboot3**(*VERSION*)`: bold name, italic version, no space between them. A bare `springboot3` on that header is not enough. The Exit row is plain `9. Exit`.
+Every command row prints **number**, **bold** short description, and *italic* long description. On a TTY the short name uses SGR 1 and the long description uses SGR 3;37. The header on every layer is the identity token `**springboot-cli**(*VERSION*)`: bold name, italic version, no space between them. A bare `springboot-cli` on that header is not enough. The Exit row is plain `9. Exit`.
 
 Off a TTY, and when `JSON=1`, any menu ink that does print is plain text with no CSI. `menu` off a TTY does not print a board; it dies as §2.1 says. `menu --json` on a TTY still draws the tree in plain text and does not emit a JSON menu catalog.
 
@@ -185,11 +185,11 @@ A wrong pick stays on this layer (§2.8). Who may run a verb is not a menu layer
 
 | Field | Value |
 |-------|--------|
-| Product | `springboot3` |
-| VERSION named here | `1.0.1` (ship-unit Config). This requirement's status stays 1.0.0. |
+| Product | `springboot-cli` |
+| VERSION named here | `2.0.0` (ship-unit Config). This requirement's status stays 1.0.0. |
 | Shebang | `#!/bin/bash` stays. Do not switch the ship unit to `/bin/sh` to match another product. |
 | Claimed | yes |
-| Live ship unit | Handlers below are in `src/springboot-cli`. A TTY with no command draws the menu. A pipe stays combined ensure. |
+| Live ship unit | Handlers below are in `src/springboot-cli`. A TTY with no command draws the menu. A pipe installs or updates the CLI and does not enter the payload. |
 | Handlers (required names) | `app_cmd_menu`, `app_cmd_menu_setup`, `app_cmd_menu_self`, `app_cmd_menu_language` |
 | Printer (required name) | `out_menu_choice` |
 | Choice read | Current-shell `read -r` |
@@ -199,10 +199,10 @@ A wrong pick stays on this layer (§2.8). Who may run a verb is not a menu layer
 
 #### Worked sample (English front board)
 
-The version token is the live `VERSION`. This fence shows `1.0.1`. Reserved numbers are not printed. The choose-prompt in the program ends with one space; this fence omits that space.
+The version token is the live `VERSION`. This fence shows `2.0.0`. Reserved numbers are not printed. The choose-prompt in the program ends with one space; this fence omits that space.
 
 ```text
-[INFO] **springboot3**(*1.0.1*)
+[INFO] **springboot-cli**(*2.0.0*)
 1. **Spring Boot 3.3.5**: *set up and run Spring Boot 3.3.5 on Java 21*
 2. **Spring Boot 2.7.18**: *set up and run Spring Boot 2.7.18 on Java 8*
 3. **Setup only**: *write the project and do not start it*
@@ -215,29 +215,29 @@ Choose a number, or type the command name:
 #### Invocation samples
 
 ```text
-springboot3
-springboot3 --debug
-springboot3 menu
-springboot3 main
+springboot-cli
+springboot-cli --debug
+springboot-cli menu
+springboot-cli main
 ```
 
 On a TTY, each of those opens this tree. These do not:
 
 ```text
 curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli | bash
-springboot3 --json
-springboot3 --quiet
-springboot3 --springboot2
-springboot3 --boot 2
-springboot3 --no-run
-springboot3 install
+springboot-cli --json
+springboot-cli --quiet
+springboot-cli --springboot2
+springboot-cli --boot 2
+springboot-cli --no-run
+springboot-cli install
 ```
 
 ### 2.13 Why This Requirement Exists (Direct CIAO Alignment)
 
 - **CIAO Principle 1 – Caution** (https://github.com/cloudgen/ciao): A pipe must not block on `read`. An unknown menu number must not kill the process.
 - **CIAO Principle 2 – Intentional**: The matrix is written so a line switch and a bare terminal are different acts.
-- **CIAO Principle 16 – Interactive vs non-interactive**: The terminal draws the board. Automation keeps the combined ensure.
+- **CIAO Principle 16 – Interactive vs non-interactive**: The terminal draws the board. Automation installs or updates the CLI and does not wait.
 - **CIAO Principle 21 – Dual policies**: The tree is filled for this product. Reusable molds stay free of these pins.
 
 ## Under command line for normal user only
@@ -272,7 +272,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 7. `out_die` on an invalid menu choice.
 8. Change the shebang to `/bin/sh` as part of this menu.
 9. Mark TP-MENU-* have before a test asserts them.
-10. Edit the sibling sshd-cli tree, or the springboot2 / springboot3 sibling trees, to satisfy this file.
+10. Edit the sibling sshd-cli tree, or the springboot2 / springboot-cli sibling trees, to satisfy this file.
 
 ## 5. Definition of done
 
@@ -287,7 +287,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 | TP family / ID | Intent | Suite | Status |
 |----------------|--------|-------|--------|
 | **TP-MENU-01** | Interactive zero-command opens this menu and does not start the payload | `tests/test_cli.sh` | **have** |
-| **TP-MENU-02** | A pipe with no command still runs Type O-P combined ensure and does not `read` | `tests/test_cli.sh` | **have** |
+| **TP-MENU-02** | A pipe with no command installs or updates the CLI only, does not enter the payload, and does not `read` | `tests/test_cli.sh` | **have** |
 | **TP-MENU-03** | An invalid choice reprints that layer via `out_error` and does not `out_die` | `tests/test_cli.sh` | **have** |
 | **TP-MENU-04** | `menu` with no TTY dies and does not `read` | `tests/test_cli.sh` | **have** |
 | **TP-MENU-05** | `--springboot2` with no verb still runs line 2 on a TTY | `tests/test_domain.sh` | **have** |
@@ -301,7 +301,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 | `docs/requirements/requirement-shell-cli-interface.md` | Dual mention of `menu` and `main` |
 | `docs/requirements/requirement-shell-cli-zero-arguments.md` | Non-interactive empty argv |
 | `docs/requirements/requirement-shell-payload-online-install.md` | `install` is the payload |
-| `docs/requirements/requirement-domain-springboot3.md` | Line pins and demo run |
+| `docs/requirements/requirement-domain-springboot-cli.md` | Line pins and demo run |
 | `docs/requirements/requirement-class-software-dev.md` | Residual pointer; no dest approver |
 | `reviews/test-plan.md` | TP-MENU-* have rows |
 | `src/springboot-cli` | Ship unit. Menu handlers are in the file. |
@@ -362,7 +362,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 
 **Human daily-life explanation:** The top line is the shop name and the edition. Each dish is a number, a bold name, and a slanted explanation.
 
-**Daily-life example:** `**springboot3**(*1.0.1*)` then `1. **Spring Boot 3.3.5**: *set up and run Spring Boot 3.3.5 on Java 21*`.
+**Daily-life example:** `**springboot-cli**(*2.0.0*)` then `1. **Spring Boot 3.3.5**: *set up and run Spring Boot 3.3.5 on Java 21*`.
 
 ### CLI main menu numbering
 
@@ -380,5 +380,5 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 | 2026-10-07 | Active 1.0.0 | Dual-mode matrix and Boot-line menu. Confirmed: TTY menu plus pipe ensure; thirteen languages in the peer file; keep `install` as payload; no `self-install`, sudoers, Termux `pkg`, or SSH backup. Ship unit does not implement the menu yet. |
 
 **Last Updated**: 2026-10-07
-**Owner**: springboot3 project maintainers
+**Owner**: springboot-cli project maintainers
 **Alignment**: Registry `docs/requirements/index.md`; **CIAO** (https://github.com/cloudgen/ciao); CIAO-Lite (https://github.com/cloudgen/ciao-lite).

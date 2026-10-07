@@ -62,6 +62,7 @@ run_test_cli() {
     assert_contains "TP-CLI-03 help lists self-uninstall" "$_out" "self-uninstall"
     assert_contains "TP-CLI-03 help lists self-upgrade" "$_out" "self-upgrade"
     assert_contains "TP-CLI-03 help lists payload install" "$_out" "install"
+    assert_contains "TP-CLI-03 help lists setup" "$_out" "setup"
     assert_contains "TP-CLI-03 help lists payload uninstall" "$_out" "uninstall"
     assert_contains "TP-CLI-03 help lists about" "$_out" "about"
     assert_contains "TP-CLI-03 help lists --json" "$_out" "--json"
@@ -434,6 +435,22 @@ EOF
     assert_contains "TP-MENU-01 exit row" "$_out" "9. Exit"
     assert_not_contains "TP-MENU-01 does not start the payload" "$_out" "Starting Spring Boot"
     assert_file_missing "TP-MENU-01 no project directory" "${CI_HOME}/springboot-${APP_NAME}"
+    assert_file_missing "TP-MENU-01 no CLI binary" "${CI_USER_BIN}/${APP_NAME}"
+
+    # --- TP-MENU-01: same board when the only flag is --debug ---
+    _errf="${CI_HOME}/menu-01d-err.txt"
+    _out=$(
+        printf '9\n' | env -u SPRINGBOOT3_LANG TTY=1 HOME="${CI_HOME}" USER_BIN="${CI_USER_BIN}" \
+            bash "${SCRIPT}" --debug 2>"${_errf}"
+    )
+    _ec=$?
+    _err=$(cat "${_errf}" 2>/dev/null || true)
+    assert_eq "TP-MENU-01 --debug menu exit 0" 0 "$_ec"
+    assert_contains "TP-MENU-01 --debug header" "$_out" "**${APP_NAME}**(*${PRODUCT_VERSION}*)"
+    assert_contains "TP-MENU-01 --debug choose prompt" "$_out" "Choose a number, or type the command name:"
+    assert_not_contains "TP-MENU-01 --debug is not self-install" "${_out}${_err}" "Starting installation"
+    assert_not_contains "TP-MENU-01 --debug does not start the payload" "${_out}${_err}" "Starting Spring Boot"
+    assert_file_missing "TP-MENU-01 --debug no CLI binary" "${CI_USER_BIN}/${APP_NAME}"
     ci_cleanup_env
 
     # --- TP-MENU-02: a pipe with no command does not draw the menu ---

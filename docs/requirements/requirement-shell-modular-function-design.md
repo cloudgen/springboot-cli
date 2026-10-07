@@ -4,7 +4,7 @@
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for **modular function organization** of the springboot3 bash shell CLI.
+This requirement is the **project Single Source of Truth** for **modular function organization** of the springboot-cli bash shell CLI.
 
 It defines modular function organization for a **monolithic yet modular** single-file shell tool that remains `curl | sh` compatible.
 
@@ -32,19 +32,19 @@ It defines modular function organization for a **monolithic yet modular** single
 | Surface | What you open | What for |
 |---------|---------------|----------|
 | `src/springboot-cli` | program file people install | prefix families and Protection Zones |
-| `springboot3 help` | command | new verbs must be listed after they are routed |
+| `springboot-cli help` | command | new verbs must be listed after they are routed |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
 | Add output | New messages go through `out_*`, not a parallel printer. | Edit `src/springboot-cli` helpers |
-| Add a command | Route it from `app_main`; do not add a second main. | `springboot3 help` must list it |
+| Add a command | Route it from `app_main`; do not add a second main. | `springboot-cli help` must list it |
 
 ### Identity SSOT (this product — do not diverge)
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
@@ -67,7 +67,7 @@ CIAO-Lite shell CLIs distributed as one-liners **MUST** use:
 | **Documented units** | Every public helper carries a defensive header and safe defaults |
 | **Requirements extract policy** | Durable rules live in `requirement-*.md`; code comments encode intent and Protection Zones |
 
-The single shipped script is `src/springboot-cli` (bash `#!/bin/bash`). It is the installable artifact for `curl | bash`. The installed command name stays `springboot3`. A further split into multiple runtime files under `src/` **MAY** exist only if a build or pack step still produces **one** installable artifact and this requirement is updated.
+The single shipped script is `src/springboot-cli` (bash `#!/bin/bash`). It is the installable artifact for `curl | bash`. The installed command name stays `springboot-cli`. A further split into multiple runtime files under `src/` **MAY** exist only if a build or pack step still produces **one** installable artifact and this requirement is updated.
 
 ### 2.2 Official function families (this product — §3.1 option 1 A naming)
 
@@ -190,13 +190,13 @@ function_name() {
 
 ### 2.6 Implementation Notes (this project)
 
-| Item | Value for springboot3 |
+| Item | Value for springboot-cli |
 |------|------------------------|
-| **Product / binary** | `springboot3` (`APP_NAME`) |
+| **Product / binary** | `springboot-cli` (`APP_NAME`) |
 | **Single shipped script** | `src/springboot-cli` (bash `#!/bin/bash`; A prefixes + domain helpers — see Live function inventory) |
 | **`src/` directory** | Present but empty — **not** a multi-file runtime layout yet |
-| **Domain helpers** | Live domain uses `setup_*` / `run_springboot_project` (not `springboot3_*` prefix) |
-| **Bootstrap** | Direct execution when `${0##*/}` is `springboot3` or `springboot3.sh` → `app_main "$@"` |
+| **Domain helpers** | Live domain uses `setup_*` / `run_springboot_project` (not `springboot-cli_*` prefix) |
+| **Bootstrap** | Direct execution when `${0##*/}` is `springboot-cli` or `springboot-cli.sh` → `app_main "$@"` |
 
 #### Live inventory (authoritative — §3.1 option 1 A naming + P1–P7 closed)
 
@@ -293,7 +293,7 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 
 ## 5. Definition of done (shell modular function design)
 
-A modular-structure change for springboot3 is **not done** if any of the following fail:
+A modular-structure change for springboot-cli is **not done** if any of the following fail:
 
 1. Every new function uses an approved prefix from this requirement.  
 2. Critical helpers retain defensive headers and Protection intent.  
@@ -321,7 +321,7 @@ A modular-structure change for springboot3 is **not done** if any of the followi
 ---
 
 **Last Updated**: 2026-09-06  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; CIAO Principles 1, 2, 3, 5, 6, 7, 18 (https://github.com/cloudgen/ciao); CIAO-Lite (https://github.com/cloudgen/ciao-lite).
 
 ### Live function inventory (ship unit — A naming)

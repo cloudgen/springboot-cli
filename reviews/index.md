@@ -1,4 +1,4 @@
-# Review reports index — springboot3
+# Review reports index — springboot-cli
 
 | Date | Report | Scope | Verdict | Suite |
 |------|--------|-------|---------|-------|

@@ -27,12 +27,14 @@ run_test_install_lifecycle() {
 
     _sm_bin="${CI_USER_BIN}/${APP_NAME}"
     _errf="${CI_HOME}/lc-err.txt"
-    # Stubs required: Type O-P empty argv continues into payload after ship install
+    # Stubs required: `setup` enters the payload after the pipe places the CLI
     ci_stub_domain_toolchain
 
-    # --- first empty argv: ship unit + payload (must not exit binary-only) ---
-    # Pure empty argv ($#=0). NO_RUN=1 via env skips build/run after payload setup.
+    # --- first empty argv: ship unit only (no SDKMAN / project / app start) ---
+    # Pure empty argv ($#=0).
     rm -f "${_sm_bin}"
+    _def_proj="${CI_HOME}/springboot-${APP_NAME}"
+    rm -rf "${_def_proj}"
     _out=$(
         HOME="${CI_HOME}" USER_BIN="${CI_USER_BIN}" SCRIPT_URL="${CI_SCRIPT_URL}" \
         PATH="${CI_STUB_BIN}:${PATH}" NO_RUN=1 \
@@ -40,28 +42,40 @@ run_test_install_lifecycle() {
     )
     _ec=$?
     _err=$(cat "${_errf}" 2>/dev/null || true)
-    assert_eq "TP-LC-01 empty-argv first ensure exit 0" 0 "$_ec"
+    assert_eq "TP-LC-01 empty-argv self-install exit 0" 0 "$_ec"
     assert_file_exists "TP-LC-01 binary after empty argv" "${_sm_bin}"
-    assert_contains "TP-LC-01 ship/payload signals" "$_out$_err" "install"
-    # Payload must have been entered (project or setup messages) — not binary-only silence
+    assert_contains "TP-LC-01 ship signals" "$_out$_err" "install"
     _combo="${_out}${_err}"
-    if printf '%s' "$_combo" | grep -qE 'successfully installed|Payload|setup completed|Project location|SDKMAN|Preparing Spring'; then
-        t_pass "TP-LC-01 combined messages"
+    if printf '%s' "$_combo" | grep -qE 'successfully installed|Next:'; then
+        t_pass "TP-LC-01 self-install messages"
     else
-        t_fail "empty-argv silent or binary-only without messages: '$(_trunc "$_combo")'"
+        t_fail "empty-argv silent or missing self-install message: '$(_trunc "$_combo")'"
     fi
-    # Project created under default dir when payload ran
-    _def_proj="${CI_HOME}/springboot-${APP_NAME}"
-    if [ -d "${_def_proj}" ] || [ -f "${_def_proj}/pom.xml" ]; then
-        t_pass "TP-LC-01 payload project created"
+    assert_contains "TP-LC-01 names setup as the next step" "$_combo" "setup"
+    assert_file_missing "TP-LC-01 pipe does not create the demo" "${_def_proj}/pom.xml"
+    if printf '%s' "$_combo" | grep -q 'Starting Spring Boot'; then
+        t_fail "TP-LC-01 pipe started the app"
     else
-        # If only ship installed without payload → fail Type O-P
-        if [ -e "${_sm_bin}" ] && ! printf '%s' "$_combo" | grep -qE 'Payload|setup completed|Preparing Spring|Project'; then
-            t_fail "TP-LC-01 Type O-P binary-only"
-        else
-            t_fail "TP-LC-01 payload project missing"
-        fi
+        t_pass "TP-LC-01 pipe did not start the app"
     fi
+
+    # --- setup verb installs the payload and does not start the app ---
+    _out=$(
+        HOME="${CI_HOME}" USER_BIN="${CI_USER_BIN}" SCRIPT_URL="${CI_SCRIPT_URL}" \
+        PATH="${CI_STUB_BIN}:${PATH}" \
+        bash "${SCRIPT}" setup 2>"${_errf}"
+    )
+    _ec=$?
+    _err=$(cat "${_errf}" 2>/dev/null || true)
+    assert_eq "TP-LC-01 setup exit 0" 0 "$_ec"
+    assert_file_exists "TP-LC-01 setup creates the demo" "${_def_proj}/pom.xml"
+    assert_contains "TP-LC-01 setup payload message" "$_out$_err" "SDKMAN"
+    if printf '%s' "${_out}${_err}" | grep -q 'Starting Spring Boot'; then
+        t_fail "TP-LC-01 setup started the app"
+    else
+        t_pass "TP-LC-01 setup did not start the app"
+    fi
+    assert_file_exists "TP-LC-01 CLI remains after setup" "${_sm_bin}"
 
     # --- explicit payload install command ---
     _proj="${CI_HOME}/payload-proj"

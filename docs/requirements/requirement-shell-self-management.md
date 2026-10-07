@@ -4,12 +4,12 @@
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for **CLI self-management** of the springboot3 bash shell tool: inspecting, upgrading, and removing its own installed binary (and related install artifacts) safely—especially for tools installed via one-command online install (`curl | sh`)—without requiring a separate package-manager workflow for routine updates.
+This requirement is the **project Single Source of Truth** for **CLI self-management** of the springboot-cli bash shell tool: inspecting, upgrading, and removing its own installed binary (and related install artifacts) safely—especially for tools installed via one-command online install (`curl | sh`)—without requiring a separate package-manager workflow for routine updates.
 
 It defines lifecycle capabilities and safety rules for this shell project’s self-management commands.
 
 **Scope:** Lifecycle capabilities and safety rules for **ship-unit** commands only: `version-check`, `self-update` / `self-upgrade`, `self-uninstall`, and `about` (plus reuse of ship-unit install primitives).  
-**Out of scope (cited, not re-owned):** Payload `install` / `uninstall` / domain setup (`requirement-shell-payload-online-install.md`, `requirement-domain-springboot3.md`); full CLI dispatcher catalog (`requirement-shell-cli-interface.md`); pure re-run matrix (`requirement-shell-idempotency.md`); Type 1/2 ops.
+**Out of scope (cited, not re-owned):** Payload `install` / `uninstall` / domain setup (`requirement-shell-payload-online-install.md`, `requirement-domain-springboot-cli.md`); full CLI dispatcher catalog (`requirement-shell-cli-interface.md`); pure re-run matrix (`requirement-shell-idempotency.md`); Type 1/2 ops.
 
 **Must not confuse with:** Payload `install`/`uninstall` (environment/project), OS package managers, or domain start/stop.
 
@@ -17,13 +17,13 @@ It defines lifecycle capabilities and safety rules for this shell project’s se
 
 ### 1.1 Human-facing
 
-**In one sentence:** This file owns **updating and removing the CLI program** (`springboot3` on your PATH), not the Spring Boot demo folder.
+**In one sentence:** This file owns **updating and removing the CLI program** (`springboot-cli` on your PATH), not the Spring Boot demo folder.
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Operator who installed the script | `springboot3 self-update` |
+| You / this login | Operator who installed the script | `springboot-cli self-update` |
 | The other role | Publisher who ships `src/springboot-cli` and `src/springboot-cli.sha256` | Companion digest next to the channel URL |
-| Not this file | `uninstall` of the demo project | `springboot3 uninstall --force` |
+| Not this file | `uninstall` of the demo project | `springboot-cli uninstall --force` |
 
 | Includes | Excludes |
 |----------|----------|
@@ -32,19 +32,19 @@ It defines lifecycle capabilities and safety rules for this shell project’s se
 | Surface | What you open | What for |
 |---------|---------------|----------|
 | `src/springboot-cli` | program file people install | `inst_self_update` / `inst_self_uninstall` / `ver_check` |
-| `springboot3 about` | command | diagnostics for this CLI |
+| `springboot-cli about` | command | diagnostics for this CLI |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Compare versions | Local VERSION versus the channel file. A louder error beats a silent skip. | `springboot3 version-check` |
-| Remove the CLI | Deletes the installed script. It does not delete your demo sources unless you also uninstall payload. | `springboot3 self-uninstall` |
+| Compare versions | Local VERSION versus the channel file. A louder error beats a silent skip. | `springboot-cli version-check` |
+| Remove the CLI | Deletes the installed script. It does not delete your demo sources unless you also uninstall payload. | `springboot-cli self-uninstall` |
 
 ### Identity SSOT (this product — do not diverge)
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
@@ -137,16 +137,16 @@ Root may write global install path; non-root uses user path. Do not assume root 
 
 ### 2.8 Implementation Notes (this project)
 
-| Item | Value for springboot3 |
+| Item | Value for springboot-cli |
 |------|------------------------|
-| **Product / binary** | `springboot3` (`APP_NAME`) |
+| **Product / binary** | `springboot-cli` (`APP_NAME`) |
 | **Implementation file** | `src/springboot-cli` |
 | **Dispatcher** | `app_main` routes `version-check` → `ver_check`; `self-update` → `inst_self_update`; `self-uninstall` → `inst_self_uninstall`; `about` → `app_about` |
 | **Install orchestrator SSOT** | `inst_perform_install` (download → `util_verify_download_integrity` → place binary) |
 | **Version compare** | `ver_gt`; local version via `inst_get_version` |
 | **Install presence** | `inst_is_installed` |
 | **Paths** | `GLOBAL_BIN` default `/usr/local/bin`; `USER_BIN` default `${HOME}/.local/bin` |
-| **Repository identity** | `REPO_USER` default `Wilgat`; `REPO_NAME` default `springboot3` |
+| **Repository identity** | `REPO_USER` default `Wilgat`; `REPO_NAME` default `springboot-cli` |
 | **Release channel** | `SCRIPT_URL` with `:=` default composed from `REPO_*` and repo-relative path `src/springboot-cli` (override via env). `APP_NAME` stays the installed command name. |
 | **Strict digest pin** | Runtime `CHECKSUM` → Shape B path inside `util_verify_download_integrity` (**not** in help/about) |
 | **Companion digest** | Default `${SCRIPT_URL}.sha256` via `util_verify_download_integrity` — `requirement-shell-automatic-checksum.md` |
@@ -154,7 +154,7 @@ Root may write global install path; non-root uses user path. Do not assume root 
 | **Uninstall** | `inst_self_uninstall` (bin resolve via `util_get_install_bin_path`; confirm / `confirm_required`; remove; optional PATH cleanup) |
 | **PATH ensure** | `path_add_shell` / `path_in_path` on user install |
 | **Privilege** | Type 0 only for self-management surface; no dedicated system user |
-| **Version SSOT** | `VERSION` default `1.0.1` in script config block (`VERSION="1.0.1"`) |
+| **Version SSOT** | `VERSION` default `2.0.0` in script config block (`VERSION="2.0.0"`) |
 
 #### Normative acceptance behaviors (this project)
 
@@ -171,12 +171,12 @@ Root may write global install path; non-root uses user path. Do not assume root 
 #### Invocation samples (this topic-owner)
 
 ```bash
-springboot3 version
-springboot3 version-check
-springboot3 self-update
-springboot3 self-upgrade
-springboot3 self-uninstall
-springboot3 about
+springboot-cli version
+springboot-cli version-check
+springboot-cli self-update
+springboot-cli self-upgrade
+springboot-cli self-uninstall
+springboot-cli about
 ```
 
 #### Compliance notes (implementation status) — re-read disk 2026-07-15
@@ -250,7 +250,7 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 
 ## 5. Definition of done (shell self-management)
 
-Work claiming self-management support for springboot3 is **not done** if any of the following fail:
+Work claiming self-management support for springboot-cli is **not done** if any of the following fail:
 
 1. User-facing lifecycle commands exist and are routed (`version-check`, `self-update`, `self-uninstall`, `about`).  
 2. Update path verifies integrity (pinned and/or companion digest policy) and uses atomic replace via install SSOT.  
@@ -279,7 +279,7 @@ Work claiming self-management support for springboot3 is **not done** if any of 
 ---
 
 **Last Updated**: 2026-09-06  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; CIAO Principles 1, 2, 3, 8, 9, 18 (https://github.com/cloudgen/ciao); CIAO-Lite (https://github.com/cloudgen/ciao-lite).
 
 ### Live function inventory (ship unit — A naming)

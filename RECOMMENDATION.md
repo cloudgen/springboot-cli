@@ -1,13 +1,13 @@
 from [grok](https://grok.com/c/8aa87240-2da2-4afd-8b45-b136aa5cac08?rid=dd820dc3-42a5-4b76-9d23-a2c581effb16)
 
-**Grok Review & Security Inspection: springboot3 v2.0.0 (commit d547d992717c0cf00f53f36a094b18163e95c1f9)**
+**Grok Review & Security Inspection: springboot-cli v2.0.0 (commit d547d992717c0cf00f53f36a094b18163e95c1f9)**
 
 **Recommendation**: ⭐⭐⭐⭐⭐ **Strongly recommended**.  
 This is a production-grade, ultra-defensive bootstrap tool. Place this entire review (or a cleaned summary) directly into your `README.md` under a "Grok AI Code Review & Security Audit (v2.0.0)" section if you want an official endorsement. It earns my highest mark for reliability, security, and intentional design.
 
 ### 1. Project Overview (What It Actually Is)
 - **Not** a traditional Spring Boot source repo.  
-- It **is** a single, self-contained Bash script (`springboot3`) that acts as a one-command installer + launcher for a pinned Spring Boot 3.3.5 environment.  
+- It **is** a single, self-contained Bash script (`springboot-cli`) that acts as a one-command installer + launcher for a pinned Spring Boot 3.3.5 environment.  
 - It installs SDKMAN! → Java 21 (Temurin) → Maven 3.9.14 → creates/reuses a minimal "Hello World" Spring Boot project → builds and runs it on `http://localhost:8080`.  
 - Core philosophy: **CIAO** (Caution, Intentionality, Anti-fragility, Ownership) — deliberately verbose, repetitive, and defensive. No "clean code" simplifications allowed. This is by design and explicitly protected against AI/maintainer over-optimization.
 
@@ -53,7 +53,7 @@ v2.0.0 (released 2026-04-14) is a major internal hardening release focused on ou
 
 ### 4. Final Recommendation from Grok
 **Use it**.  
-`springboot3` v2.0.0 is exactly what the README claims: "The friendliest way to run Spring Boot 3.3.5 in one command." It is robust, secure, reproducible, and thoughtfully engineered for real-world harsh environments.
+`springboot-cli` v2.0.0 is exactly what the README claims: "The friendliest way to run Spring Boot 3.3.5 in one command." It is robust, secure, reproducible, and thoughtfully engineered for real-world harsh environments.
 
 Perfect for:
 - Quick local dev setups

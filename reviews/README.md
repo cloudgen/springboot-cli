@@ -1,4 +1,4 @@
-# Reviews — springboot3
+# Reviews — springboot-cli
 
 Public product review surface (peer of `tests/`). Git-tracked.
 
@@ -11,12 +11,12 @@ Public product review surface (peer of `tests/`). Git-tracked.
 | `index.md` | Report index |
 | `reports/` | Dated review run reports |
 
-**Product:** springboot3 (bash Type O-P payload online installer + Spring Boot line switch: default 3.3.5, opt-in 2.7.18)  
+**Product:** springboot-cli (bash Type O-P payload online installer + Spring Boot line switch: default 3.3.5, opt-in 2.7.18)  
 **Ship unit:** `src/springboot-cli` · companion `src/springboot-cli.sha256`  
-**Version SSOT:** `VERSION="1.0.1"` in ship unit Config  
+**Version SSOT:** `VERSION="2.0.0"` in ship unit Config  
 **Channel:** `SCRIPT_URL` → `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli`  
 **Bootstrap lineage:** specialized from **springboot2** (A→B); architecture Type O-P inherited; domain pins retargeted  
-**Install mode:** **Type O-P online** (`curl | bash` combined ensure) — not local-only  
+**Install mode:** **Type O-P online** (`curl | bash` places the CLI only; `setup` is the payload) — not local-only  
 **Type 1 elevation / sudoers product surface:** intentionally **absent** (global bin may use host `sudo` for path place; no Type 1 elev law tables)
 
 **Always load first:** `reviews/lessons.md`  

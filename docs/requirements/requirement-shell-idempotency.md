@@ -4,7 +4,7 @@
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for **idempotency (re-run safety)** of state-changing operations in the **POSIX shell CLI** for springboot3.
+This requirement is the **project Single Source of Truth** for **idempotency (re-run safety)** of state-changing operations in the **POSIX shell CLI** for springboot-cli.
 
 It defines re-run safety for ensure-style shell lifecycle commands (install, PATH integration, self-update, self-uninstall, and related helpers). Read-only commands remain outside the “ensure-X” contract except where they must stay safe under repeat invocation.
 
@@ -21,7 +21,7 @@ It defines re-run safety for ensure-style shell lifecycle commands (install, PAT
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Operator who runs `springboot3` twice | Second `springboot3` keeps `pom.xml` |
+| You / this login | Operator who runs `springboot-cli` twice | Second `springboot-cli` keeps `pom.xml` |
 | The other role | Implementer of install/update helpers | Detect → ensure → success-if-done |
 | Not this file | Intentional `--reset` / `--force` wipes | Those flags opt in to destroy |
 
@@ -32,19 +32,19 @@ It defines re-run safety for ensure-style shell lifecycle commands (install, PAT
 | Surface | What you open | What for |
 |---------|---------------|----------|
 | `src/springboot-cli` | program file people install | re-run ensure helpers |
-| `springboot3` (empty arguments) | command | second run must preserve |
+| `springboot-cli` (empty arguments) | command | second run must preserve |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Re-run | Second `springboot3` should keep your `pom.xml`. A wipe without a flag is a bug. | `springboot3` |
-| Force rebuild | Only flags that say so may regenerate the demo. | `springboot3 --reset` |
+| Re-run | Second `springboot-cli` should keep your `pom.xml`. A wipe without a flag is a bug. | `springboot-cli` |
+| Force rebuild | Only flags that say so may regenerate the demo. | `springboot-cli --reset` |
 
 ### Identity SSOT (this product — do not diverge)
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
@@ -102,9 +102,9 @@ Force **MUST NOT** be used as a silent way to skip integrity verification.
 
 ### 2.5 Implementation Notes (this project)
 
-| Item | Value for springboot3 |
+| Item | Value for springboot-cli |
 |------|------------------------|
-| **Product / binary** | `springboot3` (`APP_NAME`) |
+| **Product / binary** | `springboot-cli` (`APP_NAME`) |
 | **Implementation file** | `src/springboot-cli` |
 | **Install detect SSOT** | `inst_is_installed` / `inst_get_version` |
 | **Install ensure SSOT** | `inst_perform_install` (+ download/atomic helpers) |
@@ -119,7 +119,7 @@ Force **MUST NOT** be used as a silent way to skip integrity verification.
 |----------------|---------------|--------------------------|-----------------|
 | Payload `install` | Managed project already present | **Success**; ensure SDKMAN/Java/Maven; **preserve** demo files unless `--force`/`--reset` | `--force`/`--reset` regenerates project; CLI binary is unchanged |
 | Ship-unit place (`inst_perform_install`) | Binary present at privilege-correct path | **Success no-op**; human: already installed; JSON success | `FORCE_REINSTALL=1` re-downloads/replaces the CLI |
-| Zero-arg combined ensure (**Type O-P**) | Binary present (local or global) | Second empty argv **with no TTY**: upgrade policy **then payload/domain run** — **not** help; **not** binary-only “already installed” no-op. Second empty argv **on a TTY** with no line switch and no domain payload flag: the numbered menu again, not a second payload run | See `requirement-shell-cli-zero-arguments.md` and `requirement-shell-cli-default-interaction.md` |
+| Zero-arg ship-unit ensure | Binary present (local or global) | Second empty argv **with no TTY**, no line switch, and no domain payload flag: upgrade policy, then exit — **not** help and **not** the payload. Second empty argv **on a TTY** with no line switch and no domain payload flag: the numbered menu again, not a payload run | See `requirement-shell-cli-zero-arguments.md` and `requirement-shell-cli-default-interaction.md` |
 | `inst_maybe_install` | Installed or user declined | Already installed → return success without re-prompt storm | — |
 | `self-update` | Local version equals remote (or newer under project policy) | **Success no-op** “already latest” when versions equal and force off | When versions differ, reinstall via install path; force may force reinstall; **must not silent-downgrade** without explicit force policy (see self-management term) |
 | `self-uninstall` | Binary absent | **Success no-op** “not installed / nothing to uninstall” | Force may skip interactive confirm only; still no over-delete |
@@ -199,7 +199,7 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 
 ## 5. Definition of done (shell idempotency)
 
-A state-changing shell change for springboot3 is **not done** if any of the following fail:
+A state-changing shell change for springboot-cli is **not done** if any of the following fail:
 
 1. Second `install` with healthy install and force off exits success without reinstall.  
 2. Second `self-update` when local equals remote and force off exits success without reinstall.  
@@ -226,10 +226,10 @@ A state-changing shell change for springboot3 is **not done** if any of the foll
 ---
 
 **Last Updated**: 2026-10-07  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; related `requirement-shell-cli-interface.md`; CIAO Principles 1, 2, 3, 9, 10, 18 (https://github.com/cloudgen/ciao); CIAO-Lite (https://github.com/cloudgen/ciao-lite).
 
-**Empty argv (this product):** See `requirement-shell-cli-zero-arguments.md`. Installed **non-interactive** empty argv is **domain run**, not an install-ensure no-op. Installed **interactive TTY** empty argv with no line switch is the numbered menu again.
+**Empty argv (this product):** See `requirement-shell-cli-zero-arguments.md`. Installed **non-interactive** empty argv with no line switch and no domain payload flag refreshes the CLI and stops. It is not a domain run. Installed **interactive TTY** empty argv with no line switch is the numbered menu again.
 
 ## Design-time verification
 

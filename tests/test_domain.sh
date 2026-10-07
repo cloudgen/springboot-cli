@@ -2,7 +2,7 @@
 # tests/test_domain.sh — Spring Boot domain surface (TP-DOM-*)
 # =============================================================================
 # Design-time: declare TP-DOM when specializing:
-#   requirement-domain-springboot3
+#   requirement-domain-springboot-cli
 #   requirement-shell-payload-online-install (payload layer)
 #   requirement-shell-cli-zero-arguments (empty argv domain ensure)
 # Status map: docs/reviews/test-plan.md · matrix: docs/reviews/requirement-test-matrix.md
@@ -35,6 +35,16 @@ run_test_domain() {
     assert_contains "TP-DOM-11 help --prefix" "$_out" "--prefix"
     assert_contains "TP-DOM-11 help --project-base" "$_out" "--project-base"
     assert_contains "TP-DOM-11 help --base-path" "$_out" "--base-path"
+
+    # --- TP-DOM-12: Bash shebang, this-login SDKMAN tree, Java swap verbs ---
+    _shebang=$(head -n 1 "${SCRIPT}")
+    assert_eq "TP-DOM-12 shebang is /bin/bash" "#!/bin/bash" "${_shebang}"
+    _ship=$(cat "${SCRIPT}")
+    assert_contains "TP-DOM-12 SDKMAN dir is the login home" "${_ship}" '${HOME}/.sdkman'
+    assert_contains "TP-DOM-12 sdkman-init under that tree" "${_ship}" '${HOME}/.sdkman/bin/sdkman-init.sh'
+    assert_contains "TP-DOM-12 sdk use java" "${_ship}" 'sdk use java'
+    assert_contains "TP-DOM-12 sdk default java" "${_ship}" 'sdk default java'
+    assert_contains "TP-DOM-12 requires bash" "${_ship}" 'requires bash'
 
     _errf_early=$(mktemp)
     _ec=0
@@ -72,7 +82,7 @@ run_test_domain() {
     _proj="${CI_HOME}/my-demo-project"
 
     ci_stub_domain_toolchain
-    # Type O-P: empty argv with NO_RUN continues to payload after ship place
+    # Empty argv places the CLI only. Payload is the setup / install verb.
     HOME="${CI_HOME}" USER_BIN="${CI_USER_BIN}" SCRIPT_URL="${CI_SCRIPT_URL}" \
         PATH="${CI_STUB_BIN}:${PATH}" NO_RUN=1 \
         bash "${SCRIPT}" </dev/null >/dev/null 2>"${_errf}"
@@ -254,8 +264,8 @@ run_test_domain() {
     )
     _ec=$?
     assert_eq "TP-DOM-10 default line --no-run exit 0" 0 "$_ec"
-    assert_file_exists "TP-DOM-10 default Boot 3 dir" "${CI_HOME}/springboot-springboot3/pom.xml"
-    assert_contains "TP-DOM-10 default Boot 3 pom" "$(cat "${CI_HOME}/springboot-springboot3/pom.xml")" "${SPRINGBOOT_VER}"
+    assert_file_exists "TP-DOM-10 default Boot 3 dir" "${CI_HOME}/springboot-springboot-cli/pom.xml"
+    assert_contains "TP-DOM-10 default Boot 3 pom" "$(cat "${CI_HOME}/springboot-springboot-cli/pom.xml")" "${SPRINGBOOT_VER}"
     assert_contains "TP-DOM-10 Boot 2 dir survives default run" "$(cat "${CI_HOME}/springboot-springboot2/pom.xml")" "2.7.18"
 
     _out=$(
@@ -280,7 +290,7 @@ run_test_domain() {
     assert_contains "TP-DOM-10 unknown line text" "$_err" "Unknown Spring Boot line"
 
     # Default roots use different TCP ports so both lines can listen together.
-    assert_contains "TP-DOM-11 default Boot 3 port" "$(cat "${CI_HOME}/springboot-springboot3/src/main/resources/application.properties")" "server.port=8080"
+    assert_contains "TP-DOM-11 default Boot 3 port" "$(cat "${CI_HOME}/springboot-springboot-cli/src/main/resources/application.properties")" "server.port=8080"
     assert_contains "TP-DOM-11 default Boot 2 port" "$(cat "${CI_HOME}/springboot-springboot2/src/main/resources/application.properties")" "server.port=8081"
 
     # Two extra roots under one base, two prefixes, two ports. Neither replaces the other.
@@ -292,9 +302,9 @@ run_test_domain() {
     )
     _ec=$?
     assert_eq "TP-DOM-11 prefix alpha exit 0" 0 "$_ec"
-    assert_file_exists "TP-DOM-11 alpha root" "${_base}/springboot-springboot3-alpha/pom.xml"
-    assert_contains "TP-DOM-11 alpha port" "$(cat "${_base}/springboot-springboot3-alpha/src/main/resources/application.properties")" "server.port=18080"
-    assert_contains "TP-DOM-11 alpha pin" "$(cat "${_base}/springboot-springboot3-alpha/pom.xml")" "${SPRINGBOOT_VER}"
+    assert_file_exists "TP-DOM-11 alpha root" "${_base}/springboot-springboot-cli-alpha/pom.xml"
+    assert_contains "TP-DOM-11 alpha port" "$(cat "${_base}/springboot-springboot-cli-alpha/src/main/resources/application.properties")" "server.port=18080"
+    assert_contains "TP-DOM-11 alpha pin" "$(cat "${_base}/springboot-springboot-cli-alpha/pom.xml")" "${SPRINGBOOT_VER}"
 
     _out=$(
         HOME="${CI_HOME}" USER_BIN="${CI_USER_BIN}" SCRIPT_URL="${CI_SCRIPT_URL}" \
@@ -306,7 +316,7 @@ run_test_domain() {
     assert_file_exists "TP-DOM-11 beta root" "${_base}/springboot-springboot2-beta/pom.xml"
     assert_contains "TP-DOM-11 beta port" "$(cat "${_base}/springboot-springboot2-beta/src/main/resources/application.properties")" "server.port=18081"
     assert_contains "TP-DOM-11 beta pin" "$(cat "${_base}/springboot-springboot2-beta/pom.xml")" "2.7.18"
-    assert_file_exists "TP-DOM-11 alpha kept beside beta" "${_base}/springboot-springboot3-alpha/pom.xml"
+    assert_file_exists "TP-DOM-11 alpha kept beside beta" "${_base}/springboot-springboot-cli-alpha/pom.xml"
 
     # --project-dir is the exact root. Prefix must not create a second folder.
     _out=$(
@@ -317,10 +327,10 @@ run_test_domain() {
     _ec=$?
     assert_eq "TP-DOM-11 project-dir wins exit 0" 0 "$_ec"
     assert_file_exists "TP-DOM-11 explicit dir kept" "${_proj}/pom.xml"
-    assert_file_missing "TP-DOM-11 prefix not applied over project-dir" "${CI_HOME}/springboot-springboot3-shop/pom.xml"
+    assert_file_missing "TP-DOM-11 prefix not applied over project-dir" "${CI_HOME}/springboot-springboot-cli-shop/pom.xml"
 
     # A later --port updates server.port and keeps a user marker.
-    printf 'KEEP-PORT\n' > "${_base}/springboot-springboot3-alpha/USER_MARK.txt"
+    printf 'KEEP-PORT\n' > "${_base}/springboot-springboot-cli-alpha/USER_MARK.txt"
     _out=$(
         HOME="${CI_HOME}" USER_BIN="${CI_USER_BIN}" SCRIPT_URL="${CI_SCRIPT_URL}" \
         PATH="${CI_STUB_BIN}:${PATH}" \
@@ -328,8 +338,8 @@ run_test_domain() {
     )
     _ec=$?
     assert_eq "TP-DOM-11 retarget port exit 0" 0 "$_ec"
-    assert_contains "TP-DOM-11 retarget port" "$(cat "${_base}/springboot-springboot3-alpha/src/main/resources/application.properties")" "server.port=18082"
-    assert_eq "TP-DOM-11 retarget keeps marker" "KEEP-PORT" "$(cat "${_base}/springboot-springboot3-alpha/USER_MARK.txt")"
+    assert_contains "TP-DOM-11 retarget port" "$(cat "${_base}/springboot-springboot-cli-alpha/src/main/resources/application.properties")" "server.port=18082"
+    assert_eq "TP-DOM-11 retarget keeps marker" "KEEP-PORT" "$(cat "${_base}/springboot-springboot-cli-alpha/USER_MARK.txt")"
 
     _out=$(
         HOME="${CI_HOME}" USER_BIN="${CI_USER_BIN}" SCRIPT_URL="${CI_SCRIPT_URL}" \
@@ -341,7 +351,7 @@ run_test_domain() {
     assert_contains "TP-DOM-11 about prefix" "$_out" '"prefix":"alpha"'
     assert_contains "TP-DOM-11 about port" "$_out" '"port":"18082"'
     assert_contains "TP-DOM-11 about base" "$_out" '"project_base":'
-    assert_contains "TP-DOM-11 about composed dir" "$_out" "springboot-springboot3-alpha"
+    assert_contains "TP-DOM-11 about composed dir" "$_out" "springboot-springboot-cli-alpha"
 
     # --- TP-MENU-05: --springboot2 on a TTY still runs line 2, not the menu ---
     rm -rf "${CI_HOME}/springboot-springboot2"

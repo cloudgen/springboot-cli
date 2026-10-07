@@ -4,7 +4,7 @@
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for how the springboot3 **POSIX shell CLI** behaves in **interactive** (human + TTY) versus **non-interactive** (automation, `curl | sh`, CI/CD, pipes, `--json` / often `--quiet`) environments.
+This requirement is the **project Single Source of Truth** for how the springboot-cli **POSIX shell CLI** behaves in **interactive** (human + TTY) versus **non-interactive** (automation, `curl | sh`, CI/CD, pipes, `--json` / often `--quiet`) environments.
 
 It defines interactive vs non-interactive behavior for this shell project (global flags + `prompt_*` + TTY detection—not a Node Config singleton).
 
@@ -19,7 +19,7 @@ It defines interactive vs non-interactive behavior for this shell project (globa
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Human at a terminal | `springboot3 uninstall` may ask |
+| You / this login | Human at a terminal | `springboot-cli uninstall` may ask |
 | The other role | Automation piping `curl \| bash` | No prompt may wait for a key |
 | Not this file | A dest-approval review screen | This product has none |
 
@@ -35,14 +35,14 @@ It defines interactive vs non-interactive behavior for this shell project (globa
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
 | One-liner | No prompt may wait for a key. The pipe has no human to answer. | `curl -fsSL …/src/springboot-cli \| bash` |
-| Confirm wipe | Interactive uninstall may ask; `--force` skips the question. Non-interactive without `--force` must refuse. | `springboot3 uninstall --force` |
+| Confirm wipe | Interactive uninstall may ask; `--force` skips the question. Non-interactive without `--force` must refuse. | `springboot-cli uninstall --force` |
 
 ### Identity SSOT (this product — do not diverge)
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
@@ -145,9 +145,9 @@ interactive   non-interactive
 
 ### 2.5 Implementation Notes (this project)
 
-| Item | Value for springboot3 |
+| Item | Value for springboot-cli |
 |------|------------------------|
-| **Product / binary** | `springboot3` |
+| **Product / binary** | `springboot-cli` |
 | **Implementation** | `src/springboot-cli` |
 | **Mode globals** | `TTY`, `QUIET`, `JSON`, `DEBUG`, `FORCE`, `FORCE_REINSTALL` |
 | **TTY init** | `[ -t 0 ] && [ -t 1 ] && TTY=1` near config block |
@@ -160,8 +160,8 @@ interactive   non-interactive
 
 | Command / path | Interactive (TTY, not quiet/json) | Non-interactive / quiet / json |
 |----------------|-----------------------------------|--------------------------------|
-| Zero-arg, **not** installed, no line switch, no domain payload flag | Numbered menu. Do not auto-place and do not auto-run the payload. Live ship unit still confirms or installs (**gap**) | Auto path: quiet/json/non-TTY → ship-unit install then payload, no `read` |
-| Zero-arg, **already** installed, no line switch, no domain payload flag | Numbered menu again. Not a second payload run. Not help | Non-interactive: upgrade policy then payload ensure; no `read` |
+| Zero-arg, **not** installed, no line switch, no domain payload flag | Numbered menu. Do not auto-place and do not auto-run the payload. Live ship unit still confirms or installs (**gap**) | Auto path: quiet/json/non-TTY → ship-unit install, then exit. No payload. No `read` |
+| Zero-arg, **already** installed, no line switch, no domain payload flag | Numbered menu again. Not a second payload run. Not help | Non-interactive: upgrade policy, then exit. No payload. No `read` |
 | Line switch or domain payload flag, no positional verb | Payload path for that line, including on a TTY. Not the menu | Same payload path; no menu `read` |
 | `install` | Install with human `out_*` messages | No prompt; honor force for reinstall; JSON structured results |
 | `self-uninstall` | `prompt_yes_no` unless `--force` | Without force: fail closed with explicit “requires --force” (JSON: `out_json_error` / `confirm_required`); never pretend user cancelled; with `--force`: remove without confirm |
@@ -255,11 +255,11 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 
 ## 5. Definition of done (shell interactive vs non-interactive)
 
-Mode-related work for springboot3 is **not done** if any of the following fail:
+Mode-related work for springboot-cli is **not done** if any of the following fail:
 
 1. No code path blocks on `read` under `--json`, `--quiet`, or non-TTY (except documented `INTERACTIVE=1` value prompt).  
 2. Destructive uninstall without `--force` does not silently proceed in non-interactive mode.  
-3. Zero-arg install-ensure supports automation (`curl | bash` / quiet/json): not-installed installs; already-installed continues payload ensure without help (`requirement-shell-cli-zero-arguments.md` Type O-P). A TTY with no command, no line switch, and no domain payload flag opens the numbered menu and must not auto-run the payload (`requirement-shell-cli-default-interaction.md`). Pipes stay combined ensure and must not `read`.  
+3. Zero-arg install-ensure supports automation (`curl | bash` / quiet/json): not-installed installs the CLI and exits; already-installed refreshes the CLI and exits, without help and without the payload (`requirement-shell-cli-zero-arguments.md`). A TTY with no command, no line switch, and no domain payload flag opens the numbered menu and must not auto-run the payload (`requirement-shell-cli-default-interaction.md`). Pipes must not `read`.  
 4. All confirms go through `prompt_yes_no`.  
 5. Colors only when TTY and not quiet/json.  
 6. JSON/human contracts remain aligned with `requirement-shell-output-requirements.md`.  
@@ -285,7 +285,7 @@ Mode-related work for springboot3 is **not done** if any of the following fail:
 ---
 
 **Last Updated**: 2026-10-07  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; CIAO Principles 1, 2, 3, 14, 18 (https://github.com/cloudgen/ciao); CIAO-Lite (https://github.com/cloudgen/ciao-lite).
 
 **Empty argv (this product):** See `requirement-shell-cli-zero-arguments.md`. Installed non-interactive empty argv is **domain run**. Installed interactive TTY empty argv with no line switch is the numbered menu.

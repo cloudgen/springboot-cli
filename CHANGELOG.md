@@ -1,15 +1,38 @@
 # Changelog
 
-All notable changes to **springboot3** will be documented in this file.
+All notable changes to **springboot-cli** will be documented in this file.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
+
+---
+
+## [Unreleased]
+
+---
+
+## [2.0.0] - 2026-10-07
+
+### Breaking
+- The installed command is `springboot-cli`. Release **1.0.1** installed `springboot3`. Run the one-liner again so `PATH` gets `springboot-cli`. A `self-update` started from the old `springboot3` binary writes the new script to the `springboot-cli` path and leaves the old filename in place.
+- A pipe with no command installs or updates this CLI only. It does not install SDKMAN, Java, Maven, or the demo, and it does not start the app. Release **1.0.1** continued into the payload and started the app.
+- The default Boot 3 demo folder is `~/springboot-springboot-cli`. Release **1.0.1** used `~/springboot-springboot3`. Boot 2 stays `~/springboot-springboot2`. Persistence is `~/.local/springboot-cli`.
+
+### Changed
+- `setup` installs SDKMAN, Java, Maven, and the demo and does not start the app. `install` is the same step. `run` builds and starts the demo.
+- `--springboot3` and `--springboot2` stay the Boot line switches. They are not the command name.
+- Domain law file is `docs/requirements/requirement-domain-springboot-cli.md`.
+
+### Notes
+- Product version **2.0.0**. `APP_NAME` is `springboot-cli`. `VERSION="2.0.0"`.
+- Companion digest regenerated.
+- Suite: PASS=335 FAIL=0 SKIP=1.
 
 ---
 
 ## [1.0.1] - 2026-10-07
 
 ### Changed
-- The published ship unit is `src/springboot-cli`. The installed command name stays `springboot3`.
+- The published ship unit is `src/springboot-cli`. The installed command stays `springboot3`.
 - The install channel is `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli`. The companion is `src/springboot-cli.sha256`.
 
 ### Notes
@@ -25,13 +48,13 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) 
 - `--project-base` (alias `--base-path`) and `--prefix` so more than one project root can live on one machine. `--project-dir` still names one exact directory and wins.
 - `--port` sets the TCP listen port. Boot 3 stays on **8080**. Boot 2 defaults to **8081** so the two default roots can listen together. `PORT`, `PROJECT_BASE`, and `PROJECT_PREFIX` match those switches.
 - Numbered terminal menu for Boot 3.3.5, Boot 2.7.18, setup only, language (13 codes), and self-management. `menu` and `main` open the same tree. A pipe with no command runs combined ensure and does not wait for a key.
-- Cache folder per login and per process, plus persistence under `~/.local/springboot3`. `about` reports the folder this run used.
+- Cache folder per login and per process, plus persistence under `~/.local/springboot-cli`. `about` reports the folder this run used.
 
 ### Changed
 - First-commit product version baseline is **1.0.0**. The ship unit line is `VERSION="1.0.0"`.
-- Spring Boot **3.3.5** stays the default line. Spring Boot **2.7.18** stays the opt-in line. On a terminal, `springboot3` with no command opens the numbered menu. A pipe with no command runs combined ensure.
+- Spring Boot **3.3.5** stays the default line. Spring Boot **2.7.18** stays the opt-in line. On a terminal, `springboot-cli` with no command opens the numbered menu. A pipe with no command runs combined ensure.
 - `STORAGE_DIR` is the first fallback path the program reports. It is not an operator override.
-- Public repository is **cloudgen/springboot-cli**. The install channel is `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3`. The program name stays `springboot3`.
+- Public repository is **cloudgen/springboot-cli**. The install channel is `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot-cli`. The program name stays `springboot-cli`.
 
 ### Notes
 - First published baseline on `cloudgen/springboot-cli`. Headings below this version are workspace notes from before that repository.
@@ -48,10 +71,10 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) 
 ## [2.4.0] - 2026-10-07
 
 ### Added
-- Payload line switch on the `springboot3` ship unit: `--springboot3` (default) and `--springboot2`.
+- Payload line switch on the `springboot-cli` ship unit: `--springboot3` (default) and `--springboot2`.
 - `--boot 2|3` (also `springboot2` / `springboot3`) and environment `BOOT_LINE` select the same lines. A flag wins over `BOOT_LINE`.
 - Spring Boot **2.7.18** / Java **8** Amazon Corretto (`8.0.472-amzn`) profile, with default folder `~/springboot-springboot2` and artifact `hello-springboot2`.
-- Spring Boot **3.3.5** / Java **21** Temurin (`21.0.10-tem`) remains the default, with default folder `~/springboot-springboot3`.
+- Spring Boot **3.3.5** / Java **21** Temurin (`21.0.10-tem`) remains the default, with default folder `~/springboot-springboot3` on that older command name.
 - `about` reports `boot_line`, `springboot_ver`, and `java_id`.
 - Unknown or missing `--boot` values fail closed.
 - **TP-DOM-10** covers both generated projects, separate default folders, about JSON, and the unknown-line failure.
@@ -119,7 +142,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) 
 ### Changed
 - Software-dev housekeeping after harness-knowledge audit fix.
 - Re-synced portable harness from RAM genesis (H2 NEW+UPDATE); product law/ship unit unchanged.
-- `.gitignore` detect header retargeted to `./springboot3` (removed stale `./pomo`/`./countdown` detect text).
+- `.gitignore` detect header retargeted to `./springboot-cli` (removed stale `./pomo`/`./countdown` detect text).
 - Version bump **2.3.2 → 2.3.3**; companion digest regenerated.
 
 ### Notes
@@ -133,8 +156,8 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) 
 
 ### Added
 - Public **`reviews/`** surface: `what-to-review`, `test-plan`, `requirement-test-matrix`, `lessons`, dated reports.
-- Product law under **`docs/requirements/`** (class + Type O-P shell + domain `requirement-domain-springboot3`).
-- CI workflow, tests suite, companion **`springboot3.sha256`**, and **SECURITY.md** aligned with current release.
+- Product law under **`docs/requirements/`** (class + Type O-P shell + domain `requirement-domain-springboot-cli`).
+- CI workflow, tests suite, companion **`springboot-cli.sha256`**, and **SECURITY.md** aligned with current release.
 
 ### Changed
 - Version bump **2.3.1 → 2.3.2** after specialize, H2 harness pull, and review/test-plan publish.
@@ -148,17 +171,17 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) 
 
 ## [2.3.1] - 2026-08-10
 
-### Specialization (bootstrap springboot2 → springboot3)
+### Specialization (bootstrap springboot2 → springboot-cli)
 - **Architecture inheritance:** rebuilt ship unit from bootstrap **springboot2** Type O-P (`out_*` / `inst_*` / `app_main`, payload `install`/`uninstall` vs CLI `self-*`).
-- **Identity / channel retarget:** `APP_NAME=springboot3`, `REPO_NAME=springboot3`, `SCRIPT_URL` for Wilgat/springboot3.
+- **Identity / channel retarget:** `APP_NAME=springboot-cli`, `REPO_NAME=springboot-cli`, `SCRIPT_URL` for Wilgat/springboot-cli.
 - **Domain pins retained for this product line:** Spring Boot **3.3.5**, Java **21** (`21.0.10-tem` Temurin), Maven **3.9.14**.
-- **Product law:** registered `docs/requirements/` including domain SSOT `requirement-domain-springboot3.md`.
-- **Tests / CI:** ported Type 0 + domain suite; companion `springboot3.sha256` regenerated.
+- **Product law:** registered `docs/requirements/` including domain SSOT `requirement-domain-springboot-cli.md`.
+- **Tests / CI:** ported Type 0 + domain suite; companion `springboot-cli.sha256` regenerated.
 - **Anti-pollution:** bootstrap origin springboot2 was not overwritten.
 
 ### Notes
 - Prior 2.0.0 ship unit archived under `.specialize-archive/` for reference only.
-- Direction remains **A → B only** (springboot2 bootstrap → springboot3 specialized product).
+- Direction remains **A → B only** (springboot2 bootstrap → springboot-cli specialized product).
 
 ---
 
@@ -199,7 +222,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) 
 - Updated function headers with clearer GENERAL PURPOSE descriptions and explicit mentions of supported flags.
 - Better documentation and warnings to guide future maintainers and AI assistants.
 - Maintained full backward compatibility for the one-command install:  
-  `curl -fsSL https://raw.githubusercontent.com/Wilgat/springboot3/main/springboot3 | bash`
+  `curl -fsSL https://raw.githubusercontent.com/Wilgat/springboot-cli/main/springboot-cli | bash`
 
 ### Notes
 - Spring Boot **3.3.5** and Java **21 (Temurin)** remain **intentionally pinned**.

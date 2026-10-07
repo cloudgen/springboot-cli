@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# springboot3 – Spring Boot payload installer (default 3.3.5; --springboot2 selects 2.7.18)
+# springboot-cli – Spring Boot payload installer (default 3.3.5; --springboot2 selects 2.7.18)
 # =============================================================================
 # Requires bash (SDKMAN + defensive features). Re-exec if invoked as sh/dash.
 if [ -z "${BASH_VERSION:-}" ]; then
@@ -8,7 +8,7 @@ if [ -z "${BASH_VERSION:-}" ]; then
         case "${0##*/}" in
             sh|dash|ash|busybox)
                 # stdin pipe under non-bash: cannot reliably re-exec; fail loud
-                printf '%s\n' "springboot3 requires bash. Use: curl -fsSL <url> | bash" >&2
+                printf '%s\n' "springboot-cli requires bash. Use: curl -fsSL <url> | bash" >&2
                 exit 1
                 ;;
             *)
@@ -16,7 +16,7 @@ if [ -z "${BASH_VERSION:-}" ]; then
                 ;;
         esac
     else
-        printf '%s\n' "springboot3 requires bash, but bash was not found on PATH." >&2
+        printf '%s\n' "springboot-cli requires bash, but bash was not found on PATH." >&2
         exit 1
     fi
 fi
@@ -34,7 +34,7 @@ fi
 # - requirement-shell-output-requirements.md
 # - requirement-shell-interactive-vs-noninteractive.md
 # - requirement-shell-automatic-checksum.md
-# - requirement-domain-springboot3.md         (payload pins: SDKMAN/Java/Maven/project)
+# - requirement-domain-springboot-cli.md         (payload pins: SDKMAN/Java/Maven/project)
 # - requirement-shell-cli-storage.md
 # - requirement-shell-cli-default-interaction.md
 # - requirement-shell-cli-language.md
@@ -44,7 +44,7 @@ fi
 # Philosophy: CIAO (Caution • Intentional • Anti-fragile • Over-engineered)
 # Single file for curl | sh compatibility.
 #
-# APP NAME: springboot3 via APP_NAME (Config SSOT; safe default below).
+# APP NAME: springboot-cli via APP_NAME (Config SSOT; safe default below).
 # REPO_USER / REPO_NAME: GitHub owner/repo identity for the install channel (B).
 # SCRIPT_URL: product channel SSOT — composed from repo identity + SCRIPT_REL (raw content URL).
 #   APP_NAME is the installed command. The published file path is src/springboot-cli.
@@ -60,14 +60,14 @@ set -u  # Treat unset variables as error (defensive)
 # GLOBAL SAFE DEFAULTS (Single Source of Truth for configuration)
 # =============================================================================
 # Product identity SSOT (hardcoded + safe default). Extractors use: grep '^APP_NAME="' / '^VERSION="'
-APP_NAME="springboot3"
-: "${APP_NAME:=springboot3}"
+APP_NAME="springboot-cli"
+: "${APP_NAME:=springboot-cli}"
 : "${APP_DESC:=Spring Boot line switch: default 3.3.5, or Spring Boot 2.7.18 (SDKMAN / Java / Maven)}"
 : "${SHORT_DESCRIPTION:=${APP_DESC}}"
-: "${DESCRIPTION:=Spring Boot payload online installer (CLI self-* + payload install/uninstall + run). Default line is Spring Boot 3.3.5. --springboot2 selects Spring Boot 2.7.18.}"
+: "${DESCRIPTION:=Spring Boot CLI. A pipe with no command installs this program only. setup installs SDKMAN, Java, Maven, and the demo. run starts it. Default line is Spring Boot 3.3.5. --springboot2 selects Spring Boot 2.7.18.}"
 # Product version SSOT (semver). Extractors use: grep '^VERSION="'
-VERSION="1.0.1"
-: "${VERSION:=1.0.1}"
+VERSION="2.0.0"
+: "${VERSION:=2.0.0}"
 
 # Runtime flags (safe defaults)
 : "${QUIET:=0}"
@@ -128,7 +128,7 @@ fi
 # ----------------------------- Spring Boot domain defaults (line 3) ----------
 # Default line is Spring Boot 3. domain_apply_boot_line retargets pins when
 # --springboot2 / --boot 2 / BOOT_LINE selects the Spring Boot 2 profile.
-# requirement-domain-springboot3.md
+# requirement-domain-springboot-cli.md
 # An operator-set BOOT_LINE is a line switch. The silent default of 3 is not.
 if [ -n "${BOOT_LINE+x}" ]; then
     BOOT_LINE_SET=1
@@ -146,7 +146,7 @@ fi
 : "${PROJECT_DIR:=${HOME}/${PROJECT_NAME}}"
 # Parent of the generated folder. --project-dir still names the full root.
 : "${PROJECT_BASE:=${HOME}}"
-# Optional instance name. Empty keeps ~/springboot-springboot3 and ~/springboot-springboot2.
+# Optional instance name. Empty keeps ~/springboot-springboot-cli and ~/springboot-springboot2.
 : "${PROJECT_PREFIX:=}"
 : "${JAVA_ID:=21.0.10-tem}"
 : "${JAVA_VERSION:=21}"
@@ -1096,7 +1096,7 @@ inst_maybe_install() {
 
 inst_self_update() {
     # --- Safe Variable Defaults ---
-    : "${APP_NAME:=springboot3}"
+    : "${APP_NAME:=springboot-cli}"
     : "${JSON:=0}"
     : "${QUIET:=0}"
     : "${FORCE:=0}"
@@ -1247,7 +1247,7 @@ inst_self_uninstall() {
 
 inst_self_uninstall_determine_bin() {
     # Prefer shared path SSOT (util_get_install_bin_path); only return if file exists.
-    : "${APP_NAME:=springboot3}"
+    : "${APP_NAME:=springboot-cli}"
     : "${GLOBAL_BIN:=/usr/local/bin}"
     : "${HOME:=/tmp}"
     : "${USER_BIN:=${HOME}/.local/bin}"
@@ -1597,7 +1597,7 @@ ver_gt() {
 ver_check() {
     # --- Safe Variable Defaults ----
     # Defensive defaults - never assume globals are set
-    : "${APP_NAME:=springboot3}"
+    : "${APP_NAME:=springboot-cli}"
     : "${JSON:=0}"
     : "${QUIET:=0}"
     : "${SCRIPT_URL:=}"
@@ -2229,7 +2229,7 @@ util_resolve_storage() {
 # The cache directory name includes $$. Scratch file names must not.
 # =============================================================================
 util_mktemp() {
-    : "${APP_NAME:=springboot3}"
+    : "${APP_NAME:=springboot-cli}"
     : "${EFFECTIVE_STORAGE_DIR:=}"
     local _suffix="${1:-tmp}"
     local _dollar='$'
@@ -2666,7 +2666,7 @@ setup_sdkman() {
 # Reject anything that is not an integer from 1 to 65535. The accepted value
 # is the listen port for this invocation and wins over the line default.
 #
-# requirement-domain-springboot3.md
+# requirement-domain-springboot-cli.md
 # =============================================================================
 domain_require_listen_port() {
     local raw="${1-}"
@@ -2692,7 +2692,7 @@ domain_require_listen_port() {
 # A prefix is a single path segment so two demos can sit beside each other.
 # It is not a directory path and it is not a URL context path.
 #
-# requirement-domain-springboot3.md
+# requirement-domain-springboot-cli.md
 # =============================================================================
 domain_require_prefix() {
     local raw="${1-}"
@@ -2730,7 +2730,7 @@ domain_require_prefix() {
 # An explicit PORT stays. Otherwise Boot 3 listens on 8080 and Boot 2 on 8081
 # so both default roots can run on one machine.
 #
-# requirement-domain-springboot3.md
+# requirement-domain-springboot-cli.md
 # =============================================================================
 domain_apply_boot_line() {
     local raw="${1:-${BOOT_LINE:-3}}"
@@ -2740,7 +2740,7 @@ domain_apply_boot_line() {
     : "${PROJECT_BASE:=${HOME}}"
     : "${PROJECT_PREFIX:=}"
     : "${PORT_EXPLICIT:=0}"
-    : "${APP_NAME:=springboot3}"
+    : "${APP_NAME:=springboot-cli}"
 
     case "${raw}" in
         2|springboot2|sb2)
@@ -2767,7 +2767,7 @@ domain_apply_boot_line() {
         JAVA_DISTRIBUTION="Temurin"
         JAVA_NAME="Java ${JAVA_VERSION} (Eclipse Temurin)"
         SPRINGBOOT_VER="3.3.5"
-        PROJECT_NAME="springboot-springboot3"
+        PROJECT_NAME="springboot-${APP_NAME}"
     fi
 
     ARTIFACT_ID="hello-${BOOT_LINE}"
@@ -2809,7 +2809,7 @@ domain_apply_boot_line() {
 # file keeps its port, and this invocation adopts that port for the banner.
 # Call this from the project directory after application.properties exists.
 #
-# requirement-domain-springboot3.md
+# requirement-domain-springboot-cli.md
 # =============================================================================
 domain_align_listen_port() {
     local props="src/main/resources/application.properties"
@@ -3305,8 +3305,8 @@ app_about() {
 }
 
 app_version() {
-    : "${APP_NAME:=springboot3}"
-    : "${VERSION:=1.0.1}"
+    : "${APP_NAME:=springboot-cli}"
+    : "${VERSION:=2.0.0}"
     : "${JSON:=0}"
     if [ "${JSON}" -eq 1 ]; then
         # Same machine contract as historical app_main inline path
@@ -3364,12 +3364,14 @@ app_help() {
         eol_warning="  • Spring Boot 2.7.x reached OSS end-of-support in late 2023."
     fi
 
-    out_plain "${APP_NAME} v${VERSION} — Spring Boot payload installer (active line: ${SPRINGBOOT_VER})"
+    out_plain "${APP_NAME} v${VERSION} — Spring Boot CLI (active line: ${SPRINGBOOT_VER})"
     out_plain ""
-    out_plain "Type O-P: one-liner installs the CLI and the Spring Boot environment (payload)."
+    out_plain "A pipe with no command installs this CLI only. It does not install SDKMAN, Java, Maven, or the demo, and it does not start the app."
+    out_plain "setup installs that payload. run builds and starts the demo."
     out_plain "Two payload lines: Spring Boot 3.3.5 (default) or Spring Boot 2.7.18."
     out_plain ""
     out_plain "$(app_menu_text help_h)"
+    out_plain "  setup — $(app_menu_text cmd.install)"
     out_plain "  install — $(app_menu_text cmd.install)"
     out_plain "  uninstall — $(app_menu_text cmd.uninstall)"
     out_plain "  run — $(app_menu_text cmd.run)"
@@ -3387,12 +3389,12 @@ app_help() {
     if [ "${APP_LANG:-en}" = "en" ]; then
         out_plain "  Front 5 opens the language board (rows 51 through 63)."
     fi
-    out_plain "  ${APP_NAME}                          Combined ensure: CLI if needed + Boot 3 payload + build/run"
-    out_plain "  ${APP_NAME} --springboot3            Same as the default line (Spring Boot 3.3.5 / Java 21)"
-    out_plain "  ${APP_NAME} --springboot2            Combined ensure for Spring Boot 2.7.18 / Java 8"
-    out_plain "  ${APP_NAME} install                  Payload only: SDKMAN/Java/Maven/project (no app run)"
-    out_plain "  ${APP_NAME} install --springboot2    Payload setup for the Spring Boot 2 line"
-    out_plain "  ${APP_NAME} install --springboot3    Payload setup for the Spring Boot 3 line"
+    out_plain "  ${APP_NAME}                          Pipe or no command off a terminal: install or update this CLI only"
+    out_plain "  ${APP_NAME} setup                    Payload: SDKMAN, Java, Maven, and the demo (does not start the app)"
+    out_plain "  ${APP_NAME} install                  Same payload step as setup"
+    out_plain "  ${APP_NAME} setup --springboot2      Payload for Spring Boot 2.7.18 / Java 8"
+    out_plain "  ${APP_NAME} setup --springboot3      Payload for Spring Boot 3.3.5 / Java 21"
+    out_plain "  ${APP_NAME} --springboot2            Set up the Boot 2.7.18 line and start it"
     out_plain "  ${APP_NAME} uninstall                Payload only: remove managed project dir (not the CLI)"
     out_plain "  ${APP_NAME} run                      Payload ensure + build + run"
     out_plain "  ${APP_NAME} --no-run                 Payload setup only (no build/run)"
@@ -3413,8 +3415,8 @@ app_help() {
     out_plain "  ${APP_NAME} main                     $(app_menu_text cmd.main)"
     out_plain ""
     out_plain "Command layers:"
-    out_plain "  Payload:  install | uninstall | run | reinstall (project/toolchain)"
-    out_plain "  Ship unit: self-update | self-upgrade | self-uninstall | version-check"
+    out_plain "  Ship unit: a pipe with no command | self-update | self-upgrade | self-uninstall | version-check"
+    out_plain "  Payload:  setup | install | uninstall | run | reinstall (SDKMAN, Java, Maven, project)"
     out_plain ""
     out_plain "Options:"
     out_plain "  --springboot3          Select Spring Boot 3.3.5 + Java 21 Temurin (21.0.10-tem) — default"
@@ -3423,7 +3425,7 @@ app_help() {
     out_plain "  --project-dir <path>   Exact project directory (wins over --project-base and --prefix)"
     out_plain "  --project-base <path>  Parent of the generated folder (default: home directory)"
     out_plain "  --base-path <path>     Alias of --project-base"
-    out_plain "  --prefix <name>        Instance name. Folder becomes <base>/springboot-springboot3-<name>"
+    out_plain "  --prefix <name>        Instance name. Folder becomes <base>/springboot-${APP_NAME}-<name>"
     out_plain "  --port <1-65535>       TCP listen port (Boot 3 default 8080, Boot 2 default 8081)"
     out_plain "  --reset                Force full project reset"
     out_plain "  --no-run               Setup only, skip build & run"
@@ -3445,7 +3447,7 @@ app_help() {
     out_plain "  REPO_NAME              GitHub repo used to compose SCRIPT_URL (default: ${REPO_NAME})"
     out_plain ""
     out_plain "Important Notes:"
-    out_plain "  • install/uninstall = payload (environment/project). self-* = this CLI script only."
+    out_plain "  • A pipe with no command installs this CLI only. setup and install add SDKMAN, Java, Maven, and the demo. They do not start it. run starts it. self-* changes this CLI script only."
     out_plain "  • Default line is Spring Boot 3.3.5. --springboot2 does not replace the Boot 3 project folder."
     out_plain "  • Another copy on this machine: --prefix and --port, or --project-base, or --project-dir."
     out_plain "  • Boot 3 listens on 8080 and Boot 2 on 8081 unless PORT or --port names one port."
@@ -3457,13 +3459,12 @@ app_help() {
     out_plain "  • Intended pins: Spring Boot 3.3.5 (default) or Spring Boot 2.7.18 (--springboot2)."
     out_plain ""
     out_plain "Examples:"
-    out_plain "  curl -fsSL ${SCRIPT_URL} | bash"
-    out_plain "  curl -fsSL ${SCRIPT_URL} | bash -s -- --springboot2"
-    out_plain "  curl -fsSL ${SCRIPT_URL} | BOOT_LINE=springboot3 bash"
-    out_plain "  ${APP_NAME} install --springboot2 --no-run"
+    out_plain "  curl -fsSL ${SCRIPT_URL} | bash          # CLI only"
+    out_plain "  ${APP_NAME} setup                        # SDKMAN, Java, Maven, and the demo"
+    out_plain "  ${APP_NAME} run                          # build and start the demo"
+    out_plain "  ${APP_NAME} setup --springboot2"
     out_plain "  ${APP_NAME} --prefix shop --port 8088 --no-run"
     out_plain "  ${APP_NAME} --project-base /srv/apps --prefix api --port 9090 --springboot2 --no-run"
-    out_plain "  ${APP_NAME} install --no-run            # payload setup for CI"
     out_plain "  ${APP_NAME} self-update                 # upgrade CLI only"
     out_plain "  ${APP_NAME} uninstall --force           # remove project dir only"
     out_plain "  ${APP_NAME} about --json"
@@ -3473,7 +3474,7 @@ app_help() {
 # =============================================================================
 # payload_install() — ensure Spring Boot environment payload (not the CLI binary)
 # =============================================================================
-# requirement-shell-payload-online-install.md: `install` = payload only.
+# requirement-shell-payload-online-install.md: `setup` and `install` = payload only.
 # =============================================================================
 payload_install() {
     : "${NO_RUN:=1}"
@@ -4750,7 +4751,7 @@ app_cmd_menu_self() {
             ""|0|"${_bw}")
                 return 0
                 ;;
-            81|install)
+            81|install|setup)
                 BOOT_LINE="springboot3"
                 BOOT_LINE_SET=1
                 domain_apply_boot_line "${BOOT_LINE}"
@@ -4843,7 +4844,10 @@ app_cmd_menu() {
 }
 
 # =============================================================================
-# ship_combined_ensure() - Place or refresh the CLI before a non-interactive payload
+# ship_combined_ensure() - Place or refresh the CLI ship unit only
+# =============================================================================
+# requirement-shell-cli-zero-arguments.md: a pipe with no command stops here.
+# Payload (SDKMAN, Java, Maven, demo) is the setup verb.
 # =============================================================================
 ship_combined_ensure() {
     if ! inst_is_installed; then
@@ -4858,7 +4862,7 @@ ship_combined_ensure() {
         fi
     else
         if [ "${TTY:-0}" -ne 1 ] || [ "${JSON}" -eq 1 ] || [ "${QUIET}" -eq 1 ]; then
-            inst_self_update || true
+            inst_self_update || return $?
         fi
     fi
 }
@@ -4996,13 +5000,25 @@ app_main() {
         exit $?
     fi
 
-    # Non-interactive, no positional verb, no domain payload flag:
-    # Type O-P combined ensure (ship unit if needed, then the payload).
-    # An explicit `run` verb is not this path.
-    if [ "${positional}" -eq 0 ] && [ "${cmd}" = "run" ] && [ "${domain_payload_flag}" -eq 0 ]; then
-        if [ "${empty_argv}" -eq 1 ] || [ "${BOOT_LINE_SET:-0}" -eq 0 ]; then
-            ship_combined_ensure
+    # Bare pipe, or no command off a terminal, with no line switch and no domain flag:
+    # install or update this CLI only. Do not install SDKMAN, Java, Maven, or the demo,
+    # and do not start the app. That payload is `setup`.
+    # requirement-shell-cli-zero-arguments.md
+    # An explicit `run`, `setup`, line switch, or domain payload flag is not this path.
+    if [ "${positional}" -eq 0 ] && [ "${cmd}" = "run" ] \
+        && [ "${domain_payload_flag}" -eq 0 ] \
+        && [ "${BOOT_LINE_SET:-0}" -eq 0 ]; then
+        local _ship_rc=0
+        ship_combined_ensure
+        _ship_rc=$?
+        if [ "${_ship_rc}" -ne 0 ]; then
+            exit "${_ship_rc}"
         fi
+        if [ "${JSON:-0}" -eq 0 ] && [ "${QUIET:-0}" -eq 0 ]; then
+            out_info "CLI only. SDKMAN, Java, Maven, and the demo were not changed."
+            out_info "Next: ${APP_NAME} setup"
+        fi
+        exit 0
     fi
 
     # Line switch with no positional command: place the CLI when missing,
@@ -5047,7 +5063,8 @@ app_main() {
             exit $?
             ;;
 
-        install)
+        setup|install)
+            NO_RUN=1
             payload_install
             exit $?
             ;;

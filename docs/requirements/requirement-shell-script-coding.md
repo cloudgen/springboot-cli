@@ -4,7 +4,7 @@
 
 ## 1. Purpose
 
-This requirement is the **specialize-in home** for portable shell coding lessons on springboot3. **Without this file, agents bring those lessons raw** and treat coding skills as product law.
+This requirement is the **specialize-in home** for portable shell coding lessons on springboot-cli. **Without this file, agents bring those lessons raw** and treat coding skills as product law.
 
 It owns residual coding rules for the single-file bash ship unit `src/springboot-cli` that are **not** already owned by peer requirements (output, prefixes, TTY, storage, prompts).
 
@@ -35,7 +35,7 @@ It owns residual coding rules for the single-file bash ship unit `src/springboot
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
 | Edit a helper | Follow this file plus the peer it points at. Do not invent a parallel printer. | Edit `src/springboot-cli`; prove with `./tests/run.sh` |
-| Add a confirm | Call `prompt_yes_no` in the current shell. Do not capture it with `$()`. | `springboot3 uninstall` (TTY) |
+| Add a confirm | Call `prompt_yes_no` in the current shell. Do not capture it with `$()`. | `springboot-cli uninstall` (TTY) |
 
 ## 2. Core Rules / Requirements (Mandatory)
 
@@ -58,7 +58,7 @@ It owns residual coding rules for the single-file bash ship unit `src/springboot
 
 ### 2.3 Residual coding rules (this product)
 
-1. Shebang **MUST** remain `#!/bin/bash` while SDKMAN requires bash.  
+1. Shebang **MUST** remain `#!/bin/bash` while SDKMAN requires bash. Why `/bin/sh` cannot run SDKMAN, the login tree `${HOME}/.sdkman`, and the `sdk use` / `sdk default` Java swap are owned by `requirement-domain-springboot-cli.md` §2.5.  
 2. **MUST** keep `set -u`. **MUST NOT** add global `set -e`.  
 3. User-facing messages **MUST** go through `out_*`. Raw `echo`/`printf` for product UI is forbidden (output peer).  
 4. **MUST NOT** capture `prompt_ask` / `prompt_yes_no` / any `read` helper with `$()` or backticks. Call in the current shell.  
@@ -72,7 +72,7 @@ It owns residual coding rules for the single-file bash ship unit `src/springboot
 | Item | Value |
 |------|--------|
 | **Ship unit** | `src/springboot-cli` (`#!/bin/bash`) |
-| **VERSION SSOT** | `VERSION="1.0.1"` |
+| **VERSION SSOT** | `VERSION="2.0.0"` |
 | **Nounset** | `set -u` at script top |
 | **TTY SSOT** | Script top `[ -t 0 ] && [ -t 1 ] && TTY=1` after `: "${TTY:=0}"`; `prompt_*` consume `TTY` |
 | **Safe source** | `util_source_external_safe` |
@@ -129,7 +129,7 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 | `tests/test_cli.sh` | TP-MOD / TP-U |
 
 **Last Updated**: 2026-09-06  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; CIAO (https://github.com/cloudgen/ciao); CIAO-Lite.
 
 ## Design-time verification

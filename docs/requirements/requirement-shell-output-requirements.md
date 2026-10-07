@@ -4,7 +4,7 @@
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for **all CLI output** of the springboot3 bash shell tool: human messages, machine JSON, channel split (stdout vs stderr), and mode behavior (normal / quiet / JSON / debug).
+This requirement is the **project Single Source of Truth** for **all CLI output** of the springboot-cli bash shell tool: human messages, machine JSON, channel split (stdout vs stderr), and mode behavior (normal / quiet / JSON / debug).
 
 It defines the centralized output system and stdout/stderr channel contracts for this shell project.
 
@@ -19,8 +19,8 @@ It defines the centralized output system and stdout/stderr channel contracts for
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Operator reading the terminal | `springboot3 about` |
-| The other role | Script consuming `--json` | `springboot3 about --json` |
+| You / this login | Operator reading the terminal | `springboot-cli about` |
+| The other role | Script consuming `--json` | `springboot-cli about --json` |
 | Not this file | Spring Boot application logs on port 8080 | Demo app stdout is not `out_*` |
 
 | Includes | Excludes |
@@ -30,19 +30,19 @@ It defines the centralized output system and stdout/stderr channel contracts for
 | Surface | What you open | What for |
 |---------|---------------|----------|
 | `src/springboot-cli` | program file people install | `out_*` helpers |
-| `springboot3 about --json` | command | machine-readable diagnostics |
+| `springboot-cli about --json` | command | machine-readable diagnostics |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Human run | Prefixed lines on the terminal. Errors stay visible even with `--quiet`. | `springboot3 about` |
-| Machine run | Success/error objects, no mixed banners on the success path. | `springboot3 about --json` |
+| Human run | Prefixed lines on the terminal. Errors stay visible even with `--quiet`. | `springboot-cli about` |
+| Machine run | Success/error objects, no mixed banners on the success path. | `springboot-cli about --json` |
 
 ### Identity SSOT (this product — do not diverge)
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
@@ -111,7 +111,7 @@ Align with SSOT-of-stdout and SSOT-of-stderr terms:
 1. **Errors never as the primary success payload on stdout** in a way that corrupts JSON pipes — fatal paths use `out_die` / `out_json_error`.  
 2. **JSON purity:** In JSON mode, stdout is reserved for the structured result; no colors, banners, or progress mixed in.  
 3. **Capture pattern for agents/CI:**  
-   `springboot3 --json <cmd> 2>err.log` → stdout = JSON; stderr = diagnostics as mode allows.  
+   `springboot-cli --json <cmd> 2>err.log` → stdout = JSON; stderr = diagnostics as mode allows.  
 4. **No secrets** on either channel (tokens, passwords, private keys).
 
 ### 2.4 Mode behavior (portable)
@@ -153,9 +153,9 @@ Align with SSOT-of-stdout and SSOT-of-stderr terms:
 
 ### 2.6 Implementation Notes (this project)
 
-| Item | Value for springboot3 |
+| Item | Value for springboot-cli |
 |------|------------------------|
-| **Product / binary** | `springboot3` (`APP_NAME`) |
+| **Product / binary** | `springboot-cli` (`APP_NAME`) |
 | **Implementation file** | `src/springboot-cli` |
 | **Human SSOT** | `out_text` |
 | **JSON SSOT** | `out_json` / `out_json_error` |
@@ -259,7 +259,7 @@ Align with SSOT-of-stdout and SSOT-of-stderr terms:
 
 ## 5. Definition of done (shell output requirements)
 
-Output-related work for springboot3 is **not done** if any of the following fail:
+Output-related work for springboot-cli is **not done** if any of the following fail:
 
 1. All new **product** user-facing messages use `out_*` only (exceptions limited to §2.1.1).  
 2. Non-product `printf`/`echo` sites document their exception class in the function comment block when they are intentional helpers.  
@@ -286,7 +286,7 @@ Output-related work for springboot3 is **not done** if any of the following fail
 ---
 
 **Last Updated**: 2026-09-06  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; CIAO Principles 1, 2, 3, 4, 12, 18 (https://github.com/cloudgen/ciao); CIAO-Lite (https://github.com/cloudgen/ciao-lite).
 
 ### Live function inventory (ship unit — A naming)

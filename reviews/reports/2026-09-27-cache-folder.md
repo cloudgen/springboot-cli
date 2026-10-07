@@ -1,4 +1,4 @@
-# Report: cache folder — springboot3 2.3.6
+# Report: cache folder — springboot-cli 2.3.6
 
 **Date:** 2026-09-27  
 **Suite:** PASS=224 FAIL=0 SKIP=1

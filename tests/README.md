@@ -1,4 +1,4 @@
-# Tests (springboot3)
+# Tests (springboot-cli)
 
 POSIX `/bin/sh` CI suite for the Type O-P + domain ship unit `src/springboot-cli`.
 
@@ -19,7 +19,7 @@ No public network for core lifecycle: install tests serve the checkout over `127
 | Suite | File | Focus |
 |-------|------|--------|
 | CLI surface | `test_cli.sh` | **TP-CLI-*** + **TP-U-*** / **TP-CSUM-05** / **TP-MOD-*** / **TP-MENU-01..04** / **TP-LANG-01**: syntax, companion, version/help/about, quiet/json, cache folder, unknown, zero-arg fail, set -u, modular prefixes, TTY menu, language leaf, TTY consume (TP-U-06) |
-| Install lifecycle | `test_install_lifecycle.sh` | **TP-LC-*** + **TP-CSUM-***: combined ensure, payload install/uninstall, self-*, downgrade, checksum pin, bad channel |
+| Install lifecycle | `test_install_lifecycle.sh` | **TP-LC-*** + **TP-CSUM-***: pipe is CLI only, `setup` payload, install/uninstall, self-*, downgrade, checksum pin, bad channel |
 | Online curl install | `test_online_curl_install.sh` | **TP-CURL-*** (+ **TP-U-04** pipe): local channel pipes; optional `RUN_ONLINE_CURL_TESTS=1` |
 | Domain | `test_domain.sh` | **TP-DOM-*** plus **TP-MENU-05**: default Boot 3.3.5 pin, opt-in Boot 2.7.18 line switch (a TTY with `--springboot2` is not the menu), scaffold, preserve/reset, JSON, status/reinstall, payload uninstall isolation |
 
@@ -46,7 +46,7 @@ RUN_ONLINE_CURL_TESTS=1 ONLINE_SCRIPT_URL='https://raw.githubusercontent.com/clo
 | Companion `${APP_NAME}.sha256` | Asserted against ship unit (first field) |
 | Shape A companion + Shape B `CHECKSUM` pin | Install path verifies; transparency messages asserted |
 | Type O-P payload verbs | `install` / `uninstall` = payload; `self-*` = CLI only |
-| Empty argv when not installed | Combined ensure: place CLI then payload (not binary-only) |
+| Empty argv when not installed | Place the CLI and stop. `setup` installs the payload |
 
 Product law naming: A prefixes `out_*`/`inst_*`/`app_*` (**§3.1 option 1**).
 
@@ -54,7 +54,7 @@ Product law naming: A prefixes `out_*`/`inst_*`/`app_*` (**§3.1 option 1**).
 
 | Bootstrap A | Product B |
 |-------------|-----------|
-| `springboot2` Type O-P + Boot 2.7.18 suite | This directory — `APP_NAME=springboot3`, Boot **3.3.5** / Java **21**, hybrid empty argv, domain suite |
+| `springboot2` Type O-P + Boot 2.7.18 suite | This directory — `APP_NAME=springboot-cli`, Boot **3.3.5** / Java **21**, hybrid empty argv, domain suite |
 
 A’s tests alone do **not** prove B; always run `./tests/run.sh` in this repo.
 
@@ -68,6 +68,8 @@ No secrets and no root.
 
 | Date | Result |
 |------|--------|
+| 2026-10-07 | **PASS=335 FAIL=0 SKIP=1** (2.0.0, command `springboot-cli`, CLI-only pipe) |
+| 2026-10-07 | **PASS=320 FAIL=0 SKIP=1** (1.0.1, domain SDKMAN / TP-DOM-12) |
 | 2026-10-07 | **PASS=314 FAIL=0 SKIP=1** (1.0.1, ship unit `src/springboot-cli`) |
 | 2026-10-07 | **PASS=314 FAIL=0 SKIP=1** (1.0.0, cache folder + TTY menu) |
 | 2026-10-07 | **PASS=253 FAIL=0 SKIP=1** (1.0.0, multi-root / multi-port) |

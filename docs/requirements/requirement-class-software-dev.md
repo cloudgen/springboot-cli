@@ -1,5 +1,5 @@
 **file**: docs/requirements/requirement-class-software-dev.md  
-**Status**: Active (Version 1.1.0 – springboot3 class law + residual stack)  
+**Status**: Active (Version 1.1.0 – springboot-cli class law + residual stack)  
 **Area**: class  
 **Key**: `requirement-class-software-dev`  
 **Philosophy**: CIAO **v2.10.2** / CIAO-Lite (Caution • Intentional • Anti-fragile • Over-engineered / Over-protect)
@@ -14,12 +14,12 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 
 ### 1.1 Human-facing
 
-**In one sentence:** This workspace’s **project nature** is **shippable software** — a bash installer that places `springboot3` and a Spring Boot demo — not a blank seed and not a host-admin allowlist.
+**In one sentence:** This workspace’s **project nature** is **shippable software** — a bash installer that places `springboot-cli` and a Spring Boot demo — not a blank seed and not a host-admin allowlist.
 
 | Box | Meaning | Example |
 |-----|---------|---------|
 | You / this login | Maintainers writing product law and the program people install | Open this file and `index.md` |
-| The other role | Operators who install and run `springboot3` | `springboot3 help` |
+| The other role | Operators who install and run `springboot-cli` | `springboot-cli help` |
 | Not this file | A genesis-only seed with empty law, or a server-maintenance allowlist | Do not treat this tree as “no requirements yet” |
 
 | Includes | Excludes |
@@ -90,16 +90,16 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 
 ### 2.7 Implementation Notes (this project)
 
-| Field | Value (springboot3) |
+| Field | Value (springboot-cli) |
 |-------|---------------------|
-| **Project display name** | `springboot3` |
+| **Project display name** | `springboot-cli` |
 | **Project class** | software-development |
 | **Class requirement basename** | `requirement-class-software-dev.md` |
 | **Primary language(s)** | `bash` (`#!/bin/bash` ship unit) |
 | **Language role** | primary — single-file CLI ship unit `src/springboot-cli` |
 | **Secondary / payload languages** | Java 21 (Temurin via SDKMAN) for the demo Spring Boot app; Maven builds the payload project — **domain-owned**, not a second ship-unit language |
 | **Execution model** | **interpreted** for CLI; **compiled** for demo app (`mvn package` → JAR) |
-| **Toolchain / interpreter** | bash (required for SDKMAN); payload pins via domain REQ |
+| **Toolchain / interpreter** | bash (required for SDKMAN); payload pins, the `${HOME}/.sdkman` tree, and the Java `sdk use` / `sdk default` swap via domain REQ §2.5 |
 | **Toolchain version policy** | CLI: **unconstrained** among bash that pass product tests; domain payload: **pinned** Boot/Java/Maven in domain Implementation Notes |
 | **Cross-compile in scope?** | no (CLI); demo app targets JVM bytecode via Maven |
 | **Primary project/package tool** | **none** for CLI (ship unit is the source); payload uses **Maven** via SDKMAN (domain) |
@@ -110,7 +110,7 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 | **Architectures supported** | any arch with bash + curl/wget + tools the script invokes |
 | **Git surface** | used (`origin` GitHub channel) |
 | **Ship unit / install** | yes — `src/springboot-cli` → user/global bin via **Type O-P online** install (`SCRIPT_URL`) |
-| **Product version SSOT** | `VERSION="1.0.1"` hard-assign in `src/springboot-cli` |
+| **Product version SSOT** | `VERSION="2.0.0"` hard-assign in `src/springboot-cli` |
 | **Channel / identity SSOT** | `APP_NAME`, `REPO_USER`, `REPO_NAME`, `SCRIPT_URL` in ship unit Config |
 | **Bootstrap origin** | Type 0 shell online-install family (selfmanaged lineage) specialized to **Type O-P** payload installer + Spring Boot domain |
 
@@ -122,7 +122,7 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 | Primary language + CLI toolchain policy | **this file** | bash; unconstrained among test-passing bash |
 | Package/build tool + lockfile (CLI) | **this file** | none / not used |
 | Type 0 / Type O-P CLI surface / flags / dispatch | `requirement-shell-cli-interface` | Do not duplicate |
-| Empty argv Type O-P combined ensure | `requirement-shell-cli-zero-arguments` | Non-interactive pipe. Interactive TTY menu is the next row |
+| Empty argv: a bare pipe is the CLI only | `requirement-shell-cli-zero-arguments` | Non-interactive pipe. Interactive TTY menu is the next row |
 | TTY numbered menu (Boot lines) | `requirement-shell-cli-default-interaction` | Front **1** / **2** are Boot lines. No sudoers row. No `self-install` |
 | Menu language (13 codes) | `requirement-shell-cli-language` | Leaf under `${HOME}/.local/${APP_NAME}/language`. Not the cache resolver |
 | Payload online install class + layer split | `requirement-shell-payload-online-install` | install/uninstall vs self-* |
@@ -134,7 +134,7 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 | Interactive vs non-interactive | `requirement-shell-interactive-vs-noninteractive` | Do not duplicate |
 | Modular prefixes / single-file layout | `requirement-shell-modular-function-design` | Do not duplicate |
 | Shell coding-style related REQ (specialize-in home) | `requirement-shell-script-coding` | **Required** — without it, portable lessons arrive raw |
-| Spring Boot domain pins + pipeline | `requirement-domain-springboot3` | Payload content SSOT |
+| Spring Boot domain pins + pipeline | `requirement-domain-springboot-cli` | Payload content SSOT |
 | Type 1 sudoers elev tables | **intentionally absent** | Not product law |
 | Actor / role / subject / approver | **considered — no dest approver and no approval subject** | No dest drop-box; do not invent an approver |
 | Dest fence conditions | **considered — no dest fence conditions** | Review done; do not invent a dest fence |
@@ -172,7 +172,7 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 6. Collapse Type O-P online install into local-only without explicit user order and peer law updates.  
 7. Treat this file as server-maintenance allowlist law, or register an Active server-maintenance class file in parallel.  
 8. Invent a second primary ship-unit language SSOT that contradicts modular/CLI requirements.  
-9. Casual-modernize domain Boot/Java/Maven pins without updating `requirement-domain-springboot3`.
+9. Casual-modernize domain Boot/Java/Maven pins without updating `requirement-domain-springboot-cli`.
 
 **Violating any of these is considered a critical regression.**
 
@@ -206,7 +206,7 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 | `requirement-shell-idempotency` | Re-run safety |
 | `requirement-shell-interactive-vs-noninteractive` | Mode policy |
 | `requirement-shell-modular-function-design` | Prefixes / single-file modularity |
-| `requirement-domain-springboot3` | Spring Boot payload domain SSOT |
+| `requirement-domain-springboot-cli` | Spring Boot payload domain SSOT |
 | `requirement-shell-cli-default-interaction` | TTY menu and dual-mode matrix |
 | `requirement-shell-cli-language` | Menu language copy and language leaf |
 
@@ -220,5 +220,5 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 ---
 
 **Last Updated**: 2026-10-07  
-**Owner**: springboot3 project maintainers  
+**Owner**: springboot-cli project maintainers  
 **Alignment**: Registry `docs/requirements/index.md`; CIAO (https://github.com/cloudgen/ciao); CIAO-Lite.

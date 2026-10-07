@@ -4,27 +4,28 @@
 
 > ### Payload installer law (read first — this product)
 >
-> springboot3 is a **payload installer (Type O-P)** (**Type O-P**): empty argv / `curl \| bash` **MUST** reduce install steps via **combined ensure** — ship-unit self-install (and non-interactive self-update when policy requires) **plus** payload (SDKMAN / Java / Maven / project / optional run).
+> A bare pipe (`curl \| bash` with no command) is **ship-unit self-install only**. It places or updates the CLI and **MUST** stop. It **MUST NOT** install SDKMAN, Java, Maven, or the demo, and it **MUST NOT** start the app.
 >
 > | Situation | Empty argv **MUST** mean |
 > |-----------|---------------------------|
-> | **Non-interactive** (no TTY, pipe, `--json`, `--quiet`), not installed | Ship-unit install-ensure **then continue into payload ensure** — **MUST NOT** exit after binary place alone |
-> | **Non-interactive**, installed (local or global) | Ship-unit **auto-upgrade** when remote newer / policy; **then payload ensure** (`cmd=run`) — **not** help; **not** a binary-only “already installed” no-op |
+> | **Non-interactive** (no TTY, pipe, `--json`, `--quiet`), not installed, no line switch, no domain payload flag | Ship-unit install, then **exit**. Tell the operator the next command is `setup` in human mode. **MUST NOT** enter the payload |
+> | **Non-interactive**, installed (local or global), no line switch, no domain payload flag | Ship-unit **auto-upgrade** when remote newer / policy, then **exit**. **Not** help. **Not** the payload |
 > | **Interactive TTY**, no line switch, no domain payload flag | Numbered menu (`requirement-shell-cli-default-interaction.md`). **MUST NOT** auto-run the payload. A second such run is the menu again. |
 > | **Line switch or domain payload flag**, no positional verb | Payload path for that line, including on a TTY. Not the menu. |
+> | **`setup` or `install`** | Payload only: SDKMAN, Java, Maven, and the demo. **MUST NOT** start the app |
 >
-> Portable Type O-S “already installed → install no-op only” and “first pipe = binary only” are **superseded** by Type O-P and `requirement-domain-springboot3.md`. **MUST NOT** dump help for bare `springboot3`. **MUST NOT** silent-success one-liner with no message and no install.
+> **MUST NOT** dump help for bare `springboot-cli`. **MUST NOT** silent-success one-liner with no message and no install. Payload installation is the verb `setup`.
 
 ## 1. Purpose
 
-This requirement is the **project Single Source of Truth** for **zero-argument (empty argv) dispatcher behavior** of the springboot3 bash (`#!/bin/bash`) CLI, specialized as a **Type O-P payload installer** (combined self-install/self-update + domain payload ensure).
+This requirement is the **project Single Source of Truth** for **zero-argument (empty argv) dispatcher behavior** of the springboot-cli bash (`#!/bin/bash`) CLI. The product stays a **Type O-P payload installer**. A bare pipe installs or updates the CLI only. `setup` installs the payload.
 
 ### 1.0 Product type (template dual-axis model)
 
-| Field | Value for springboot3 |
+| Field | Value for springboot-cli |
 |-------|------------------------|
 | **Empty-argv type** | **Type O-P — Online payload installer** (not Type N; not Type O-S script-alone) |
-| **Rationale** | Product advertises `curl … \| bash` to set up a full Spring Boot environment (CLI + SDKMAN/Java/Maven/project), not only place a script file |
+| **Rationale** | `curl … \| bash` places this CLI. `springboot-cli setup` installs SDKMAN, Java, Maven, and the demo |
 
 Type N (non-online-install → empty argv = help) does **not** apply. Type O-S (binary-only ensure) does **not** apply.
 
@@ -38,46 +39,47 @@ Empty argv detect cases:
 
 | Case | Meaning | Empty-argv outcome (this product — Type O-P) |
 |------|---------|-----------------------------------------------|
-| **Not installed** | No managed binary at the resolved install path(s) | Non-interactive: ship-unit install **then payload ensure**. Interactive TTY with no line switch: numbered menu, no auto payload |
-| **Installed (local)** | Managed binary at the user path (`USER_BIN` / `${HOME}/.local/bin/springboot3`) | Non-interactive: upgrade policy + **payload ensure**. Interactive TTY with no line switch: numbered menu again |
-| **Installed (global)** | Managed binary at the global path (`GLOBAL_BIN` / `/usr/local/bin/springboot3`) | Same split as local for the global path |
+| **Not installed** | No managed binary at the resolved install path(s) | Non-interactive: ship-unit install, then **exit**. No payload. Interactive TTY with no line switch: numbered menu, no auto payload |
+| **Installed (local)** | Managed binary at the user path (`USER_BIN` / `${HOME}/.local/bin/springboot-cli`) | Non-interactive: upgrade policy, then **exit**. No payload. Interactive TTY with no line switch: numbered menu again |
+| **Installed (global)** | Managed binary at the global path (`GLOBAL_BIN` / `/usr/local/bin/springboot-cli`) | Same split as local for the global path |
 
-**Scope:** Empty-argv routing, Type O-P combined ensure, detect cases (global / local / absent), force boundary, exit status, TTY / quiet / json, **loud one-liner outcomes**.  
-**Out of scope (own requirements):** Full command catalog (`requirement-shell-cli-interface.md`); domain pipeline depth (`requirement-domain-springboot3.md`); download/checksum detail (`requirement-shell-automatic-checksum.md`); full self-update/uninstall lifecycle detail (`requirement-shell-self-management.md` — reused on empty argv for upgrade policy); output function catalog (`requirement-shell-output-requirements.md`); general idempotency matrix beyond empty-argv rows (`requirement-shell-idempotency.md`).
+**Scope:** Empty-argv routing, CLI-only bare pipe, payload on `setup`, detect cases (global / local / absent), force boundary, exit status, TTY / quiet / json, **loud one-liner outcomes**.  
+**Out of scope (own requirements):** Full command catalog (`requirement-shell-cli-interface.md`); domain pipeline depth (`requirement-domain-springboot-cli.md`); download/checksum detail (`requirement-shell-automatic-checksum.md`); full self-update/uninstall lifecycle detail (`requirement-shell-self-management.md` — reused on empty argv for upgrade policy); output function catalog (`requirement-shell-output-requirements.md`); general idempotency matrix beyond empty-argv rows (`requirement-shell-idempotency.md`).
 
 ---
 
 ### 1.1 Human-facing
 
-**In one sentence:** This file owns **what a run with no arguments does** — a pipe installs the program and the Spring Boot demo, and a terminal with no extra switch opens the numbered menu.
+**In one sentence:** This file owns **what a run with no arguments does** — a pipe installs the program only, and a terminal with no extra switch opens the numbered menu.
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Someone pasting the one-liner, or typing the name on a terminal | `curl … \| bash` or `springboot3` |
-| The other role | CI using explicit `install` / `--no-run` | `springboot3 --no-run` |
+| You / this login | Someone pasting the one-liner, or typing the name on a terminal | `curl … \| bash` or `springboot-cli` |
+| The other role | CI using explicit `install` / `--no-run` | `springboot-cli --no-run` |
 | Not this file | A help-default program that never installs | Empty arguments must not dump help |
 
 | Includes | Excludes |
 |----------|----------|
-| Pipe: place the CLI if needed, then ensure SDKMAN/Java/Maven/demo. Terminal with no line switch: the numbered menu | Removing the CLI (`self-uninstall`); the menu’s row text (peer file) |
+| Pipe: place the CLI if needed, then stop. Terminal with no line switch: the numbered menu. `setup` is the payload verb | Removing the CLI (`self-uninstall`); the menu’s row text (peer file) |
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
 | `src/springboot-cli` | program file people install | empty-argv path in `app_main` |
-| One-liner | `curl -fsSL …/src/springboot-cli \| bash` | first combined ensure |
+| One-liner | `curl -fsSL …/src/springboot-cli \| bash` | ship-unit self-install only |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| First pipe | Empty arguments must not stop after copying the script. The demo environment is part of that pipe. | `curl … \| bash` |
-| Terminal, no switch | The numbered menu opens. The demo does not start until a row is chosen. | `springboot3` |
-| Setup only | Skip build/run after the environment is ready. | `springboot3 --no-run` |
+| First pipe | Empty arguments place the CLI and stop. SDKMAN, Java, Maven, and the demo are not part of that pipe. | `curl … \| bash` |
+| Payload | `setup` installs SDKMAN, Java, Maven, and the demo. It does not start the app. | `springboot-cli setup` |
+| Terminal, no switch | The numbered menu opens. The demo does not start until a row is chosen. | `springboot-cli` |
+| Setup only | Skip build/run after the environment is ready. | `springboot-cli --no-run` |
 
 ### Identity SSOT (this product — do not diverge)
 
 | Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
-| **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.1` |
+| **APP_NAME** | `springboot-cli` |
+| **VERSION** | `2.0.0` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
@@ -91,71 +93,71 @@ Live scalars are owned by the ship unit Config block. Requirement **cores** stay
 
 ### 2.1 Definitions (portable + project)
 
-| Term | Definition for springboot3 |
+| Term | Definition for springboot-cli |
 |------|----------------------------|
-| **Type O-P** | Payload installer (Type O-P): non-interactive empty argv = combined ship-unit + payload ensure (this product). Interactive TTY empty argv with no line switch is the numbered menu. |
+| **Type O-P** | Payload installer (Type O-P): non-interactive empty argv installs or updates the CLI and stops. `setup` is the payload. Interactive TTY empty argv with no line switch is the numbered menu. |
 | **Type O-S** | Script-alone online tool — **out of scope** as product class (binary-only). |
-| **Type N** | Non-online-install empty-argv type: empty argv = help — **out of scope** for springboot3. |
+| **Type N** | Non-online-install empty-argv type: empty argv = help — **out of scope** for springboot-cli. |
 | **Empty argv / zero-arg** | `$# -eq 0` at entry to `app_main` (no command tokens; classic `curl \| sh` with no trailing args). |
-| **Ship-unit install-ensure** | Converge to “managed `springboot3` binary present” (install / upgrade / force replace). |
-| **Payload ensure** | Domain pipeline: SDKMAN / Java / Maven / project + optional `run_springboot_project` (`requirement-domain-springboot3.md`). |
+| **Ship-unit install-ensure** | Converge to “managed `springboot-cli` binary present” (install / upgrade / force replace). |
+| **Payload ensure** | Domain pipeline: SDKMAN / Java / Maven / project + optional `run_springboot_project` (`requirement-domain-springboot-cli.md`). |
 | **Combined ensure** | Ship-unit layer then payload layer without requiring a second user command. |
 | **Not installed** | `inst_is_installed` returns false (`inst_get_version` → `not installed`). |
-| **Installed (local)** | Executable at `${USER_BIN}/springboot3` (default `USER_BIN=${HOME}/.local/bin`) observed by install-detect SSOT. |
-| **Installed (global)** | Executable at `${GLOBAL_BIN}/springboot3` (default `GLOBAL_BIN=/usr/local/bin`) observed by install-detect SSOT. |
+| **Installed (local)** | Executable at `${USER_BIN}/springboot-cli` (default `USER_BIN=${HOME}/.local/bin`) observed by install-detect SSOT. |
+| **Installed (global)** | Executable at `${GLOBAL_BIN}/springboot-cli` (default `GLOBAL_BIN=/usr/local/bin`) observed by install-detect SSOT. |
 | **Force / reinstall** | `FORCE_REINSTALL=1` from `--force` / `reinstall` (and related wiring in `app_main`). Required only for deliberate replace, not for ensure. |
 
-### 2.2 Single meaning of empty argv (Type O-P combined ensure)
+### 2.2 Single meaning of empty argv (ship unit on a bare pipe)
 
-1. When **argv is empty**, the run is **non-interactive** (no TTY, pipe, `--quiet`, or `--json`), and the tool is **not installed**, `app_main` **MUST** run **ship-unit install** then **payload ensure** — **MUST NOT** route to `app_help`, and **MUST NOT** exit after binary place alone.  
-2. When **argv is empty** and the run is **non-interactive** and the tool is **installed**, `app_main` **MUST** apply **ship-unit auto-upgrade** when remote is newer or force policy requires (reuse `inst_self_update` / `inst_perform_install` primitives); then **payload ensure**. **MUST NOT** dump help or treat a binary-only no-op as full success.  
+1. When **argv is empty**, the run is **non-interactive** (no TTY, pipe, `--quiet`, or `--json`), there is no line switch and no domain payload flag, and the tool is **not installed**, `app_main` **MUST** run **ship-unit install** and **exit**. **MUST NOT** route to `app_help`. **MUST NOT** enter the payload. Human mode **MUST** name `setup` as the next command.  
+2. When **argv is empty** and the run is **non-interactive**, there is no line switch and no domain payload flag, and the tool is **installed**, `app_main` **MUST** apply **ship-unit auto-upgrade** when remote is newer or force policy requires (reuse `inst_self_update` / `inst_perform_install` primitives), then **exit**. **MUST NOT** dump help. **MUST NOT** enter the payload.  
 2a. When **argv is empty** and the run is an **interactive TTY** with no line switch and no domain payload flag, `app_main` **MUST** open the numbered menu in `requirement-shell-cli-default-interaction.md` and **MUST NOT** auto-run the payload. A second such run is the menu again.  
 2b. A line switch or a domain payload flag with no positional verb **MUST** run that payload path, including on a TTY. That invocation is not the menu. The silent Config default `BOOT_LINE` of `3` is not a line switch.  
-3. Explicit `springboot3 help` remains the only full-usage path for help text.  
+3. Explicit `springboot-cli help` remains the only full-usage path for help text.  
 4. Bootstrap **MUST** always call `app_main "$@"` so pipe one-liners reach this contract (no `${0##*/}` product-name gate).  
-5. Empty argv **MUST NOT** require the user to pass `install` or a second invocation merely to get SDKMAN/Java/Maven after first pipe.  
+5. SDKMAN, Java, Maven, and the demo **MUST** wait for `setup` (alias `install`) or for `run`, a line switch, or a domain payload flag. A bare pipe **MUST NOT** do that work.  
 6. Outcomes **MUST** be loud: visible progress/success via `out_*` or non-zero failure — **silent exit 0 with no install is forbidden** (INC-20260720-001).
 
 ### 2.3 Normative case matrix (Type O-P)
 
 | Case | Detect condition (project) | Empty argv, force off (this product) | Empty argv / deliberate install force |
 |------|----------------------------|--------------------------------------|---------------------------------------|
-| **A. Not installed** | `inst_is_installed` false | Non-interactive: ship-unit install (§2.4) **then payload ensure**. Interactive TTY, no line switch, no domain payload flag: numbered menu | Non-interactive: same + force placement as designed. A domain payload flag still selects the payload path |
-| **B. Installed — local** | User binary present via detect SSOT | Non-interactive: upgrade policy + **payload ensure** — **no help**. Interactive TTY, no line switch, no domain payload flag: numbered menu again | `self-update` / `reinstall` / `--force` for deliberate binary replace |
+| **A. Not installed** | `inst_is_installed` false | Non-interactive, no line switch, no domain payload flag: ship-unit install (§2.4) then **exit**. Interactive TTY, no line switch, no domain payload flag: numbered menu | A domain payload flag or line switch still selects the payload path |
+| **B. Installed — local** | User binary present via detect SSOT | Non-interactive, no line switch, no domain payload flag: upgrade policy then **exit** — **no help**, **no payload**. Interactive TTY, no line switch, no domain payload flag: numbered menu again | `self-update` / `reinstall` / `--force` for deliberate binary replace |
 | **C. Installed — global** | Global binary present via detect SSOT | Same split as B for the global path | Same as B |
 
-**Portable Type O-S “already-installed = install no-op”** is seed pattern for script-alone CLIs only. **This product is Type O-P.** Do not claim binary-only no-op or first-pipe-binary-only as Implemented for springboot3 empty argv.
+**Portable Type O-S “already-installed = install no-op”** is seed pattern for script-alone CLIs only. **This product is Type O-P.** A bare pipe is the CLI only. Do not put the payload back on that pipe. Do not treat empty argv as help.
 
 **Already-installed rules (Cases B and C, empty argv, force off) — Type O-P:**
 
 1. **MUST NOT** dump full help.  
-2. **Non-interactive:** **MUST** enter the domain/payload pipeline (default `run`) per `requirement-domain-springboot3.md`. **Interactive TTY** with no line switch and no domain payload flag: **MUST** open the numbered menu and **MUST NOT** enter that pipeline until a leaf chooses it.  
+2. **Non-interactive**, no line switch, no domain payload flag: **MUST** stop after the ship unit. **MUST NOT** enter the domain pipeline. **Interactive TTY** with no line switch and no domain payload flag: **MUST** open the numbered menu and **MUST NOT** enter that pipeline until a leaf chooses it.  
 3. Non-interactive: **MUST** attempt ship-unit upgrade when version-check says remote is newer (or document temporary Gap until implemented).  
 4. Detect **MUST** treat either global or local managed binary as installed when that is how `inst_is_installed` / `inst_get_version` resolve paths.  
 5. Exit status and messaging for domain run follow domain + output requirements (build/run may long-run / exec; `--no-run` may exit 0 after setup).
 
-### 2.4 Case A — not installed (modes) — ship unit then payload
+### 2.4 Case A — not installed (modes) — ship unit, then stop
 
 | Mode | Required empty-argv behavior |
 |------|------------------------------|
 | **Interactive** (TTY stdin+stdout, not quiet/json), no line switch, no domain payload flag | Open the numbered menu. Do not auto-place and do not auto-run the payload |
-| **Non-interactive** (non-TTY / `curl \| sh`) | Auto ship-unit install + **payload ensure** without hang |
-| **Quiet or JSON** | Ship-unit install + payload ensure without prompts; JSON purity for structured paths |
+| **Non-interactive** (non-TTY / `curl \| sh`) | Auto ship-unit install, then exit, without hang and without the payload |
+| **Quiet or JSON** | Ship-unit install without prompts, then exit; JSON purity for structured paths (one JSON value, no extra human lines) |
 | **Failure** (network, checksum, I/O, payload) | Non-zero exit; no fake success; no help-only output; **no silent no-op** |
 
 **Placement privilege:**
 
 | Invoker | Target |
 |---------|--------|
-| root (`id -u` 0), e.g. `curl … \| sudo bash` | `${GLOBAL_BIN}/springboot3` → `/usr/local/bin/springboot3` |
-| non-root | `${USER_BIN}/springboot3` → `${HOME}/.local/bin/springboot3` |
+| root (`id -u` 0), e.g. `curl … \| sudo bash` | `${GLOBAL_BIN}/springboot-cli` → `/usr/local/bin/springboot-cli` |
+| non-root | `${USER_BIN}/springboot-cli` → `${HOME}/.local/bin/springboot-cli` |
 
 ### 2.5 Equivalence / non-equivalence
 
 | Invocation | Contract (this product) |
 |------------|-------------------------|
-| Empty argv, not installed, non-interactive | Combined ensure (ship unit + payload) |
-| Empty argv, installed, non-interactive | Upgrade policy + payload ensure — **not** binary-only no-op |
+| Empty argv, not installed, non-interactive, no line switch, no domain payload flag | Ship-unit install, then exit. Name `setup` in human mode |
+| Empty argv, installed, non-interactive, no line switch, no domain payload flag | Upgrade policy, then exit. **Not** the payload |
 | Empty argv, interactive TTY, no line switch, no domain payload flag | Numbered menu. Not a payload run |
 | Explicit `self-update` | Ship-unit upgrade lifecycle (may not run payload unless fallthrough designed) |
 | `reinstall` | Force ship unit then domain pipeline (live) |
@@ -165,8 +167,8 @@ Live scalars are owned by the ship unit Config block. Requirement **cores** stay
 
 1. Dump full help when Case A/B/C should ensure.  
 2. Silent success when Case A should install (no message, no binary).  
-3. Exit after ship-unit install without payload ensure (Type O-S collapse).  
-4. Treat Case B/C empty argv as binary-only success no-op while claiming Type O-P compliance.  
+3. Enter the payload (SDKMAN, Java, Maven, demo, or app start) from a non-interactive empty argv that has no line switch and no domain payload flag.  
+4. Treat a bare pipe as permission to start the demo.  
 5. Require `--force` solely because detect says installed (for normal re-run / domain use).  
 6. Blind re-download every empty-argv run without force (unless upgrade policy requires).  
 7. Basename-gate main so `curl \| sh` never hits the empty-argv branch.  
@@ -174,10 +176,10 @@ Live scalars are owned by the ship unit Config block. Requirement **cores** stay
 
 ### 2.7 Implementation Notes (this project)
 
-| Item | Value for springboot3 |
+| Item | Value for springboot-cli |
 |------|------------------------|
-| **Empty-argv type** | **Type O-P — Payload installer** (combined ensure; not Type N; not Type O-S) |
-| **Product / binary** | `springboot3` (`APP_NAME`) |
+| **Empty-argv type** | **Type O-P — Payload installer** (a bare pipe is the CLI only; payload is `setup`; not Type N; not Type O-S) |
+| **Product / binary** | `springboot-cli` (`APP_NAME`) |
 | **Ship unit** | `src/springboot-cli` |
 | **Dispatcher** | `app_main` — empty-argv block **before** flag/command parse default help |
 | **Ship-unit ensure** | `inst_perform_install` / `inst_maybe_install` / `inst_self_update` (upgrade policy) |
@@ -188,7 +190,7 @@ Live scalars are owned by the ship unit Config block. Requirement **cores** stay
 | **Force wiring** | `--force` → `FORCE=1` and `FORCE_REINSTALL=1` in `app_main` |
 | **Output SSOT** | `out_success` / `out_info` / `out_json` / errors via `out_*` |
 | **Channel** | `SCRIPT_URL` (compose from `REPO_USER` / `REPO_NAME` / `APP_NAME`) for download path inside install |
-| **Live status** | Non-interactive Type O-P combined ensure is implemented in `app_main`. **Gap:** a TTY empty argv still falls through to the payload. The numbered menu is required by `requirement-shell-cli-default-interaction.md` and is not in the ship unit yet. |
+| **Live status** | Implemented in `app_main`. A bare non-interactive empty argv installs or updates the CLI and exits. An interactive TTY opens the numbered menu. |
 | **Tests** | `tests/test_cli.sh`; `tests/test_install_lifecycle.sh`; `tests/test_online_curl_install.sh`; map `tests/README.md` |
 
 #### Dispatcher algorithm (normative sketch — Type O-P target)
@@ -202,13 +204,13 @@ app_main:
     if not inst_is_installed:
       ship-unit install (inst_maybe_install / inst_perform_install per mode)
       on failure → exit non-zero
-      # MUST NOT exit here on success — fall through to payload
+      # exit here on success — do not enter the payload
     else
       if upgrade needed:
         ship-unit self-update / force policy
     fi
-    # payload ensure (domain default run) — non-interactive only
-    cmd=run → domain pipeline
+    human mode: name `setup` as the next command
+    exit
   fi
   # else parse flags/commands…
   # line switch or domain payload flag and no positional verb → payload path, not the menu
@@ -225,7 +227,7 @@ app_main:
 ### 2.8 Why This Requirement Exists (Direct CIAO Alignment)
 
 - **CIAO Principle 1 – Caution** (https://github.com/cloudgen/ciao): One-liner must not be silent or look like success when nothing installed.  
-- **CIAO Principle 2 – Intentional** (https://github.com/cloudgen/ciao): Non-interactive empty argv means **combined ensure**. Interactive empty argv with no line switch means the numbered menu.  
+- **CIAO Principle 2 – Intentional** (https://github.com/cloudgen/ciao): Non-interactive empty argv installs or updates the CLI and stops. Interactive empty argv with no line switch means the numbered menu.  
 - **CIAO Principle 3 – Anti-fragile** (https://github.com/cloudgen/ciao): Dual install paths + `curl \| bash` + full environment converge.  
 - **CIAO Principle 5 – Single point of entry** (https://github.com/cloudgen/ciao): `app_main` owns empty-argv before help default.  
 - **CIAO Principle 14 – Interactive vs non-interactive** (https://github.com/cloudgen/ciao): Auto under pipe; upgrade policy non-interactive.  
@@ -304,7 +306,7 @@ This requirement is satisfied when all of the following hold:
 | `docs/requirements/requirement-shell-self-management.md` | self-update primitives reused on empty argv upgrade |
 | `docs/requirements/requirement-shell-output-requirements.md` | `out_*` / JSON purity |
 | `docs/requirements/requirement-shell-automatic-checksum.md` | Integrity on install download path |
-| `docs/requirements/requirement-domain-springboot3.md` | Payload pipeline |
+| `docs/requirements/requirement-domain-springboot-cli.md` | Payload pipeline |
 | `src/springboot-cli` | Implementation (`app_main`, `inst_*`, domain helpers) |
 | `tests/README.md` | TP-CURP-* map |
 | `tests/test_cli.sh`, `tests/test_install_lifecycle.sh`, `tests/test_online_curl_install.sh` | Regression coverage |
@@ -320,9 +322,9 @@ This requirement is satisfied when all of the following hold:
 | 2026-07-15 | v1.2.0: Promote hybrid supersession banner to top; soft-supersede portable Cases B/C force-off as domain run; cite domain requirement | Grok (authorized 1–3) |
 | 2026-07-20 | v1.3.0: **Type O-P payload installer** law; combined ensure; first pipe must not exit binary-only; non-interactive upgrade; loud one-liner; live Gap honesty | Grok (owner request) |
 | 2026-10-07 | v1.4.0: Dual-mode matrix. Non-interactive empty argv stays combined ensure. Interactive TTY with no line switch opens the numbered menu and does not auto-run the payload. Live ship unit still payload-ensures on a TTY (gap). | Grok (owner confirm) |
-| 2026-10-07 | v1.4.1: The TTY gap is closed. `./springboot3` opens the numbered menu on an interactive empty argv and keeps combined ensure on a pipe. | Grok (owner request) |
+| 2026-10-07 | v1.4.1: The TTY gap is closed. `./springboot-cli` opens the numbered menu on an interactive empty argv and keeps combined ensure on a pipe. | Grok (owner request) |
 
-### Empty argv specialization (springboot3 — Type O-P payload installer)
+### Empty argv specialization (springboot-cli — Type O-P payload installer)
 
 Normative summary lives in the **Payload installer law** banner at the top of this file and in §2.2–2.3. Condensed matrix:
 
@@ -334,7 +336,7 @@ Normative summary lives in the **Payload installer law** banner at the top of th
 | **Installed** + explicit lifecycle cmds | `version`, `version-check`, `self-update`, `self-uninstall`, `about`, `help` as dispatched |
 | **Flags** | `--project-dir`, `--no-run`, `--force`, `--force-user`, `--force-root`, `--json`, `--quiet` |
 
-Portable Type O-S matrices are **not** full product law for springboot3.
+Portable Type O-S matrices are **not** full product law for springboot-cli.
 
 ## Design-time verification
 

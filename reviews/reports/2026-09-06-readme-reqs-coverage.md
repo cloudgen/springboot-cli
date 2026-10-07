@@ -1,4 +1,4 @@
-# Report: README + requirements human-readability and coverage — springboot3 2.3.4
+# Report: README + requirements human-readability and coverage — springboot-cli 2.3.4
 
 **Date:** 2026-09-06
 **Mode:** review + implement (authorized)
@@ -8,7 +8,7 @@
 
 Reviewed product README and registered requirements for human readability (voice pack, jargon ban, **project nature**), then coverage of requirements vs tests vs checklists. Implemented: README section order + voice pack; full §1.1 on every REQ; **Under command line for normal user only** on related shell/domain files; coding-style related REQ; domain artifact samples; TTY consume in `prompt_*` / install-uninstall confirms; TP-U-06; version **2.3.4**.
 
-Class gate: software-development, Active `requirement-class-software-dev`. Registry ↔ disk match after adding `requirement-shell-script-coding.md`. Bootstrap direction A→B (springboot2 → springboot3) unchanged. Type 1 elev N/A. Dest/actor residual remains **considered — none**.
+Class gate: software-development, Active `requirement-class-software-dev`. Registry ↔ disk match after adding `requirement-shell-script-coding.md`. Bootstrap direction A→B (springboot2 → springboot-cli) unchanged. Type 1 elev N/A. Dest/actor residual remains **considered — none**.
 
 ## Issues
 
@@ -37,7 +37,7 @@ Class gate: software-development, Active `requirement-class-software-dev`. Regis
 - Status: closed
 
 ### Issue 4 -- Severity: suggestion
-- File: docs/requirements/requirement-domain-springboot3.md
+- File: docs/requirements/requirement-domain-springboot-cli.md
 - Description: Demo artifacts named without complete sample bodies (coverage Step 3c).
 - Suggestion: Add filename grammar + sample `pom.xml` / main class / `application.properties`.
 - Lesson: L-PRESERVE-01 (related)
@@ -45,7 +45,7 @@ Class gate: software-development, Active `requirement-class-software-dev`. Regis
 - Status: closed
 
 ### Issue 5 -- Severity: nit
-- File: springboot3:app_version
+- File: springboot-cli:app_version
 - Description: Stale `: "${VERSION:=2.3.1}"` inside `app_version` (harmless after Config assign, dishonest).
 - Suggestion: Align to current VERSION.
 - Lesson: —
