@@ -1,6 +1,6 @@
 # Tests (springboot3)
 
-POSIX `/bin/sh` CI suite for the Type O-P + domain ship unit `./springboot3`.
+POSIX `/bin/sh` CI suite for the Type O-P + domain ship unit `src/springboot-cli`.
 
 Specialized from the **springboot2** bootstrap suite: same layout (runner, helpers, CLI, install lifecycle, online curl, domain) with product identity and Boot **3.3.5** / Java **21** pins.
 
@@ -29,14 +29,14 @@ No public network for core lifecycle: install tests serve the checkout over `127
 **Per-TP status map:** `reviews/test-plan.md` (includes primary requirement column)  
 **Living review plan:** `reviews/what-to-review.md` · lessons: `reviews/lessons.md`
 
-**Version note:** suites source `PRODUCT_VERSION` / `APP_NAME` / `SPRINGBOOT_VER` from `./springboot3` via `helpers.sh`. Do not hardcode semver or foreign Boot pins in new tests.
+**Version note:** suites source `PRODUCT_VERSION` / `APP_NAME` / `SPRINGBOOT_VER` from `src/springboot-cli` via `helpers.sh`. Do not hardcode semver or foreign Boot pins in new tests.
 
 ### Optional online gate
 
 ```sh
 RUN_ONLINE_CURL_TESTS=1 ./tests/run.sh
 # or override channel:
-RUN_ONLINE_CURL_TESTS=1 ONLINE_SCRIPT_URL='https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3' ./tests/run.sh
+RUN_ONLINE_CURL_TESTS=1 ONLINE_SCRIPT_URL='https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli' ./tests/run.sh
 ```
 
 ## Notes
@@ -68,6 +68,7 @@ No secrets and no root.
 
 | Date | Result |
 |------|--------|
+| 2026-10-07 | **PASS=314 FAIL=0 SKIP=1** (1.0.1, ship unit `src/springboot-cli`) |
 | 2026-10-07 | **PASS=314 FAIL=0 SKIP=1** (1.0.0, cache folder + TTY menu) |
 | 2026-10-07 | **PASS=253 FAIL=0 SKIP=1** (1.0.0, multi-root / multi-port) |
 | 2026-10-07 | **PASS=221 FAIL=0 SKIP=1** (1.0.0) |

@@ -1,6 +1,6 @@
 # =============================================================================
 # .gitignore — skill-create-gitignore
-# Detected: Shell (POSIX CLI: ./springboot3, tests/*.sh) — Type O-P self-managed
+# Detected: Shell (POSIX CLI: src/springboot-cli, tests/*.sh) — Type O-P self-managed
 # Docs: Pattern A — track docs/requirements/** only
 # Artifacts: compiled, caches, temp, secrets ignored (universal + shell)
 # Harness: ignore AGENTS.md + docs skills/incidents/terminologies/templates/…

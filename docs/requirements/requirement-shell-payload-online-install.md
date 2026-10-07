@@ -29,7 +29,7 @@ This requirement is the **project Single Source of Truth** for springboot3 as a 
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | `payload_install` / `payload_uninstall` |
+| `src/springboot-cli` | program file people install | `payload_install` / `payload_uninstall` |
 | `springboot3 help` | command | layer wording (payload vs this CLI) |
 
 | You do… | What it means | What you type |
@@ -39,10 +39,10 @@ This requirement is the **project Single Source of Truth** for springboot3 as a 
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **Product class** | **Type O-P — payload online installer** |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
 | **SCRIPT_URL** | composed GitHub raw default |
@@ -60,7 +60,7 @@ This requirement is the **project Single Source of Truth** for springboot3 as a 
 |-------|--------|
 | **Type** | **O-P** (not O-S, not Type N) |
 | **Purpose** | Reduce install steps: CLI + SDKMAN/Java/Maven/project (+ optional run) |
-| **One-liner** | `curl -fsSL …/springboot3 \| bash` must self-install CLI **and** enter payload ensure |
+| **One-liner** | `curl -fsSL …/src/springboot-cli \| bash` must self-install CLI **and** enter payload ensure |
 
 ### 2.2 Command split (normative)
 
@@ -171,7 +171,7 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 | `requirement-shell-cli-interface.md` | Full command table |
 | `tests/README.md` | TP status map |
 | `tests/test_online_curl_install.sh` | TP-CURL suite |
-| `./springboot3` | Implementation |
+| `src/springboot-cli` | Implementation |
 
 ## 6. Revision history
 

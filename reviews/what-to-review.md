@@ -13,7 +13,7 @@
 | # | Check | Notes |
 |---|--------|--------|
 | P1 | Read `docs/requirements/index.md` | class + 11 shell REQs + domain (`requirement-domain-springboot3`) |
-| P2 | Confirm ship unit `./springboot3` + companion `.sha256` | `VERSION` / `APP_NAME` / `SCRIPT_URL` SSOT |
+| P2 | Confirm ship unit `src/springboot-cli` + companion `.sha256` | `VERSION` / `APP_NAME` / `SCRIPT_URL` SSOT |
 | P3 | Load `reviews/lessons.md` and re-check every open L-* | Mandatory |
 | P4 | Run suite | `./tests/run.sh` — record PASS/FAIL/SKIP |
 | P5 | Confirm product class still **Type O-P** | Combined ensure; not Type O-S binary-only; not Type N help-default |
@@ -100,9 +100,9 @@
 | Check | Path |
 |-------|------|
 | README install / Type O-P honesty | `README.md` |
-| Changelog vs `VERSION` | `CHANGELOG.md` vs `1.0.0` |
+| Changelog vs `VERSION` | `CHANGELOG.md` vs `1.0.1` |
 | SECURITY integrity / contact | `SECURITY.md` |
-| Companion digest present | `springboot3.sha256` |
+| Companion digest present | `src/springboot-cli.sha256` |
 | Requirements registry honesty | `docs/requirements/index.md` |
 | Harness (local, often unversioned) | H2 from RAM genesis present; not product law |
 

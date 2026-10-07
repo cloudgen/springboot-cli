@@ -31,7 +31,7 @@ It defines re-run safety for ensure-style shell lifecycle commands (install, PAT
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | re-run ensure helpers |
+| `src/springboot-cli` | program file people install | re-run ensure helpers |
 | `springboot3` (empty arguments) | command | second run must preserve |
 
 | You do… | What it means | What you type |
@@ -41,12 +41,12 @@ It defines re-run safety for ensure-style shell lifecycle commands (install, PAT
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
-| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3` |
+| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
 | **Dispatcher** | `app_main` (A naming) |
 | **Output SSOT** | `out_text` / `out_json` / `out_json_error` (+ wrappers `out_info`/`out_success`/`out_warn`/`out_error`/`out_die`) |
@@ -105,7 +105,7 @@ Force **MUST NOT** be used as a silent way to skip integrity verification.
 | Item | Value for springboot3 |
 |------|------------------------|
 | **Product / binary** | `springboot3` (`APP_NAME`) |
-| **Implementation file** | Repo root `./springboot3` |
+| **Implementation file** | `src/springboot-cli` |
 | **Install detect SSOT** | `inst_is_installed` / `inst_get_version` |
 | **Install ensure SSOT** | `inst_perform_install` (+ download/atomic helpers) |
 | **Force reinstall var** | `FORCE_REINSTALL` (default `0`); CLI `--force` must set this per `requirement-shell-cli-interface.md` |
@@ -221,7 +221,7 @@ A state-changing shell change for springboot3 is **not done** if any of the foll
 | `docs/requirements/requirement-shell-self-management.md` | Lifecycle commands; integrity + downgrade policy |
 | `docs/requirements/requirement-shell-output-requirements.md` | Messages on no-op / already-done paths |
 | `docs/requirements/index.md` | Registry SSOT |
-| `./springboot3` | Implementation under test |
+| `src/springboot-cli` | Implementation under test |
 
 ---
 

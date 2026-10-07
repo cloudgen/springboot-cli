@@ -22,7 +22,7 @@ It defines lifecycle capabilities and safety rules for this shell project’s se
 | Box | Meaning | Example |
 |-----|---------|---------|
 | You / this login | Operator who installed the script | `springboot3 self-update` |
-| The other role | Publisher who ships `springboot3` + `springboot3.sha256` | Companion digest next to the channel URL |
+| The other role | Publisher who ships `src/springboot-cli` and `src/springboot-cli.sha256` | Companion digest next to the channel URL |
 | Not this file | `uninstall` of the demo project | `springboot3 uninstall --force` |
 
 | Includes | Excludes |
@@ -31,7 +31,7 @@ It defines lifecycle capabilities and safety rules for this shell project’s se
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | `inst_self_update` / `inst_self_uninstall` / `ver_check` |
+| `src/springboot-cli` | program file people install | `inst_self_update` / `inst_self_uninstall` / `ver_check` |
 | `springboot3 about` | command | diagnostics for this CLI |
 
 | You do… | What it means | What you type |
@@ -41,12 +41,12 @@ It defines lifecycle capabilities and safety rules for this shell project’s se
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
-| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3` |
+| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
 | **Dispatcher** | `app_main` (A naming) |
 | **Output SSOT** | `out_text` / `out_json` / `out_json_error` (+ wrappers `out_info`/`out_success`/`out_warn`/`out_error`/`out_die`) |
@@ -140,21 +140,21 @@ Root may write global install path; non-root uses user path. Do not assume root 
 | Item | Value for springboot3 |
 |------|------------------------|
 | **Product / binary** | `springboot3` (`APP_NAME`) |
-| **Implementation file** | Repo root `./springboot3` |
+| **Implementation file** | `src/springboot-cli` |
 | **Dispatcher** | `app_main` routes `version-check` → `ver_check`; `self-update` → `inst_self_update`; `self-uninstall` → `inst_self_uninstall`; `about` → `app_about` |
 | **Install orchestrator SSOT** | `inst_perform_install` (download → `util_verify_download_integrity` → place binary) |
 | **Version compare** | `ver_gt`; local version via `inst_get_version` |
 | **Install presence** | `inst_is_installed` |
 | **Paths** | `GLOBAL_BIN` default `/usr/local/bin`; `USER_BIN` default `${HOME}/.local/bin` |
 | **Repository identity** | `REPO_USER` default `Wilgat`; `REPO_NAME` default `springboot3` |
-| **Release channel** | `SCRIPT_URL` with `:=` default composed from `REPO_*` / `APP_NAME` (override via env) |
+| **Release channel** | `SCRIPT_URL` with `:=` default composed from `REPO_*` and repo-relative path `src/springboot-cli` (override via env). `APP_NAME` stays the installed command name. |
 | **Strict digest pin** | Runtime `CHECKSUM` → Shape B path inside `util_verify_download_integrity` (**not** in help/about) |
 | **Companion digest** | Default `${SCRIPT_URL}.sha256` via `util_verify_download_integrity` — `requirement-shell-automatic-checksum.md` |
 | **Force reinstall** | CLI `--force` → `FORCE=1` **and** `FORCE_REINSTALL=1` in `app_main` |
 | **Uninstall** | `inst_self_uninstall` (bin resolve via `util_get_install_bin_path`; confirm / `confirm_required`; remove; optional PATH cleanup) |
 | **PATH ensure** | `path_add_shell` / `path_in_path` on user install |
 | **Privilege** | Type 0 only for self-management surface; no dedicated system user |
-| **Version SSOT** | `VERSION` default `1.0.0` in script config block (`VERSION="1.0.0"`) |
+| **Version SSOT** | `VERSION` default `1.0.1` in script config block (`VERSION="1.0.1"`) |
 
 #### Normative acceptance behaviors (this project)
 
@@ -274,7 +274,7 @@ Work claiming self-management support for springboot3 is **not done** if any of 
 | `docs/requirements/requirement-shell-modular-function-design.md` | Live function families (`out_*`, lifecycle, util) |
 | `docs/requirements/requirement-shell-automatic-checksum.md` | Companion / pin integrity on install path |
 | `docs/requirements/index.md` | Registry SSOT |
-| `./springboot3` | Implementation under test |
+| `src/springboot-cli` | Implementation under test |
 
 ---
 
@@ -284,7 +284,7 @@ Work claiming self-management support for springboot3 is **not done** if any of 
 
 ### Live function inventory (ship unit — A naming)
 
-**Product law inventory** (live `./springboot3` — §3.1 option 1 (A naming); live `out_*`/`inst_*`/`app_*` (A naming)):
+**Product law inventory** (live `src/springboot-cli` — §3.1 option 1 (A naming); live `out_*`/`inst_*`/`app_*` (A naming)):
 
 | Area | Live names |
 |------|------------|

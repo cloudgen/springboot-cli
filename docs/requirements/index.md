@@ -1,11 +1,11 @@
 # Requirements index
 
 **Product:** springboot3 — bash (`#!/bin/bash`) Type 0 self-install / self-maintenance CLI plus a Spring Boot line switch (default 3.3.5, opt-in 2.7.18)  
-**Identity SSOT:** ship unit `./springboot3` Project Constants — `APP_NAME="springboot3"`, `VERSION="1.0.0"`, `REPO_USER="cloudgen"`, `REPO_NAME="springboot-cli"`, `SCRIPT_URL` composed from those. Requirements **must not** invent a different product name, channel, or version.  
-**Workspace state:** Specialized product law — identity SSOT retargeted; Implementation Notes use **live** `./springboot3` helpers; class law Active (`requirement-class-software-dev`); domain law registered (`requirement-domain-springboot3`).  
-**Live Implementation honesty:** Product naming SSOT = A prefixes (`out_*`, `inst_*`, `app_main`) on live ship unit (§3.1 option 1). Non-interactive empty argv = Type O-P combined ensure (domain **run**). Interactive TTY with no line switch and no domain payload flag = numbered menu in `./springboot3` (`requirement-shell-cli-default-interaction`). A pipe with no command stays combined ensure. Automatic checksum Shape A when companion present. JSON success/error types = `out_success` / `out_error`.
+**Identity SSOT:** ship unit `src/springboot-cli` Project Constants — `APP_NAME="springboot3"`, `VERSION="1.0.1"`, `REPO_USER="cloudgen"`, `REPO_NAME="springboot-cli"`, `SCRIPT_REL="src/springboot-cli"`, `SCRIPT_URL` composed from `REPO_USER`, `REPO_NAME`, and `SCRIPT_REL`. Requirements **must not** invent a different product name, channel, or version.  
+**Workspace state:** Specialized product law — identity SSOT retargeted; Implementation Notes use **live** `src/springboot-cli` helpers; class law Active (`requirement-class-software-dev`); domain law registered (`requirement-domain-springboot3`).  
+**Live Implementation honesty:** Product naming SSOT = A prefixes (`out_*`, `inst_*`, `app_main`) on live ship unit (§3.1 option 1). Non-interactive empty argv = Type O-P combined ensure (domain **run**). Interactive TTY with no line switch and no domain payload flag = numbered menu in `src/springboot-cli` (`requirement-shell-cli-default-interaction`). A pipe with no command stays combined ensure. Automatic checksum Shape A when companion present. JSON success/error types = `out_success` / `out_error`.
 **Sufficiency note:** Class + domain + storage + integrity law registered; help↔dispatcher / force / hybrid empty-argv / Shape A+B checksum / cache-folder storage / TTY menu / menu language are in the ship unit. Suite after that work: PASS=314 FAIL=0 SKIP=1 (TP-MENU-01..05 and TP-LANG-01 **have**; TP-CLI-05 and TP-CLI-12 **have**). Storage: per-login per-process cache chain, persistence `${HOME}/.local/springboot3`, `EFFECTIVE_STORAGE_DIR` + `TMPDIR` in main, about cache fields. The menu language leaf is inside persistence, not the cache. Residual: optional downgrade JSON code wording; JSON error on stdout vs stderr.  
-**Updated:** 2026-10-07 (public repository cloudgen/springboot-cli; cache-folder storage Active 1.2.0; TTY menu and 13 languages; VERSION 1.0.0)
+**Updated:** 2026-10-07 (public repository cloudgen/springboot-cli; cache-folder storage Active 1.2.0; TTY menu and 13 languages; ship unit `src/springboot-cli`; VERSION 1.0.1)
 
 | ID / key | Title | Area | Status | Path | Updated |
 |----------|-------|------|--------|------|---------|
@@ -27,7 +27,7 @@
 
 **Rules for agents:**
 
-1. Treat rows above as the **live product-law inventory** for springboot3. Product identity (`APP_NAME` and friends) is owned by `./springboot3` — re-read disk; do not reintroduce names from seed/other projects.  
+1. Treat rows above as the **live product-law inventory** for springboot3. Product identity (`APP_NAME` and friends) is owned by `src/springboot-cli` — re-read disk; do not reintroduce names from seed/other projects.  
 2. **Do not invent** additional `requirement-*.md` paths — verify on disk and add a registry row in the same change when creating one.  
 3. Product source comments cite **only** these live requirement files (or future registered ones) — never `template-*` / `skill-*` as behavioral authority.  
 4. This versioned surface lists **requirement rows only** — do not dump templates / skills / terminologies / incidents path inventories here (git-surface; INC-20260712-005).  

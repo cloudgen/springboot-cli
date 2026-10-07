@@ -29,7 +29,7 @@ It defines a **Type 0–centric self-managed shell CLI** (install / update / uni
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | `app_main` dispatcher |
+| `src/springboot-cli` | program file people install | `app_main` dispatcher |
 | `springboot3 help` | command | listed verbs and flags |
 
 | You do… | What it means | What you type |
@@ -39,12 +39,12 @@ It defines a **Type 0–centric self-managed shell CLI** (install / update / uni
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
-| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3` |
+| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
 | **Dispatcher** | `app_main` (A naming) |
 | **Output SSOT** | `out_text` / `out_json` / `out_json_error` (+ wrappers `out_info`/`out_success`/`out_warn`/`out_error`/`out_die`) |
@@ -118,12 +118,12 @@ In JSON mode, help **MUST NOT** dump long human text; return a short structured 
 | Item | Value for springboot3 |
 |------|------------------------|
 | **Product / binary name** | `springboot3` (`APP_NAME`, default `springboot3`) |
-| **Primary executable** | Repo root `./springboot3` (bash `#!/bin/bash`, single-file for `curl \| sh`) |
+| **Primary executable** | `src/springboot-cli` (bash `#!/bin/bash`, single-file for `curl \| sh`) |
 | **Dispatcher** | `app_main` (always invoked at end of script: `app_main "$@"` — no `${0##*/}` / APP_NAME basename gate; required for `curl \| sh`) |
 | **Output SSOT** | `out_text` + wrappers (`out_info`, `out_success`, `out_warn`, `out_error`, `out_die`, `out_plain`, `out_json`, …) |
-| **Version SSOT** | `VERSION` default `1.0.0` (script header / config block: `VERSION="1.0.0"`) |
+| **Version SSOT** | `VERSION` default `1.0.1` (script header / config block: `VERSION="1.0.1"`) |
 | **Install paths** | Global: `GLOBAL_BIN` default `/usr/local/bin`; User: `USER_BIN` default `${HOME}/.local/bin` |
-| **Remote channel env (help surface)** | `REPO_USER` / `REPO_NAME` (defaults `cloudgen` / `springboot-cli`); `SCRIPT_URL` composed default `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/${APP_NAME}` (literal product default: `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3`; override via env). **`help` / `about` MUST list these operator channel vars as designed — MUST NOT list `CHECKSUM`** (install-path runtime pin only; see `requirement-shell-automatic-checksum.md`) |
+| **Remote channel env (help surface)** | `REPO_USER` / `REPO_NAME` (defaults `cloudgen` / `springboot-cli`); `SCRIPT_REL` default `src/springboot-cli`; `SCRIPT_URL` composed default `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/${SCRIPT_REL}` (literal product default: `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli`; override via env). `APP_NAME` stays the installed command name. **`help` / `about` MUST list these operator channel vars as designed — MUST NOT list `CHECKSUM`** (install-path runtime pin only; see `requirement-shell-automatic-checksum.md`) |
 | **Type 1 / Type 2 commands** | **None** on current surface — this tool is CLI lifecycle only |
 | **Dedicated system user** | **Not required** for Type 0 CLI self-management |
 
@@ -283,7 +283,7 @@ This requirement is satisfied for the springboot3 shell CLI when all of the foll
 | `docs/requirements/requirement-shell-idempotency.md` | Re-run safety for ensure ops |
 | `docs/requirements/requirement-shell-modular-function-design.md` | Live function families (`out_*`, lifecycle, util, domain) |
 | `docs/requirements/index.md` | Registry SSOT |
-| `./springboot3` | Implementation under test |
+| `src/springboot-cli` | Implementation under test |
 
 ---
 
@@ -295,7 +295,7 @@ This requirement is satisfied for the springboot3 shell CLI when all of the foll
 
 ### Live function inventory (ship unit — A naming)
 
-**Product law inventory** (live `./springboot3` — §3.1 option 1 (A naming); live `out_*`/`inst_*`/`app_*` (A naming)):
+**Product law inventory** (live `src/springboot-cli` — §3.1 option 1 (A naming); live `out_*`/`inst_*`/`app_*` (A naming)):
 
 | Area | Live names |
 |------|------------|

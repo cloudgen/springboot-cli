@@ -12,7 +12,7 @@ On a real terminal, a run with no positional verb, no Spring Boot line switch, a
 
 The language codes and the translated words live in `requirement-shell-cli-language.md`. The payload pins and the demo files live in `requirement-domain-springboot3.md`. Empty-argv detect and the non-interactive ensure live in `requirement-shell-cli-zero-arguments.md`. This file owns the matrix and the numbered tree.
 
-The ship unit `./springboot3` at VERSION 1.0.0 draws this tree. The handlers are in that file. TP-MENU-01 through TP-MENU-05 are have.
+The ship unit `src/springboot-cli` at VERSION 1.0.1 draws this tree. The handlers are in that file. TP-MENU-01 through TP-MENU-05 are have.
 
 ### 1.1 Human-facing
 
@@ -31,7 +31,7 @@ The ship unit `./springboot3` at VERSION 1.0.0 draws this tree. The handlers are
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | ship unit | the menu, once the handlers exist |
+| `src/springboot-cli` | ship unit | the menu, once the handlers exist |
 | `springboot3 menu` | command | the same tree on a terminal |
 
 | You do… | What it means | What you type |
@@ -43,7 +43,7 @@ The ship unit `./springboot3` at VERSION 1.0.0 draws this tree. The handlers are
 | Change the language | Thirteen languages. **0** goes back and does not save. | `5`, then `51` through `63` |
 | Care for this program | Payload install, local version, diagnostics, version check, channel update, remove this program. | `8`, then `81` through `86` |
 | Leave | The program returns success. | `9` |
-| Keep a pipe automatic | No board and no read. The combined ensure still runs. | `curl -fsSL …/springboot3 \| bash` |
+| Keep a pipe automatic | No board and no read. The combined ensure still runs. | `curl -fsSL …/src/springboot-cli \| bash` |
 
 ## 2. Core Rules / Requirements (Mandatory)
 
@@ -186,10 +186,10 @@ A wrong pick stays on this layer (§2.8). Who may run a verb is not a menu layer
 | Field | Value |
 |-------|--------|
 | Product | `springboot3` |
-| VERSION named here | `1.0.0` (ship-unit Config). This requirement does not bump it. |
+| VERSION named here | `1.0.1` (ship-unit Config). This requirement's status stays 1.0.0. |
 | Shebang | `#!/bin/bash` stays. Do not switch the ship unit to `/bin/sh` to match another product. |
 | Claimed | yes |
-| Live ship unit | Handlers below are in `./springboot3`. A TTY with no command draws the menu. A pipe stays combined ensure. |
+| Live ship unit | Handlers below are in `src/springboot-cli`. A TTY with no command draws the menu. A pipe stays combined ensure. |
 | Handlers (required names) | `app_cmd_menu`, `app_cmd_menu_setup`, `app_cmd_menu_self`, `app_cmd_menu_language` |
 | Printer (required name) | `out_menu_choice` |
 | Choice read | Current-shell `read -r` |
@@ -199,10 +199,10 @@ A wrong pick stays on this layer (§2.8). Who may run a verb is not a menu layer
 
 #### Worked sample (English front board)
 
-The version token is the live `VERSION`. This fence shows `1.0.0`. Reserved numbers are not printed. The choose-prompt in the program ends with one space; this fence omits that space.
+The version token is the live `VERSION`. This fence shows `1.0.1`. Reserved numbers are not printed. The choose-prompt in the program ends with one space; this fence omits that space.
 
 ```text
-[INFO] **springboot3**(*1.0.0*)
+[INFO] **springboot3**(*1.0.1*)
 1. **Spring Boot 3.3.5**: *set up and run Spring Boot 3.3.5 on Java 21*
 2. **Spring Boot 2.7.18**: *set up and run Spring Boot 2.7.18 on Java 8*
 3. **Setup only**: *write the project and do not start it*
@@ -224,7 +224,7 @@ springboot3 main
 On a TTY, each of those opens this tree. These do not:
 
 ```text
-curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3 | bash
+curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli | bash
 springboot3 --json
 springboot3 --quiet
 springboot3 --springboot2
@@ -279,7 +279,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 1. This file and `requirement-shell-cli-language.md` are registered.
 2. Peer law that used to say “interactive empty argv always runs the payload” points at §2.1.
 3. `menu` and `main` are named here and in `requirement-shell-cli-interface.md`.
-4. The ship unit draws the menu. The handlers are in `./springboot3`.
+4. The ship unit draws the menu. The handlers are in `src/springboot-cli`.
 5. TP-MENU-01 through TP-MENU-05 are **have**. `tests/` asserts them.
 
 ### Design-time verification
@@ -304,7 +304,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 | `docs/requirements/requirement-domain-springboot3.md` | Line pins and demo run |
 | `docs/requirements/requirement-class-software-dev.md` | Residual pointer; no dest approver |
 | `reviews/test-plan.md` | TP-MENU-* have rows |
-| `./springboot3` | Ship unit. Menu handlers are in the file. |
+| `src/springboot-cli` | Ship unit. Menu handlers are in the file. |
 
 ## Terminologies
 
@@ -362,7 +362,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 
 **Human daily-life explanation:** The top line is the shop name and the edition. Each dish is a number, a bold name, and a slanted explanation.
 
-**Daily-life example:** `**springboot3**(*1.0.0*)` then `1. **Spring Boot 3.3.5**: *set up and run Spring Boot 3.3.5 on Java 21*`.
+**Daily-life example:** `**springboot3**(*1.0.1*)` then `1. **Spring Boot 3.3.5**: *set up and run Spring Boot 3.3.5 on Java 21*`.
 
 ### CLI main menu numbering
 

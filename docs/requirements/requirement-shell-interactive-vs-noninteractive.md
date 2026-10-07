@@ -29,22 +29,22 @@ It defines interactive vs non-interactive behavior for this shell project (globa
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | `TTY` at script top; `prompt_*` |
-| One-liner | `curl -fsSL …/springboot3 \| bash` | non-interactive auto-install |
+| `src/springboot-cli` | program file people install | `TTY` at script top; `prompt_*` |
+| One-liner | `curl -fsSL …/src/springboot-cli \| bash` | non-interactive auto-install |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| One-liner | No prompt may wait for a key. The pipe has no human to answer. | `curl -fsSL …/springboot3 \| bash` |
+| One-liner | No prompt may wait for a key. The pipe has no human to answer. | `curl -fsSL …/src/springboot-cli \| bash` |
 | Confirm wipe | Interactive uninstall may ask; `--force` skips the question. Non-interactive without `--force` must refuse. | `springboot3 uninstall --force` |
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
-| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3` |
+| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
 | **Dispatcher** | `app_main` (A naming) |
 | **Output SSOT** | `out_text` / `out_json` / `out_json_error` (+ wrappers `out_info`/`out_success`/`out_warn`/`out_error`/`out_die`) |
@@ -148,7 +148,7 @@ interactive   non-interactive
 | Item | Value for springboot3 |
 |------|------------------------|
 | **Product / binary** | `springboot3` |
-| **Implementation** | Repo root `./springboot3` |
+| **Implementation** | `src/springboot-cli` |
 | **Mode globals** | `TTY`, `QUIET`, `JSON`, `DEBUG`, `FORCE`, `FORCE_REINSTALL` |
 | **TTY init** | `[ -t 0 ] && [ -t 1 ] && TTY=1` near config block |
 | **Flag parse SSOT** | `app_main` |
@@ -280,7 +280,7 @@ Mode-related work for springboot3 is **not done** if any of the following fail:
 | `tests/README.md` | TP-CURP-* map |
 | `tests/test_online_curl_install.sh` | Non-TTY pipe regression suite |
 | `docs/requirements/index.md` | Registry SSOT |
-| `./springboot3` | Implementation under test |
+| `src/springboot-cli` | Implementation under test |
 
 ---
 

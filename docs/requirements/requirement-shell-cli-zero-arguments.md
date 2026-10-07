@@ -31,7 +31,7 @@ Type N (non-online-install → empty argv = help) does **not** apply. Type O-S (
 It defines what happens when the tool is invoked with **no command and no flags**, including the classic one-liner:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3 | bash
+curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli | bash
 ```
 
 Empty argv detect cases:
@@ -63,8 +63,8 @@ Empty argv detect cases:
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | empty-argv path in `app_main` |
-| One-liner | `curl -fsSL …/springboot3 \| bash` | first combined ensure |
+| `src/springboot-cli` | program file people install | empty-argv path in `app_main` |
+| One-liner | `curl -fsSL …/src/springboot-cli \| bash` | first combined ensure |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
@@ -74,12 +74,12 @@ Empty argv detect cases:
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
-| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3` |
+| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
 | **Dispatcher** | `app_main` (A naming) |
 | **Output SSOT** | `out_text` / `out_json` / `out_json_error` (+ wrappers `out_info`/`out_success`/`out_warn`/`out_error`/`out_die`) |
@@ -178,7 +178,7 @@ Live scalars are owned by the ship unit Config block. Requirement **cores** stay
 |------|------------------------|
 | **Empty-argv type** | **Type O-P — Payload installer** (combined ensure; not Type N; not Type O-S) |
 | **Product / binary** | `springboot3` (`APP_NAME`) |
-| **Ship unit** | Repo root `./springboot3` |
+| **Ship unit** | `src/springboot-cli` |
 | **Dispatcher** | `app_main` — empty-argv block **before** flag/command parse default help |
 | **Ship-unit ensure** | `inst_perform_install` / `inst_maybe_install` / `inst_self_update` (upgrade policy) |
 | **Payload ensure** | Domain pipeline after ship unit: `setup_sdkman` → `setup_java` → `setup_maven` → `setup_springboot_project` → optional `run_springboot_project` |
@@ -305,7 +305,7 @@ This requirement is satisfied when all of the following hold:
 | `docs/requirements/requirement-shell-output-requirements.md` | `out_*` / JSON purity |
 | `docs/requirements/requirement-shell-automatic-checksum.md` | Integrity on install download path |
 | `docs/requirements/requirement-domain-springboot3.md` | Payload pipeline |
-| Repo root `./springboot3` | Implementation (`app_main`, `inst_*`, domain helpers) |
+| `src/springboot-cli` | Implementation (`app_main`, `inst_*`, domain helpers) |
 | `tests/README.md` | TP-CURP-* map |
 | `tests/test_cli.sh`, `tests/test_install_lifecycle.sh`, `tests/test_online_curl_install.sh` | Regression coverage |
 
@@ -330,7 +330,7 @@ Normative summary lives in the **Payload installer law** banner at the top of th
 |-----------|----------------------------------------|
 | **Not installed** + empty argv, non-interactive | Ship-unit install **then payload ensure** |
 | **Installed** + empty argv, non-interactive | Ship-unit upgrade policy + **domain default `cmd=run`** |
-| **Interactive TTY** + empty argv, no line switch, no domain payload flag | Numbered menu in `./springboot3`. Not a payload run |
+| **Interactive TTY** + empty argv, no line switch, no domain payload flag | Numbered menu in `src/springboot-cli`. Not a payload run |
 | **Installed** + explicit lifecycle cmds | `version`, `version-check`, `self-update`, `self-uninstall`, `about`, `help` as dispatched |
 | **Flags** | `--project-dir`, `--no-run`, `--force`, `--force-user`, `--force-root`, `--json`, `--quiet` |
 

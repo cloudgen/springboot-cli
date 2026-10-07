@@ -31,7 +31,7 @@ It owns product ops so agents do not treat shell lifecycle files alone as full-p
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | domain helpers (`setup_*`, `run_springboot_project`) |
+| `src/springboot-cli` | program file people install | domain helpers (`setup_*`, `run_springboot_project`) |
 | `springboot3 help` | command | domain flags and verbs |
 | Demo `PROJECT_DIR` | `pom.xml`, `HelloApplication.java`, `application.properties` | the generated app |
 
@@ -44,12 +44,12 @@ It owns product ops so agents do not treat shell lifecycle files alone as full-p
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
-| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3` |
+| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
 | **Dispatcher** | `app_main` (A naming) |
 | **Output SSOT** | `out_text` / `out_json` / `out_json_error` (+ wrappers `out_info`/`out_success`/`out_warn`/`out_error`/`out_die`) |
@@ -344,7 +344,7 @@ This requirement is satisfied when:
 | `docs/requirements/requirement-shell-output-requirements.md` | Output SSOT for domain messages |
 | `docs/requirements/requirement-shell-idempotency.md` | Ensure re-run (lifecycle); domain preserve is complementary |
 | `docs/requirements/index.md` | Registry SSOT |
-| `./springboot3` | Implementation under test |
+| `src/springboot-cli` | Implementation under test |
 
 ---
 

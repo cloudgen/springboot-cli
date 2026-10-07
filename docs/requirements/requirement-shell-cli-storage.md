@@ -35,12 +35,12 @@ The preferred cache is **not** a ram-drive **project** tree (`/dev/shm/<project>
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
-| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3` |
+| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` |
 | **Dispatcher** | `app_main` (A naming) |
 | **Output SSOT** | `out_text` / `out_json` / `out_json_error` (+ wrappers) |
@@ -188,7 +188,7 @@ Git Bash omits the 2nd fallback line. Mac prints preferred under `/tmp/cache/`, 
 | Item | Live value |
 |------|------------|
 | **Product / binary** | `springboot3` |
-| **Cache resolver** | `util_resolve_storage` in `./springboot3` |
+| **Cache resolver** | `util_resolve_storage` in `src/springboot-cli` |
 | **Linux preferred** | `/dev/shm/cache/cache-${APP_NAME}-${login}-$$` |
 | **Linux 1st / 2nd** | `/tmp/cache/cache-${APP_NAME}-${login}-$$` then `${HOME}/.cache/cache-${APP_NAME}-$$` |
 | **Git Bash** | `/tmp/cache/cache-${APP_NAME}-${login}-$$` then `${HOME}/AppData/Local/Temp/cache-${APP_NAME}-$$` |

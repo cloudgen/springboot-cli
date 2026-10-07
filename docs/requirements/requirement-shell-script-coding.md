@@ -6,7 +6,7 @@
 
 This requirement is the **specialize-in home** for portable shell coding lessons on springboot3. **Without this file, agents bring those lessons raw** and treat coding skills as product law.
 
-It owns residual coding rules for the single-file bash ship unit `./springboot3` that are **not** already owned by peer requirements (output, prefixes, TTY, storage, prompts).
+It owns residual coding rules for the single-file bash ship unit `src/springboot-cli` that are **not** already owned by peer requirements (output, prefixes, TTY, storage, prompts).
 
 **Scope:** shebang/runtime, `set -u`, no raw `echo` for user messages, Protection Zone comments, `util_source_external_safe`, no `$()` of `read` helpers, own-or-point to peers.  
 **Out of scope (cited, not re-owned):** `out_*` catalog (`requirement-shell-output-requirements.md`); prefix families (`requirement-shell-modular-function-design.md`); TTY measure-outside-functions (`requirement-shell-interactive-vs-noninteractive.md`); storage roots (`requirement-shell-cli-storage.md`); command catalog (`requirement-shell-cli-interface.md`).
@@ -15,11 +15,11 @@ It owns residual coding rules for the single-file bash ship unit `./springboot3`
 
 ### 1.1 Human-facing
 
-**In one sentence:** This file is where **how the script is written** becomes product law so agents do not copy portable workshop lessons straight into `./springboot3`.
+**In one sentence:** This file is where **how the script is written** becomes product law so agents do not copy portable workshop lessons straight into `src/springboot-cli`.
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Implementer editing `./springboot3` | Keep `set -u`; go through `out_*` |
+| You / this login | Implementer editing `src/springboot-cli` | Keep `set -u`; go through `out_*` |
 | The other role | Reviewer checking coding vs peers | Prefixes stay on the modular file |
 | Not this file | A second copy of output / TTY / storage tables | Point; do not dump peer bodies |
 
@@ -29,12 +29,12 @@ It owns residual coding rules for the single-file bash ship unit `./springboot3`
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | coding of helpers |
+| `src/springboot-cli` | program file people install | coding of helpers |
 | `tests/test_cli.sh` | suite | TP-MOD / TP-U |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Edit a helper | Follow this file plus the peer it points at. Do not invent a parallel printer. | Edit `./springboot3`; prove with `./tests/run.sh` |
+| Edit a helper | Follow this file plus the peer it points at. Do not invent a parallel printer. | Edit `src/springboot-cli`; prove with `./tests/run.sh` |
 | Add a confirm | Call `prompt_yes_no` in the current shell. Do not capture it with `$()`. | `springboot3 uninstall` (TTY) |
 
 ## 2. Core Rules / Requirements (Mandatory)
@@ -71,8 +71,8 @@ It owns residual coding rules for the single-file bash ship unit `./springboot3`
 
 | Item | Value |
 |------|--------|
-| **Ship unit** | `./springboot3` (`#!/bin/bash`) |
-| **VERSION SSOT** | `VERSION="1.0.0"` |
+| **Ship unit** | `src/springboot-cli` (`#!/bin/bash`) |
+| **VERSION SSOT** | `VERSION="1.0.1"` |
 | **Nounset** | `set -u` at script top |
 | **TTY SSOT** | Script top `[ -t 0 ] && [ -t 1 ] && TTY=1` after `: "${TTY:=0}"`; `prompt_*` consume `TTY` |
 | **Safe source** | `util_source_external_safe` |
@@ -125,7 +125,7 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 | `docs/requirements/requirement-shell-modular-function-design.md` | Prefixes |
 | `docs/requirements/requirement-shell-interactive-vs-noninteractive.md` | TTY / prompts |
 | `docs/requirements/requirement-shell-cli-storage.md` | Scratch roots |
-| `./springboot3` | Implementation under test |
+| `src/springboot-cli` | Implementation under test |
 | `tests/test_cli.sh` | TP-MOD / TP-U |
 
 **Last Updated**: 2026-09-06  

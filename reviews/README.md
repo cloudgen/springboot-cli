@@ -12,9 +12,9 @@ Public product review surface (peer of `tests/`). Git-tracked.
 | `reports/` | Dated review run reports |
 
 **Product:** springboot3 (bash Type O-P payload online installer + Spring Boot line switch: default 3.3.5, opt-in 2.7.18)  
-**Ship unit:** `./springboot3` · companion `./springboot3.sha256`  
-**Version SSOT:** `VERSION="1.0.0"` in ship unit Config  
-**Channel:** `SCRIPT_URL` → `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3`  
+**Ship unit:** `src/springboot-cli` · companion `src/springboot-cli.sha256`  
+**Version SSOT:** `VERSION="1.0.1"` in ship unit Config  
+**Channel:** `SCRIPT_URL` → `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli`  
 **Bootstrap lineage:** specialized from **springboot2** (A→B); architecture Type O-P inherited; domain pins retargeted  
 **Install mode:** **Type O-P online** (`curl | bash` combined ensure) — not local-only  
 **Type 1 elevation / sudoers product surface:** intentionally **absent** (global bin may use host `sudo` for path place; no Type 1 elev law tables)

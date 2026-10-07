@@ -25,7 +25,7 @@ TESTS_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 REPO_ROOT=$(CDPATH= cd -- "${TESTS_ROOT}/.." && pwd)
 APP_NAME="${APP_NAME:-springboot3}"
 export TESTS_ROOT REPO_ROOT APP_NAME
-SCRIPT="${REPO_ROOT}/${APP_NAME}"
+SCRIPT="${REPO_ROOT}/src/springboot-cli"
 export SCRIPT
 
 # shellcheck source=helpers.sh

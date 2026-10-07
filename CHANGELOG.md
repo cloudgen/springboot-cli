@@ -6,6 +6,19 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) 
 
 ---
 
+## [1.0.1] - 2026-10-07
+
+### Changed
+- The published ship unit is `src/springboot-cli`. The installed command name stays `springboot3`.
+- The install channel is `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli`. The companion is `src/springboot-cli.sha256`.
+
+### Notes
+- Product version **1.0.1**. `APP_NAME` stays `springboot3`. Persistence stays `~/.local/springboot3`.
+- Companion digest regenerated for this path move.
+- Suite after the path move: PASS=314 FAIL=0 SKIP=1.
+
+---
+
 ## [1.0.0] - 2026-10-07
 
 ### Added

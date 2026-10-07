@@ -9,7 +9,7 @@
 : "${TESTS_ROOT:=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)}"
 : "${REPO_ROOT:=$(CDPATH= cd -- "${TESTS_ROOT}/.." && pwd)}"
 : "${APP_NAME:=springboot3}"
-: "${SCRIPT:=${REPO_ROOT}/${APP_NAME}}"
+: "${SCRIPT:=${REPO_ROOT}/src/springboot-cli}"
 : "${PASS:=0}"
 : "${FAIL:=0}"
 : "${SKIP:=0}"
@@ -124,7 +124,7 @@ _trunc() {
 }
 
 # --- isolation helpers ---
-# Start a local HTTP channel serving REPO_ROOT/${APP_NAME} (+ optional .sha256).
+# Start a local HTTP channel serving a copy of the ship unit as ${APP_NAME} (+ optional .sha256).
 # Sets: CI_HTTP_PID, CI_SCRIPT_URL, CI_CHANNEL_DIR, CI_PORT
 # Caller must call ci_stop_channel on cleanup.
 ci_start_channel() {

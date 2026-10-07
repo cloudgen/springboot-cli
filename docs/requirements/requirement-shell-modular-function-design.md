@@ -21,7 +21,7 @@ It defines modular function organization for a **monolithic yet modular** single
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Implementer editing `./springboot3` | Add an `out_*` helper, not a new printer |
+| You / this login | Implementer editing `src/springboot-cli` | Add an `out_*` helper, not a new printer |
 | The other role | Reviewer checking prefixes | `out_*` / `inst_*` / `app_*` / `util_*` |
 | Not this file | Java package layout of the demo app | Domain `pom.xml` is not this prefix law |
 
@@ -31,22 +31,22 @@ It defines modular function organization for a **monolithic yet modular** single
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | prefix families and Protection Zones |
+| `src/springboot-cli` | program file people install | prefix families and Protection Zones |
 | `springboot3 help` | command | new verbs must be listed after they are routed |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Add output | New messages go through `out_*`, not a parallel printer. | Edit `./springboot3` helpers |
+| Add output | New messages go through `out_*`, not a parallel printer. | Edit `src/springboot-cli` helpers |
 | Add a command | Route it from `app_main`; do not add a second main. | `springboot3 help` must list it |
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
-| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3` |
+| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
 | **Dispatcher** | `app_main` (A naming) |
 | **Output SSOT** | `out_text` / `out_json` / `out_json_error` (+ wrappers `out_info`/`out_success`/`out_warn`/`out_error`/`out_die`) |
@@ -67,13 +67,13 @@ CIAO-Lite shell CLIs distributed as one-liners **MUST** use:
 | **Documented units** | Every public helper carries a defensive header and safe defaults |
 | **Requirements extract policy** | Durable rules live in `requirement-*.md`; code comments encode intent and Protection Zones |
 
-Optional multi-file layout under `src/` for future authoring **MAY** exist only if a build or pack step still produces **one** installable artifact and this requirement is updated. Until then, `./springboot3` remains the single shipped script.
+The single shipped script is `src/springboot-cli` (bash `#!/bin/bash`). It is the installable artifact for `curl | bash`. The installed command name stays `springboot3`. A further split into multiple runtime files under `src/` **MAY** exist only if a build or pack step still produces **one** installable artifact and this requirement is updated.
 
 ### 2.2 Official function families (this product — §3.1 option 1 A naming)
 
 **Naming law:** Product helpers **MUST** use bootstrap A (`selfmanaged`) **prefix families**. Live ship unit is SSOT for *which* helpers exist; **prefixes** align to A.
 
-**Normative prefix families (live `./springboot3`):**
+**Normative prefix families (live `src/springboot-cli`):**
 
 | Prefix | Category | Purpose | Normative live names |
 |--------|----------|---------|----------------------|
@@ -116,7 +116,7 @@ Every non-trivial function **MUST** include a defensive header of this shape (tr
 
 #### 2.3.1 Product-source documentation authority
 
-Optional `ALIGNMENT` / `See` / “fully synchronized with” lines in **product source** (`./springboot3`) **MUST** cite only **live** `docs/requirements/requirement-*.md` paths that exist on disk and appear in `docs/requirements/index.md`.
+Optional `ALIGNMENT` / `See` / “fully synchronized with” lines in **product source** (`src/springboot-cli`) **MUST** cite only **live** `docs/requirements/requirement-*.md` paths that exist on disk and appear in `docs/requirements/index.md`.
 
 | Allowed in product source comments | Forbidden in product source comments |
 |------------------------------------|--------------------------------------|
@@ -193,14 +193,14 @@ function_name() {
 | Item | Value for springboot3 |
 |------|------------------------|
 | **Product / binary** | `springboot3` (`APP_NAME`) |
-| **Single shipped script** | Repo root `./springboot3` (bash `#!/bin/bash`; A prefixes + domain helpers — see Live function inventory) |
+| **Single shipped script** | `src/springboot-cli` (bash `#!/bin/bash`; A prefixes + domain helpers — see Live function inventory) |
 | **`src/` directory** | Present but empty — **not** a multi-file runtime layout yet |
 | **Domain helpers** | Live domain uses `setup_*` / `run_springboot_project` (not `springboot3_*` prefix) |
 | **Bootstrap** | Direct execution when `${0##*/}` is `springboot3` or `springboot3.sh` → `app_main "$@"` |
 
 #### Live inventory (authoritative — §3.1 option 1 A naming + P1–P7 closed)
 
-Re-read `./springboot3`. This table **is** product law:
+Re-read `src/springboot-cli`. This table **is** product law:
 
 | Area | Live examples |
 |------|----------------|
@@ -224,7 +224,7 @@ Re-read `./springboot3`. This table **is** product law:
 
 #### New function checklist (this project)
 
-When adding a function to `./springboot3`:
+When adding a function to `src/springboot-cli`:
 
 1. Choose the correct prefix from §2.2 / this inventory.  
 2. Add the defensive header (full for non-trivial logic).  
@@ -316,7 +316,7 @@ A modular-structure change for springboot3 is **not done** if any of the followi
 | `docs/requirements/requirement-shell-idempotency.md` | Re-run safety inside ensure helpers |
 | `docs/requirements/requirement-shell-output-requirements.md` | `out_*` ownership |
 | `docs/requirements/index.md` | Registry SSOT |
-| `./springboot3` | Implementation under modular design rules |
+| `src/springboot-cli` | Implementation under modular design rules |
 
 ---
 
@@ -326,7 +326,7 @@ A modular-structure change for springboot3 is **not done** if any of the followi
 
 ### Live function inventory (ship unit — A naming)
 
-**Product law inventory** (live `./springboot3` — §3.1 option 1 (A naming); live `out_*`/`inst_*`/`app_*` (A naming)):
+**Product law inventory** (live `src/springboot-cli` — §3.1 option 1 (A naming); live `out_*`/`inst_*`/`app_*` (A naming)):
 
 | Area | Live names |
 |------|------------|

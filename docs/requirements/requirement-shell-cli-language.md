@@ -10,7 +10,7 @@ This requirement is the product law for **menu language** on springboot3: the th
 
 The numbered tree, Back, and the current-shell `read` stay in `requirement-shell-cli-default-interaction.md`. The scratch directory that `util_resolve_storage` returns stays in `requirement-shell-cli-storage.md`. This file owns the codes, the `language` leaf, and the copy. The leaf is not inside that scratch directory.
 
-The ship unit writes this file. The sentences below are the copy `./springboot3` prints. TP-LANG-01 is have.
+The ship unit writes this file. The sentences below are the copy `src/springboot-cli` prints. TP-LANG-01 is have.
 
 ### 1.1 Human-facing
 
@@ -401,13 +401,13 @@ English `help` still prints `Usage:` and lists operational verbs apart from any 
 | Field | Value |
 |-------|--------|
 | Product | `springboot3` |
-| VERSION named here | `1.0.0`. This requirement does not bump it. |
+| VERSION named here | `1.0.1`. This requirement's status stays 1.0.0. |
 | Leaf | `${HOME}/.local/springboot3/language` |
 | Override | `SPRINGBOOT3_LANG` |
 | Runtime variable | `APP_LANG` |
 | Default | `en` |
-| Handlers | `app_lang_load`, `app_lang_save`, `app_menu_text`, `app_cmd_menu_language` in `./springboot3` |
-| Live ship unit | The language leaf and the thirteen-code copy are in `./springboot3`. |
+| Handlers | `app_lang_load`, `app_lang_save`, `app_menu_text`, `app_cmd_menu_language` in `src/springboot-cli` |
+| Live ship unit | The language leaf and the thirteen-code copy are in `src/springboot-cli`. |
 | Proof | **TP-LANG-01** **have** |
 
 ### 2.7 Why This Requirement Exists (Direct CIAO Alignment)
@@ -451,7 +451,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 
 1. Registered beside `requirement-shell-cli-default-interaction.md`.
 2. Storage law points here for the leaf and does not own the words.
-3. The thirteen-code tables above are the copy. `./springboot3` prints those sentences.
+3. The thirteen-code tables above are the copy. `src/springboot-cli` prints those sentences.
 
 ### Design-time verification
 
@@ -469,7 +469,7 @@ When the program detects Termux, Git Bash, Windows Command Prompt, or the same c
 | `docs/requirements/requirement-shell-cli-storage.md` | Cache root; not this leaf |
 | `docs/requirements/requirement-shell-output-requirements.md` | `out_*` |
 | `reviews/test-plan.md` | TP-LANG-01 have |
-| `./springboot3` | Ship unit. Language handlers are in the file. |
+| `src/springboot-cli` | Ship unit. Language handlers are in the file. |
 
 ## Terminologies
 

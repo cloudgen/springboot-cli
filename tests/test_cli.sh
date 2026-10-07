@@ -29,8 +29,9 @@ run_test_cli() {
     assert_eq "TP-CLI-01 bash -n syntax" 0 "$_syn"
 
     # --- companion digest (Shape A) ---
-    if [ -f "${REPO_ROOT}/${APP_NAME}.sha256" ]; then
-        _expected=$(awk '{print $1}' "${REPO_ROOT}/${APP_NAME}.sha256" | tr -d ' \n\r\t')
+    _companion="${REPO_ROOT}/src/springboot-cli.sha256"
+    if [ -f "${_companion}" ]; then
+        _expected=$(awk '{print $1}' "${_companion}" | tr -d ' \n\r\t')
         _actual=$(sha256sum "${SCRIPT}" | awk '{print $1}')
         assert_eq "TP-CLI-01 sha256 matches ship unit" "$_expected" "$_actual"
     else

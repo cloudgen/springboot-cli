@@ -9,7 +9,7 @@ This requirement is the **project Single Source of Truth** for **automatic compa
 **Scope:** Automatic `${SCRIPT_URL}.sha256` path; transparency of integrity messaging; publisher companion file; relationship to optional env pin; product README primary integrity story.  
 **Out of scope (cited, not re-owned):** Full install one-liner / bootstrap (`requirement-shell-cli-interface.md`, online-install patterns in self-management); full self-update semver gates (`requirement-shell-self-management.md`); full `out_*` catalog (`requirement-shell-output-requirements.md`); package-manager signatures / cosign (not claimed here).
 
-**Must not confuse with:** Embedding a hash of `./springboot3` *inside* `./springboot3`; requiring operators to set `CHECKSUM` for every install; claiming independent host authenticity from same-channel SHA-256 alone.
+**Must not confuse with:** Embedding a hash of `src/springboot-cli` *inside* `src/springboot-cli`; requiring operators to set `CHECKSUM` for every install; claiming independent host authenticity from same-channel SHA-256 alone.
 
 ---
 
@@ -29,23 +29,23 @@ This requirement is the **project Single Source of Truth** for **automatic compa
 
 | Surface | What you open | What for |
 |---------|---------------|----------|
-| `./springboot3` | program file people install | download verify helpers |
-| `springboot3.sha256` | companion digest next to the script | publisher sidecar |
+| `src/springboot-cli` | program file people install | download verify helpers |
+| `src/springboot-cli.sha256` | companion digest next to the script | publisher sidecar |
 | `springboot3 help` | command | must **not** list `CHECKSUM` |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Normal install | The program downloads the sidecar itself and compares SHA-256. You do not export a pin. | `curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3 \| bash` |
-| Mismatch | The new file is discarded; install stops. | Re-publish matching `springboot3.sha256` or fix the channel |
+| Normal install | The program downloads the sidecar itself and compares SHA-256. You do not export a pin. | `curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli \| bash` |
+| Mismatch | The new file is discarded; install stops. | Re-publish matching `src/springboot-cli.sha256` or fix the channel |
 
 ### Identity SSOT (this product — do not diverge)
 
-| Field | Live value (ship unit `./springboot3`) |
+| Field | Live value (ship unit `src/springboot-cli`) |
 |-------|----------------------------------------|
 | **APP_NAME** | `springboot3` |
-| **VERSION** | `1.0.0` |
+| **VERSION** | `1.0.1` |
 | **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
-| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3` |
+| **SCRIPT_URL** | `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli` |
 | **Shebang / runtime** | `#!/bin/bash` (SDKMAN requires bash) |
 | **Dispatcher** | `app_main` (A naming) |
 | **Output SSOT** | `out_text` / `out_json` / `out_json_error` (+ wrappers `out_info`/`out_success`/`out_warn`/`out_error`/`out_die`) |
@@ -62,8 +62,8 @@ Live scalars are owned by the ship unit Config block. Requirement **cores** stay
 | **Default path** | When `CHECKSUM` is **unset** / empty, install and self-update download paths **MUST** use automatic companion verification (not “no integrity”). |
 | **No operator pin required** | Primary online install and self-update **MUST** work without exporting `CHECKSUM`. |
 | **Companion URL** | Companion is **`${SCRIPT_URL}.sha256`** (same scheme/host/path as channel + `.sha256` suffix). |
-| **In-repo publisher SSOT** | Companion file **`springboot3.sha256`** (bare SHA-256 hex of `./springboot3`) **MUST** ship next to the installable script for the release channel. |
-| **Regenerate on change** | After every edit to `./springboot3` that is published, regenerate `springboot3.sha256` so automatic mode can match. |
+| **In-repo publisher SSOT** | Companion file **`src/springboot-cli.sha256`** (bare SHA-256 hex of `src/springboot-cli`) **MUST** ship next to the installable script for the release channel. |
+| **Regenerate on change** | After every edit to `src/springboot-cli` that is published, regenerate `src/springboot-cli.sha256` so automatic mode can match. |
 | **Shared orchestrator** | Automatic verify **MUST** run on the shared install download path used by first install and self-update (no parallel unverified curl-to-final-path). |
 
 ### 2.2 Transparency (sacred emphasis)
@@ -117,7 +117,7 @@ Automatic integrity **MUST NOT** be silent magic. In **human / normal** mode, th
 |-------------|---------|
 | **Runtime / install-path variable** | `CHECKSUM` is an **optional** shell/env variable read **only** by the install/download verify path (e.g. `inst_perform_install*`). Empty default. |
 | **When set** | Download must match the pin exactly; mismatch aborts. |
-| **Outside payload** | Pin is env/operator/CI for that process — **MUST NOT** be embedded inside `./springboot3` as a self-hash of that file. |
+| **Outside payload** | Pin is env/operator/CI for that process — **MUST NOT** be embedded inside `src/springboot-cli` as a self-hash of that file. |
 | **Not a help/about surface** | **`help` and `about` MUST NOT list, print, or advertise `CHECKSUM`** (name, value, or “optional pin” line). Avoids operators treating it as a required public setting. |
 | **Not primary UX** | Product README **MUST NOT** present `CHECKSUM` as the main or required integrity method when automatic mode exists. |
 | **Not higher same-origin assurance** | Fetching the sidecar from the same origin into `CHECKSUM` then installing is **not** stronger than automatic mode and **MUST NOT** be documented as “highest assurance.” |
@@ -125,7 +125,7 @@ Automatic integrity **MUST NOT** be silent magic. In **human / normal** mode, th
 
 ### 2.5 Forbidden patterns
 
-1. Hash of `./springboot3` stored **inside** `./springboot3` as the verify target.  
+1. Hash of `src/springboot-cli` stored **inside** `src/springboot-cli` as the verify target.  
 2. Primary docs that force newcomers to set external `CHECKSUM` when automatic companion fetch exists.  
 3. **Displaying `CHECKSUM` in `help` or `about`** (human or JSON fields).  
 4. Silent skip of companion fetch with no link/value/result messaging in human mode.  
@@ -137,7 +137,7 @@ Automatic integrity **MUST NOT** be silent magic. In **human / normal** mode, th
 
 When this requirement is **Active** for the product:
 
-1. Product root **`README.md` MUST** explain **automatic** checksum as the default: algorithm (SHA-256), companion URL pattern, in-repo `springboot3.sha256`, match / mismatch / missing outcomes.  
+1. Product root **`README.md` MUST** explain **automatic** checksum as the default: algorithm (SHA-256), companion URL pattern, in-repo `src/springboot-cli.sha256`, match / mismatch / missing outcomes.  
 2. README **MUST** state that the program **downloads** the companion itself and is designed to show **link**, **value**, and **result** (human mode).  
 3. README **MUST NOT** push hardcoding or env-first external pin as the primary install integrity path.  
 4. Optional process-env pin — if documented at all — lives under Advanced / automation only, with honest same-channel vs out-of-band trust language; **not** in `help` / `about`.  
@@ -149,13 +149,13 @@ When this requirement is **Active** for the product:
 | Item | Value for springboot3 |
 |------|------------------------|
 | **Product / binary** | `springboot3` (`APP_NAME`) |
-| **Implementation file** | Repo root `./springboot3` |
+| **Implementation file** | `src/springboot-cli` |
 | **Orchestrator** | `inst_perform_install` (download then integrity then place binary) |
 | **Integrity helper** | `util_verify_download_integrity` — Shape A companion when `CHECKSUM` empty; Shape B pin when `CHECKSUM` set |
 | **Digest helper** | `util_sha256_file` (sha256sum / shasum / openssl; return-via-stdout) |
-| **Channel SSOT** | `SCRIPT_URL` with `:=` default `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/${APP_NAME}` |
+| **Channel SSOT** | `SCRIPT_URL` with `:=` default `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/src/springboot-cli` (`APP_NAME` stays the installed command name) |
 | **Companion URL** | `${SCRIPT_URL}.sha256` |
-| **In-repo companion** | `springboot3.sha256` (bare 64-char hex; CI asserts match) |
+| **In-repo companion** | `src/springboot-cli.sha256` (bare 64-char hex; CI asserts match) |
 | **Algorithm** | SHA-256 via `util_sha256_file` |
 | **Match flag** | `AUTO_CHECKSUM_OK=1` on companion/pin match |
 | **Missing sidecar policy** | Warn + continue (best-effort) |
@@ -229,10 +229,10 @@ Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYST
 **Future AI assistants, Grok, or maintainers MUST NOT**:
 
 1. Remove automatic `${SCRIPT_URL}.sha256` fetch while this requirement is Active.  
-2. Embed the expected SHA-256 of `./springboot3` **inside** `./springboot3` as verification.  
+2. Embed the expected SHA-256 of `src/springboot-cli` **inside** `src/springboot-cli` as verification.  
 3. Require or **primary-document** external `CHECKSUM` for normal online install when automatic mode exists.  
 4. **List or print `CHECKSUM` in `help` or `about`** (human Environment block, diagnostics, or JSON about fields).  
-5. Document same-origin `CHECKSUM=$(curl …/springboot3.sha256)` as higher assurance than automatic companion verification.  
+5. Document same-origin `CHECKSUM=$(curl …/src/springboot-cli.sha256)` as higher assurance than automatic companion verification.  
 6. Drop human-mode transparency of companion **link**, expected **value**, and verification **result** without an explicit redesign of this requirement.  
 7. Claim always-verified when missing-sidecar continues with a warning.  
 8. Add a self-update download path that skips this integrity model.  
@@ -250,8 +250,8 @@ Violating this rule is a requirements failure and must be recorded (incident or 
 | `requirement-shell-output-requirements.md` | `out_*` / JSON error channel for integrity messages |
 | `requirement-shell-cli-interface.md` | Install command surface / modes |
 | `requirement-shell-interactive-vs-noninteractive.md` | Quiet/json/pipe mode interaction with messaging |
-| `./springboot3` | Ship unit implementation |
-| `springboot3.sha256` | In-repo companion digest |
+| `src/springboot-cli` | Ship unit implementation |
+| `src/springboot-cli.sha256` | In-repo companion digest |
 | Product root `README.md` | User-facing automatic integrity story |
 
 ---
@@ -265,7 +265,7 @@ Violating this rule is a requirements failure and must be recorded (incident or 
 
 ### Live function inventory (ship unit — A naming)
 
-**Product law inventory** (live `./springboot3` — §3.1 option 1 (A naming); live `out_*`/`inst_*`/`app_*` (A naming)):
+**Product law inventory** (live `src/springboot-cli` — §3.1 option 1 (A naming); live `out_*`/`inst_*`/`app_*` (A naming)):
 
 | Area | Live names |
 |------|------------|

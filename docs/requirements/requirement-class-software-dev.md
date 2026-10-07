@@ -30,7 +30,7 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 |---------|---------------|----------|
 | `requirement-class-software-dev.md` | this file | project nature + residual stack |
 | `docs/requirements/index.md` | registry | live product-law inventory |
-| `./springboot3` | program file people install | live behavior |
+| `src/springboot-cli` | program file people install | live behavior |
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
@@ -96,7 +96,7 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 | **Project class** | software-development |
 | **Class requirement basename** | `requirement-class-software-dev.md` |
 | **Primary language(s)** | `bash` (`#!/bin/bash` ship unit) |
-| **Language role** | primary — single-file CLI ship unit `./springboot3` |
+| **Language role** | primary — single-file CLI ship unit `src/springboot-cli` |
 | **Secondary / payload languages** | Java 21 (Temurin via SDKMAN) for the demo Spring Boot app; Maven builds the payload project — **domain-owned**, not a second ship-unit language |
 | **Execution model** | **interpreted** for CLI; **compiled** for demo app (`mvn package` → JAR) |
 | **Toolchain / interpreter** | bash (required for SDKMAN); payload pins via domain REQ |
@@ -109,8 +109,8 @@ This file is **class law + residual SSOT**, not a second copy of Type O-P lifecy
 | **Primary runtime / OS family** | POSIX Linux (and Alpine with bash); SDKMAN path assumes bash |
 | **Architectures supported** | any arch with bash + curl/wget + tools the script invokes |
 | **Git surface** | used (`origin` GitHub channel) |
-| **Ship unit / install** | yes — `./springboot3` → user/global bin via **Type O-P online** install (`SCRIPT_URL`) |
-| **Product version SSOT** | `VERSION="1.0.0"` hard-assign in `./springboot3` |
+| **Ship unit / install** | yes — `src/springboot-cli` → user/global bin via **Type O-P online** install (`SCRIPT_URL`) |
+| **Product version SSOT** | `VERSION="1.0.1"` hard-assign in `src/springboot-cli` |
 | **Channel / identity SSOT** | `APP_NAME`, `REPO_USER`, `REPO_NAME`, `SCRIPT_URL` in ship unit Config |
 | **Bootstrap origin** | Type 0 shell online-install family (selfmanaged lineage) specialized to **Type O-P** payload installer + Spring Boot domain |
 

@@ -243,10 +243,10 @@ EOF
             _online_url=$(grep -E '^: "\$\{SCRIPT_URL:=' "${SCRIPT}" 2>/dev/null | head -n1 | sed 's/.*SCRIPT_URL:=//;s/}".*//')
             # Expand simple ${REPO_USER} composition from defaults if needed — fall back to README pattern
             if printf '%s' "$_online_url" | grep -q 'REPO_'; then
-                _online_url="https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3"
+                _online_url="https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli"
             fi
         fi
-        : "${_online_url:=https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3}"
+        : "${_online_url:=https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli}"
         t_info "TP-CURL-09 online URL=${_online_url}"
         _oh=$(mktemp -d "${TMPDIR:-/tmp}/sb2-online.XXXXXX")
         _oout="${_oh}/out.txt"

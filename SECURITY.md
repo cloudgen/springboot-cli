@@ -4,7 +4,8 @@
 
 | Version | Supported |
 |---------|-----------|
-| **1.0.0** (current) | Yes — report security issues against this release |
+| **1.0.1** (current) | Yes — report security issues against this release |
+| 1.0.0 | Superseded on this channel by the move to `src/springboot-cli` |
 | 2.4.0 | Uncommitted draft line; not a published tag. Prefer current. |
 | 2.3.5 | Superseded; upgrade to current when possible |
 | 2.3.4 | Superseded; upgrade to current when possible |
@@ -47,7 +48,7 @@ This section describes **design posture**. It is **not** a claim of third-party 
 
 ## Install integrity trust bounds
 
-This product implements **automatic companion-checksum** when the release channel publishes `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3.sha256` next to the ship unit:
+This product implements **automatic companion-checksum** when the release channel publishes `https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli.sha256` next to the ship unit:
 
 | Fact | Posture |
 |------|---------|

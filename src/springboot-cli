@@ -46,7 +46,8 @@ fi
 #
 # APP NAME: springboot3 via APP_NAME (Config SSOT; safe default below).
 # REPO_USER / REPO_NAME: GitHub owner/repo identity for the install channel (B).
-# SCRIPT_URL: product channel SSOT — composed from repo identity + APP_NAME (raw content URL).
+# SCRIPT_URL: product channel SSOT — composed from repo identity + SCRIPT_REL (raw content URL).
+#   APP_NAME is the installed command. The published file path is src/springboot-cli.
 #   Override SCRIPT_URL with env for a full custom channel; or override REPO_* before first use
 #   so the composed default follows a fork. Empty SCRIPT_URL disables version-check / self-update network steps.
 #
@@ -65,8 +66,8 @@ APP_NAME="springboot3"
 : "${SHORT_DESCRIPTION:=${APP_DESC}}"
 : "${DESCRIPTION:=Spring Boot payload online installer (CLI self-* + payload install/uninstall + run). Default line is Spring Boot 3.3.5. --springboot2 selects Spring Boot 2.7.18.}"
 # Product version SSOT (semver). Extractors use: grep '^VERSION="'
-VERSION="1.0.0"
-: "${VERSION:=1.0.0}"
+VERSION="1.0.1"
+: "${VERSION:=1.0.1}"
 
 # Runtime flags (safe defaults)
 : "${QUIET:=0}"
@@ -108,7 +109,8 @@ fi
 # Repository identity → install channel (Option B: raw.githubusercontent.com)
 : "${REPO_USER:=cloudgen}"
 : "${REPO_NAME:=springboot-cli}"
-: "${SCRIPT_URL:=https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/${APP_NAME}}"
+: "${SCRIPT_REL:=src/springboot-cli}"
+: "${SCRIPT_URL:=https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/${SCRIPT_REL}}"
 : "${CHECKSUM:=}"
 
 [ -t 0 ] && [ -t 1 ] && TTY=1
@@ -1110,7 +1112,7 @@ inst_self_update() {
         out_info "Starting self-update of ${APP_NAME}..."
     fi
 
-    # SCRIPT_URL is Config SSOT (composed default from REPO_* / APP_NAME).
+    # SCRIPT_URL is Config SSOT (composed default from REPO_* / SCRIPT_REL).
     # Override via env for forks or offline channels. Empty → fail loud below.
 
     REMOTE_VERSION=$(util_fetch_remote_version "${SCRIPT_URL}")
@@ -1600,7 +1602,7 @@ ver_check() {
     : "${QUIET:=0}"
     : "${SCRIPT_URL:=}"
 
-    # SCRIPT_URL is Config SSOT (composed default from REPO_USER/REPO_NAME/APP_NAME).
+    # SCRIPT_URL is Config SSOT (composed default from REPO_USER/REPO_NAME/SCRIPT_REL).
     # Override via env for forks or offline channels. Empty → network steps fail loud.
 
     # Fetch remote version (curl or wget)
@@ -2573,7 +2575,8 @@ path_in_path() {
 check_alpine_requirements() {
     # --- Safe Variable Defaults ----
     : "${SH:=bash}"
-    : "${SCRIPT_URL:=https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/${APP_NAME}}"
+    : "${SCRIPT_REL:=src/springboot-cli}"
+    : "${SCRIPT_URL:=https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/${SCRIPT_REL}}"
     : "${JSON:=0}"
     : "${QUIET:=0}"
 
@@ -3303,7 +3306,7 @@ app_about() {
 
 app_version() {
     : "${APP_NAME:=springboot3}"
-    : "${VERSION:=1.0.0}"
+    : "${VERSION:=1.0.1}"
     : "${JSON:=0}"
     if [ "${JSON}" -eq 1 ]; then
         # Same machine contract as historical app_main inline path
@@ -3332,7 +3335,8 @@ app_help() {
     : "${SPRINGBOOT_VER:=3.3.5}"
     : "${JSON:=0}"
     : "${QUIET:=0}"
-    : "${SCRIPT_URL:=https://raw.githubusercontent.com/${REPO_USER:-cloudgen}/${REPO_NAME:-springboot-cli}/main/${APP_NAME}}"
+    : "${SCRIPT_REL:=src/springboot-cli}"
+    : "${SCRIPT_URL:=https://raw.githubusercontent.com/${REPO_USER:-cloudgen}/${REPO_NAME:-springboot-cli}/main/${SCRIPT_REL}}"
     : "${REPO_USER:=cloudgen}"
     : "${REPO_NAME:=springboot-cli}"
 
@@ -3436,6 +3440,7 @@ app_help() {
     out_plain "  PROJECT_PREFIX         Same as --prefix"
     out_plain "  PORT                   Same as --port. When set, it wins over 8080 / 8081"
     out_plain "  SCRIPT_URL             Install/update channel (default: ${SCRIPT_URL})"
+    out_plain "  SCRIPT_REL             Repo path used to compose SCRIPT_URL (default: ${SCRIPT_REL})"
     out_plain "  REPO_USER              GitHub owner used to compose SCRIPT_URL (default: ${REPO_USER})"
     out_plain "  REPO_NAME              GitHub repo used to compose SCRIPT_URL (default: ${REPO_NAME})"
     out_plain ""

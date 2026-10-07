@@ -2,7 +2,7 @@
 
 **Updated:** 2026-10-07  
 **Suite:** `./tests/run.sh`  
-**Ship unit:** `./springboot3` · **VERSION** 1.0.0 · default Spring Boot **3.3.5**, opt-in **2.7.18**
+**Ship unit:** `src/springboot-cli` · **VERSION** 1.0.1 · default Spring Boot **3.3.5**, opt-in **2.7.18**
 
 | Requirement key | Area | TP families | Coverage notes |
 |-----------------|------|-------------|----------------|

@@ -1,6 +1,6 @@
 # springboot3 - Spring Boot 3.3.5 or 2.7.18 in one command
 
-![Version](https://img.shields.io/badge/Version-1.0.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/Version-1.0.1-blue?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 [![CIAO](https://img.shields.io/badge/Philosophy-CIAO%20(Caution%20%E2%80%A2%20Intentional%20%E2%80%A2%20Anti--fragile%20%E2%80%A2%20Over--engineered)-purple.svg)](https://github.com/cloudgen/ciao)
 [![Stars](https://img.shields.io/github/stars/cloudgen/springboot-cli?style=flat-square)](https://github.com/cloudgen/springboot-cli)
@@ -12,8 +12,8 @@
 
 | Box | Meaning | Example |
 |-----|---------|---------|
-| You / this login | Install for yourself and run the demo without becoming root | `curl -fsSL …/springboot3 \| bash` then `springboot3` |
-| Optional root install | A Linux host with sudo may place the program under `/usr/local/bin` | `curl -fsSL …/springboot3 \| sudo bash` |
+| You / this login | Install for yourself and run the demo without becoming root | `curl -fsSL …/src/springboot-cli \| bash` then `springboot3` |
+| Optional root install | A Linux host with sudo may place the program under `/usr/local/bin` | `curl -fsSL …/src/springboot-cli \| sudo bash` |
 | Not this | A Spring Boot 4 installer, or a signed-release claim | Boot 4 is out of scope. Boot 2 is an explicit switch, not the default |
 
 | Includes | Excludes |
@@ -23,7 +23,7 @@
 
 | You do… | What it means | What you type |
 |---------|---------------|---------------|
-| Install | Downloads this program, checks the companion digest, then ensures the demo environment. Does not hang waiting for a key. | `curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3 \| bash` |
+| Install | Downloads this program, checks the companion digest, then ensures the demo environment. Does not hang waiting for a key. | `curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli \| bash` |
 | Open the menu | On a terminal, no command shows Boot 3, Boot 2, setup only, language, and self-management. Pick 1 to start Boot 3.3.5. | `springboot3` |
 | Run from a script | A pipe or a non-interactive run with no command builds and starts the Boot 3.3.5 app. Re-runs keep your `pom.xml` unless you ask to reset. | `springboot3 </dev/null` |
 | Run the Boot 2 demo | Same program, Java 8 and Spring Boot 2.7.18, in `~/springboot-springboot2`. | `springboot3 --springboot2` |
@@ -36,7 +36,7 @@ Published at [github.com/cloudgen/springboot-cli](https://github.com/cloudgen/sp
 - One command installs the CLI and a Spring Boot environment (SDKMAN, Java, Maven, demo project)
 - Line switch: **`--springboot3`** (default, Boot 3.3.5 / Java 21 Temurin) or **`--springboot2`** (Boot 2.7.18 / Java 8 Amazon Corretto)
 - One-liner install (`curl | bash`) — places `springboot3` if needed, then ensures the default Boot 3 environment
-- One-liner for Boot 2: `curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3 | bash -s -- --springboot2`
+- One-liner for Boot 2: `curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli | bash -s -- --springboot2`
 - User install (`~/.local/bin`) and optional system install (`/usr/local/bin`)
 - Automatically installs SDKMAN! + the line's pinned Java + **Maven 3.9.14**
 - Creates (or safely re-uses) a minimal "Hello World" project for the selected line
@@ -54,12 +54,12 @@ Published at [github.com/cloudgen/springboot-cli](https://github.com/cloudgen/sp
 
 **For a normal login:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3 | bash
+curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli | bash
 ```
 
 **System-wide on Linux with sudo** (not for Termux, Git Bash, or Windows cmd):
 ```bash
-curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3 | sudo bash
+curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli | sudo bash
 ```
 
 After installation, run:
@@ -76,7 +76,7 @@ The program **downloads the companion digest itself**. You do **not** set `CHECK
 | Fact | What happens |
 |------|----------------|
 | **Algorithm** | SHA-256 (`sha256sum` / equivalent helpers in the script) |
-| **Companion** | `${SCRIPT_URL}.sha256` — in-repo file `springboot3.sha256` next to `./springboot3` |
+| **Companion** | `${SCRIPT_URL}.sha256` — in-repo file `src/springboot-cli.sha256` next to `src/springboot-cli` |
 | **No pin required** | Automatic mode when `CHECKSUM` is unset |
 | **Transparency (human mode)** | Prints the companion **link**, expected **value**, and **result** |
 | **Match** | Install / self-update continues |
@@ -119,7 +119,7 @@ springboot3 --force-user version     # Prefer ~/.local/bin for this CLI
 - **One-liner / empty arguments on a pipe:** places the CLI if needed, then ensures the **Boot 3.3.5** environment (not binary-only).
 - **Line switch:** `--springboot2` or `--boot 2` selects Spring Boot **2.7.18**, Java **8** (`8.0.472-amzn`), `~/springboot-springboot2`, and TCP port **8081**. `--springboot3` or `--boot 3` selects Spring Boot **3.3.5**, Java **21** (`21.0.10-tem`), `~/springboot-springboot3`, and TCP port **8080**. `BOOT_LINE` accepts the same tokens. A flag wins over `BOOT_LINE`. `--project-dir` wins over the line's default folder.
 - **More than one copy on this machine:** `--prefix <name>` builds `~/springboot-springboot3-<name>` (or the Boot 2 folder with the same suffix). `--project-base <path>` (alias `--base-path`) chooses the parent directory. `--port <1-65535>` sets `server.port` for that copy. `PROJECT_BASE`, `PROJECT_PREFIX`, and `PORT` are the matching environment names. An explicit `--project-dir` is the whole path and does not gain the prefix.
-- **One-liner with a line:** `curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3 | bash -s -- --springboot2` or `curl -fsSL … | BOOT_LINE=springboot2 bash`.
+- **One-liner with a line:** `curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli | bash -s -- --springboot2` or `curl -fsSL … | BOOT_LINE=springboot2 bash`.
 - **Normal run:** Preserves your existing project folder, `pom.xml`, Java source, and `application.properties`.
 - **`--reset` / `--force`:** Completely wipes and regenerates the project for a clean slate.
 - **`--force-user` / `--force-root`:** Choose user (`~/.local/bin`) vs system (`/usr/local/bin`) place for this CLI.
@@ -140,7 +140,7 @@ springboot3 about --json           # machine-readable diagnostics
 | **Ubuntu / Debian** | Excellent | Default bash |
 | **Rocky / RHEL** | Excellent | No issues |
 | **macOS** | Good | Supports official SDKMAN! |
-| **Alpine Linux** | Good | SDKMAN needs **bash**, not BusyBox ash. Install bash first: `apk add bash`, then `bash <(curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/springboot3)` |
+| **Alpine Linux** | Good | SDKMAN needs **bash**, not BusyBox ash. Install bash first: `apk add bash`, then `bash <(curl -fsSL https://raw.githubusercontent.com/cloudgen/springboot-cli/main/src/springboot-cli)` |
 | **Git Bash (Windows)** | Good | User-only install. Do not use the sudo one-liner. Do not invoke Termux `pkg`. |
 | **Windows cmd** | Same class as Git Bash | User-only. Do not use the sudo one-liner. |
 | **Termux** | User-only | Normal login only. Do not recommend `sudo curl \| sh`. |
@@ -169,4 +169,4 @@ MIT. See [`LICENSE.md`](./LICENSE.md).
 
 ## Last Update
 
-2026-10-07 — Product version **1.0.0**. Public repository **cloudgen/springboot-cli**. A terminal with no command opens the numbered menu. A pipe with no command sets up Boot 3.3.5. Cache scratch is per login and per process. Line switch remains (`--springboot2`, `--springboot3`, `--boot`, `BOOT_LINE`).
+2026-10-07 — Product version **1.0.1**. The published file is **src/springboot-cli**. The command name stays **springboot3**. Public repository **cloudgen/springboot-cli**. A terminal with no command opens the numbered menu. A pipe with no command sets up Boot 3.3.5. Cache scratch is per login and per process. Line switch remains (`--springboot2`, `--springboot3`, `--boot`, `BOOT_LINE`).

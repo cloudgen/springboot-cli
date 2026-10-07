@@ -2,8 +2,8 @@
 
 Maps **TP-*** coverage to automated or documented checks.  
 **Suite entry:** `./tests/run.sh`  
-**Ship unit:** `./springboot3`  
-**Product VERSION:** 1.0.0  
+**Ship unit:** `src/springboot-cli`  
+**Product VERSION:** 1.0.1  
 **Domain pins:** default Spring Boot **3.3.5** · Java **21** (`21.0.10-tem` Temurin); opt-in Spring Boot **2.7.18** · Java **8** (`8.0.472-amzn`); Maven **3.9.14**  
 **Last plan update:** 2026-10-07 (cache-folder storage, TTY menu, menu language)  
 **Last suite run:** see latest `reports/`

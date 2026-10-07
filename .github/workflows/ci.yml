@@ -50,15 +50,15 @@ jobs:
       - name: Ship unit present
         run: |
           set -eu
-          test -f ./springboot3
-          test -f ./springboot3.sha256
-          chmod +x ./springboot3
+          test -f src/springboot-cli
+          test -f src/springboot-cli.sha256
+          chmod +x src/springboot-cli
 
       - name: Companion digest matches ship unit
         run: |
           set -eu
-          expected=$(awk '{print $1}' ./springboot3.sha256 | tr -d ' \n\r\t')
-          actual=$(sha256sum ./springboot3 | awk '{print $1}')
+          expected=$(awk '{print $1}' src/springboot-cli.sha256 | tr -d ' \n\r\t')
+          actual=$(sha256sum src/springboot-cli | awk '{print $1}')
           echo "expected=${expected}"
           echo "actual=${actual}"
           test "${expected}" = "${actual}"
