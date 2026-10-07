@@ -1,0 +1,187 @@
+**file**: docs/requirements/requirement-shell-payload-online-install.md  
+**Status**: Active (Version 1.3.0)  
+**Philosophy**: CIAO / CIAO-Lite (Caution • Intentional • Anti-fragile • Over-engineered)
+
+## 1. Purpose
+
+This requirement is the **project Single Source of Truth** for springboot3 as a **Type O-P payload online installer**: one-liner / empty-argv **combined ensure** of the CLI ship unit **and** Spring Boot payload, with a strict command split between **ship-unit self-care** and **payload install/uninstall**.
+
+**Not the same as** script-alone online install (Type O-S / online-install mold only). Portable mold: **LM-PAYLOAD-ONLINE-INSTALL** (path secondary when molds are available).
+
+**Scope:** Product class O-P; combined empty-argv; command vocabulary (`install`/`uninstall` vs `self-update`/`self-uninstall`); success/error message cases for both layers; ownership map.  
+**Out of scope (cited):** Ship-unit download/checksum algorithms (`requirement-shell-automatic-checksum.md`, install primitives in self-management); Spring Boot pins/order detail (`requirement-domain-springboot3.md`); full flag catalog depth (`requirement-shell-cli-interface.md`); output function catalog (`requirement-shell-output-requirements.md`).
+
+---
+
+### 1.1 Human-facing
+
+**In one sentence:** This file owns the **two layers** — installing the Spring Boot environment versus installing the `springboot3` program itself.
+
+| Box | Meaning | Example |
+|-----|---------|---------|
+| You / this login | Operator who wants SDKMAN/Java/Maven/demo | `springboot3 install` |
+| The other role | Operator who only wants to update the CLI script | `springboot3 self-update` |
+| Not this file | Host package-manager installs of Java as product law | Do not wrap `apt install openjdk` as this product |
+
+| Includes | Excludes |
+|----------|----------|
+| `install` / `uninstall` = payload; empty-argv first pipe must reach payload | `self-update` / `self-uninstall` (self-management file) |
+
+| Surface | What you open | What for |
+|---------|---------------|----------|
+| `./springboot3` | program file people install | `payload_install` / `payload_uninstall` |
+| `springboot3 help` | command | layer wording (payload vs this CLI) |
+
+| You do… | What it means | What you type |
+|---------|---------------|---------------|
+| Payload only | Environment and demo; do not start the app. The CLI binary stays. | `springboot3 install` |
+| Remove demo | Deletes the managed project dir, not `~/.local/bin/springboot3`. | `springboot3 uninstall --force` |
+
+### Identity SSOT (this product — do not diverge)
+
+| Field | Live value (ship unit `./springboot3`) |
+|-------|----------------------------------------|
+| **APP_NAME** | `springboot3` |
+| **VERSION** | `1.0.0` |
+| **Product class** | **Type O-P — payload online installer** |
+| **REPO_USER** / **REPO_NAME** | `cloudgen` / `springboot-cli` |
+| **SCRIPT_URL** | composed GitHub raw default |
+| **Dispatcher** | `app_main` |
+| **Ship-unit SSOT** | `inst_perform_install` / `inst_maybe_install` / `inst_self_update` / `inst_self_uninstall` |
+| **Payload SSOT** | `payload_install` / `payload_uninstall` + domain `setup_*` / `run_springboot_project` |
+
+---
+
+## 2. Core rules
+
+### 2.1 Class
+
+| Field | Value |
+|-------|--------|
+| **Type** | **O-P** (not O-S, not Type N) |
+| **Purpose** | Reduce install steps: CLI + SDKMAN/Java/Maven/project (+ optional run) |
+| **One-liner** | `curl -fsSL …/springboot3 \| bash` must self-install CLI **and** enter payload ensure |
+
+### 2.2 Command split (normative)
+
+| Command | Layer | Behavior |
+|---------|-------|----------|
+| *(empty argv)* | Combined or menu | Non-interactive: ship-unit ensure (+ `self-update` when newer) **then** payload default. Interactive TTY with no line switch and no domain payload flag: numbered menu (`requirement-shell-cli-default-interaction.md`), no auto payload. A line switch or domain payload flag with no verb stays this payload path |
+| `install` | **Payload** | Payload ensure only (`payload_install`: Alpine check → SDKMAN → Java → Maven → project). **No** ship-unit download. Does **not** run app unless product later adds `--run`. |
+| `uninstall` | **Payload** | Remove managed **project payload** (`PROJECT_DIR`) only; confirm unless `--force`. **MUST NOT** remove CLI binary. |
+| `self-update` | **Ship unit** | Channel upgrade of CLI binary |
+| `self-upgrade` | **Ship unit** | Alias of `self-update` |
+| `self-uninstall` | **Ship unit** | Remove managed CLI binary only |
+| `version-check` | Ship unit | Local vs remote VERSION |
+| `version` / `about` / `status` / `help` | Meta | Diagnostics / usage |
+| `run` | Payload + run | Domain setup + build/run |
+| `reinstall` | Ship + payload | Force ship-unit reinstall then payload ensure (with preserve/`--no-run` as flagged) |
+
+### 2.3 Empty argv (combined ensure)
+
+1. Bootstrap **MUST** always call `app_main "$@"` (no basename gate).  
+2. Not installed → ship-unit install; on success **continue** to payload (default `run` path). **MUST NOT** `exit` after binary-only success.  
+3. Installed + non-interactive → apply ship-unit upgrade policy (`inst_self_update` / already-latest OK) then payload.  
+4. Installed + interactive empty argv, no line switch, no domain payload flag → numbered menu. **MUST NOT** auto-run the payload. A second such run is the menu again. A line switch or domain payload flag with no verb still payload-ensures, including on a TTY.  
+5. Failures non-zero and **loud** (INC-20260720-001).
+
+### 2.4 Message coverage (must implement)
+
+| Case | Exit | Message path |
+|------|------|--------------|
+| Ship install OK | 0 | `out_success` path |
+| Ship install fail | ≠0 | `out_error` / JSON error code |
+| Payload `install` OK | 0 | `out_success` + project_dir |
+| Payload `install` fail | ≠0 | which step failed |
+| Payload `uninstall` OK | 0 | `out_success` |
+| Payload `uninstall` need confirm | ≠0 | `confirm_required` |
+| `self-uninstall` need confirm | ≠0 | `confirm_required` |
+| `self-update` already latest | 0 | `out_success` |
+| Combined empty argv silent | **forbidden** | — |
+
+### 2.5 Implementation Notes
+
+| Item | Value |
+|------|--------|
+| **Handlers** | `install` → `payload_install`; `uninstall` → `payload_uninstall`; `self-update`/`self-upgrade` → `inst_self_update`; `self-uninstall` → `inst_self_uninstall` |
+| **Empty argv** | Non-interactive: ship ensure without exit-on-success, then domain/run. Interactive TTY with no line switch: menu (peer). Live ship unit still falls through on a TTY (**gap**) |
+| **Payload pins** | `requirement-domain-springboot3.md` |
+| **Tests** | `tests/test_install_lifecycle.sh`, `test_domain.sh`, `test_cli.sh`, **`test_online_curl_install.sh`** (TP-CURL — real `curl \| bash` against local channel; silent-class ban) — must detect binary-only first pipe, silent 0-byte abort, and missing subcommands |
+
+#### Invocation samples (this topic-owner)
+
+```bash
+springboot3 install
+springboot3 uninstall --force
+springboot3 run
+```
+
+## Under command line for normal user only
+
+When the program detects Termux, Git Bash, Windows Command Prompt, or the same class (this login only; no root switch):
+
+| MUST | MUST NOT |
+|------|----------|
+| Keep **normal user privilege** only | Enable **admin privilege** or a **dedicated system user** |
+| Payload `install` / `uninstall` run as this login | Wrap `apt`/`dnf` to install Java; write `/etc`; recommend `sudo curl \| sh` on that class |
+| Git Bash / Windows cmd: same ceiling | Invoke Termux `pkg` because Git Bash or cmd was detected |
+
+Detect (typical): Termux — `PREFIX` contains `com.termux`. Git Bash — `MSYSTEM` is `MINGW*` / `MSYS*`. Windows cmd — `OS` is `Windows_NT` after excluding Git Bash, Cygwin, and WSL.
+
+**This requirement:** payload ensure stays SDKMAN/this-login; it is not a host package install.
+
+### 2.6 Protection Rule
+
+**MUST NOT:**
+
+1. Treat springboot3 as Type O-S script-alone.  
+2. Map `uninstall` → CLI removal or `self-uninstall` → project wipe as primary.  
+3. Exit after first ship-unit install without payload on a non-interactive empty argv. The interactive TTY menu is the peer file; it is not this collapse.  
+4. Silent one-liner success.  
+5. Advertise `install`/`uninstall` in help without dispatcher routes.
+
+---
+
+## 3. Definition of done
+
+1. Requirement registered in `docs/requirements/index.md`.  
+2. Ship unit implements command split + combined empty argv.  
+3. Help ↔ dispatcher aligned.  
+4. Tests cover payload install/uninstall, self-*, combined ensure, loud failures.  
+5. Domain pins remain in `requirement-domain-springboot3.md`.  
+
+## 4. Design-time verification
+
+| TP family / ID | Suite | Status |
+|----------------|-------|--------|
+| **TP-LC-01–03** | `tests/test_install_lifecycle.sh` | have |
+| **TP-DOM-*** | `tests/test_domain.sh` | have |
+| **TP-CURP-*** | `tests/test_online_curl_install.sh` | have |
+
+**Suite map:** `tests/README.md` (TP labels in suite files).
+
+
+## 5. Related
+
+| Artifact | Role |
+|----------|------|
+| `requirement-shell-cli-zero-arguments.md` | Empty-argv detail |
+| `requirement-shell-self-management.md` | self-* only |
+| `requirement-domain-springboot3.md` | Payload content |
+| `requirement-shell-cli-interface.md` | Full command table |
+| `tests/README.md` | TP status map |
+| `tests/test_online_curl_install.sh` | TP-CURL suite |
+| `./springboot3` | Implementation |
+
+## 6. Revision history
+
+| Date | Change |
+|------|--------|
+| 2026-10-07 | v1.3.0 Dual-mode: interactive empty argv with no line switch is the numbered menu. Non-interactive empty argv stays combined ensure. `install` stays the payload. No `self-install` |
+| 2026-07-24 | v1.2.0 Design-time verification TP map (git-surface clean) |
+| 2026-07-24 | v1.1.0 DoD + tests: TP-CURL suite |
+| 2026-07-20 | v1.0.0 Initial Type O-P product law; install/uninstall vs self-* |
+
+**Suite map:** `tests/README.md` (TP labels in suite files).
+
+
